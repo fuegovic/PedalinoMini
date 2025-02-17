@@ -1360,20 +1360,44 @@ void fire_action(action* act, byte p, byte i, byte e)
               break;
 
             case PED_ACTION_PROFILE_PLUS:
-              if (reloadProfile) return;
-              eeprom_update_current_bank();
-              currentProfile = (currentProfile == (PROFILES - 1) ? 0 : currentProfile + 1);
-              reloadProfile = true;
-              DPRINT("PROFILE+.....%d\n", currentProfile);
-              break;
-
-            case PED_ACTION_PROFILE_MINUS:
-              if (reloadProfile) return;
-              eeprom_update_current_bank();
-              currentProfile = (currentProfile == 0 ? PROFILES - 1 : currentProfile - 1);
-              reloadProfile = true;
-              DPRINT("PROFILE-.....%d\n", currentProfile);
-              break;
+            if (reloadProfile) return;
+            eeprom_update_current_bank();
+            switch (currentProfile) {
+                case 0:  // Profile A
+                    currentProfile = 1;  // Go to Profile B
+                    break;
+                case 1:  // Profile B
+                    currentProfile = 2;  // Go to Profile C
+                    break;
+                case 2:  // Profile C
+                    currentProfile = 0;  // Loop back to Profile A
+                    break;
+                default:
+                    currentProfile = 0;  // Fallback to Profile A
+            }
+            reloadProfile = true;
+            DPRINT("PROFILE+.....%d (Profile %c)\n", currentProfile, 'A' + currentProfile);
+            break;
+        
+        case PED_ACTION_PROFILE_MINUS:
+            if (reloadProfile) return;
+            eeprom_update_current_bank();
+            switch (currentProfile) {
+                case 0:  // Profile A
+                    currentProfile = 2;  // Go to Profile C
+                    break;
+                case 1:  // Profile B
+                    currentProfile = 0;  // Go to Profile A
+                    break;
+                case 2:  // Profile C
+                    currentProfile = 1;  // Go to Profile B
+                    break;
+                default:
+                    currentProfile = 0;  // Fallback to Profile A
+            }
+            reloadProfile = true;
+            DPRINT("PROFILE-.....%d (Profile %c)\n", currentProfile, 'A' + currentProfile);
+            break;
 
             case PED_ACTION_LED_COLOR:
               fastleds[led_control(act->control, act->led)] = act->color0;

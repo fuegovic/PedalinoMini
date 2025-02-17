@@ -30,7 +30,7 @@ __________           .___      .__  .__                 _____  .__       .__    
 #define ADC_BOARDS        4   //
 #define ADC_INPUTS        4   // ADS1115 number of analog inputs
 #define ADC_CHANNELS      (ADC_BOARDS * ADC_INPUTS)
-#define LEDS             10   // number of WS2812B leds (254 max)
+#define LEDS             20   // number of WS2812B leds (254 max)
 #define LED_RGB_ORDER   RGB   // do not change it, RGB order is managed by program because FastLED library does not support changing RGB order at runtime
 #define SLOTS_ROWS        2
 #define SLOTS_COLS        3
@@ -128,9 +128,45 @@ const byte pinA[] = {GPIO_NUM_44, GPIO_NUM_43, GPIO_NUM_10, GPIO_NUM_3,  GPIO_NU
 #define FASTLEDS_DATA_PIN     GPIO_NUM_21
 #else
 #undef  PEDALS
-#define PEDALS                7
-const byte pinD[] = {GPIO_NUM_25, GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_14, GPIO_NUM_12, GPIO_NUM_13, GPIO_NUM_0};
-const byte pinA[] = {GPIO_NUM_36, GPIO_NUM_39, GPIO_NUM_34, GPIO_NUM_35, GPIO_NUM_32, GPIO_NUM_33, GPIO_NUM_0};
+#define PEDALS                 15
+
+// Digital pins for switches/pedals
+const byte pinD[] = {
+    GPIO_NUM_36,  // Pedal  1 - Expression (ADC1_CH0)
+    GPIO_NUM_39,  // Pedal  2 - Expression (ADC1_CH3)
+    GPIO_NUM_34,  // Pedal  3 - Expression (ADC1_CH6)
+    GPIO_NUM_35,  // Pedal  4 - Expression (ADC1_CH7)
+    GPIO_NUM_32,  // Pedal  5 - Expression (ADC1_CH4)
+    GPIO_NUM_33,  // Pedal  6 - Expression (ADC1_CH5)
+    GPIO_NUM_25,  // Pedal  7 - Digital Switch
+    GPIO_NUM_26,  // Pedal  8 - Digital Switch
+    GPIO_NUM_27,  // Pedal  9 - Digital Switch
+    GPIO_NUM_14,  // Pedal 10 - Digital Switch
+    GPIO_NUM_13,  // Pedal 11 - Digital Switch
+    GPIO_NUM_17,  // Pedal 12 - Digital Switch
+    GPIO_NUM_16,  // Pedal 13 - Digital Switch
+    GPIO_NUM_15,  // Pedal 14 - Digital Switch (shared with MIDI)
+    GPIO_NUM_0    // Pedal 15 - Digital Switch (shared with BOOT)
+};
+
+// Analog pins for expression pedals
+const byte pinA[] = {
+    GPIO_NUM_36,  // Pedal  1 - Expression (ADC1_CH0)
+    GPIO_NUM_39,  // Pedal  2 - Expression (ADC1_CH3)
+    GPIO_NUM_34,  // Pedal  3 - Expression (ADC1_CH6)
+    GPIO_NUM_35,  // Pedal  4 - Expression (ADC1_CH7)
+    GPIO_NUM_32,  // Pedal  5 - Expression (ADC1_CH4)
+    GPIO_NUM_33,  // Pedal  6 - Expression (ADC1_CH5)
+    GPIO_NUM_25,  // Pedal  7 - Digital Switch
+    GPIO_NUM_26,  // Pedal  8 - Digital Switch
+    GPIO_NUM_27,  // Pedal  9 - Digital Switch
+    GPIO_NUM_14,  // Pedal 10 - Digital Switch
+    GPIO_NUM_13,  // Pedal 11 - Digital Switch
+    GPIO_NUM_17,  // Pedal 12 - Digital Switch
+    GPIO_NUM_16,  // Pedal 13 - Digital Switch
+    GPIO_NUM_15,  // Pedal 14 - Digital Switch (shared with MIDI)
+    GPIO_NUM_0    // Pedal 15 - Digital Switch (shared with BOOT)
+};
 #define FACTORY_DEFAULT_PIN   GPIO_NUM_0
 #define USB_MIDI_IN_PIN       GPIO_NUM_18
 #define USB_MIDI_OUT_PIN      GPIO_NUM_19

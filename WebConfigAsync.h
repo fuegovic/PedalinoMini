@@ -2399,7 +2399,7 @@ void get_pedals_page(unsigned int start, unsigned int len) {
     page += F("'");
     if (pedals[i-1].mode == PED_MOMENTARY1) page += F(" selected");
     page += F(">Momentary</option>");
-    
+    if (PIN_D(i-1) != PIN_A(i-1)) {
       page += F("<option value='");
       page += PED_LATCH1;
       page += F("'");
@@ -2465,7 +2465,7 @@ void get_pedals_page(unsigned int start, unsigned int len) {
       page += F("'");
       if (pedals[i-1].mode == PED_ANALOG4) page += F(" selected");
       page += F(">Analog 4</option>");
-    
+    }
 
     page += F("</select>");
     page += F("<label for='modeSelect");

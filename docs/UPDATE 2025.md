@@ -1,3 +1,41 @@
+# Profile Switching Feature Update
+
+## Overview
+The PedalinoMini now supports cycling through three distinct profiles (A, B, and C) using dedicated profile switching actions.
+
+## Using Profile Actions
+Two actions are available for profile switching:
+- **Profile+**: Cycles forward through profiles (A → B → C → A)
+- **Profile-**: Cycles backward through profiles (A → C → B → A)
+
+## Profile Order
+The profiles are arranged in a circular sequence:
+- **Profile A** (0)
+- **Profile B** (1)
+- **Profile C** (2)
+
+## How to Use
+1. Configure a pedal with either the `Profile+` or `Profile-` action
+2. Press the pedal to cycle through profiles
+3. Current profile will be displayed on screen
+4. Your settings are automatically saved when switching profiles
+
+## Important Notes
+- The current bank settings are automatically saved before switching profiles
+- Profile changes are prevented while a previous profile is still loading
+- The system will always default to Profile A if an invalid profile is detected
+
+## Display Feedback
+When switching profiles, you'll see:
+- The profile letter (A, B, or C)
+- The profile number (0, 1, or 2)
+- A brief confirmation message
+
+## Tips
+- Use Profile+ for forward cycling (A→B→C)
+- Use Profile- for reverse cycling (A→C→B)
+- You can assign both actions to different pedals for quick access in either direction
+
 # PedalinoMini Pin Assignments
 
 ## 15-Pedal Configuration
