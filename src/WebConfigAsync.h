@@ -404,7 +404,7 @@ void get_login_page() {
   page += F("<div class='text-center mb-4'>");
   page += F("<img class='mb-4' src='/logo.png' alt='' width='64' height='64'>");
   page += F("<h1 class='h3 mb-3 font-weight-normal'>PedalinoMini&trade;</h1>");
-  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/fuegovic/PedalinoMini'>More info</a></p>");
+  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/fuegovic/PedalinoMini/blob/single/docs/CHANGELOG.md'>More info</a></p>");
   page += F("</div>");
 
   page += F("<div class='form-label-group'>");
@@ -4935,7 +4935,7 @@ void get_update_page(unsigned int start, unsigned int len) {
   page += F("</div></b></div>");
   page += F("<div class='col-4'>");
   page += F("Latest public version: <b>");
-  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/master/firmware/");
+  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/single/firmware/");
   page += xstr(PLATFORMIO_ENV);
   page += F("/version.txt?");
   page += (rand() % (999999 - 100000 + 1) + 100000);
@@ -4960,7 +4960,7 @@ void get_update_page(unsigned int start, unsigned int len) {
   page += F("</div>");
   page += F("<div class='col-4'>");
   page += F("<small>");
-  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/master/firmware/");
+  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/single/firmware/");
   page += xstr(PLATFORMIO_ENV);
   page += F("/firmware.bin.md5?");
   page += (rand() % (999999 - 100000 + 1) + 100000);
