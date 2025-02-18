@@ -186,6 +186,7 @@
 
         "Actions": {
             "type": "array",
+            "maxItems": 15,
             "items": {
                 "type": "object",
                 "properties": {
@@ -196,7 +197,7 @@
                     "Control": {
                         "type": "integer",
                         "minimum": 0,
-                        "maximum": 64
+                        "maximum": 100
                     },
                     "Led": {
                         "type": "integer",
@@ -402,13 +403,13 @@
         "Pedals": {
             "type": "array",
             "minItems": 0,
-            "maxItems": 9,
+            "maxItems": 15,
             "items": {
                 "type": "object",
                 "properties": {
                     "Pedal": {
                         "type": "integer",
-                        "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
                     },
                     "Mode": {
                         "type": "string",
@@ -464,7 +465,7 @@
                 "properties": {
                     "Pedal1": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
                     },
                     "Button1": {
                         "type": "integer",
@@ -472,7 +473,7 @@
                     },
                     "Pedal2": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
                     },
                     "Button2": {
                         "type": "integer",
@@ -486,5 +487,7 @@
                 }
             }
         }
-    }
+    },
+    "required": ["Pedals", "Controls", "Actions"],
+    "additionalProperties": false
 }

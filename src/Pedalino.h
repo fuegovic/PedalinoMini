@@ -22,7 +22,7 @@ __________           .___      .__  .__                 _____  .__       .__    
 #define INTERFACES        6
 #define PROFILES          3
 #define BANKS            21   // 20 banks + 1 bank for global actions
-#define PEDALS            6   // real number of pedals is board specific (see below)
+#define PEDALS           15   // real number of pedals is board specific (see below)
 #define CONTROLS        100
 #define SEQUENCES        20
 #define STEPS            10   // number of steps for each sequence
