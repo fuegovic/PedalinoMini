@@ -53,7 +53,7 @@ String uicontrol     = "All";
 String uicontrolpage = "1";
 String uisequence    = "1";
 
-#define CONTROLS_PER_PAGE   10
+#define CONTROLS_PER_PAGE   15
 
 bool fullPageCompleted = false;
 
@@ -109,7 +109,7 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page = "";
 
   page += F("<!doctype html>");
-  page += F("<html lang='en'>");
+  page += F("<html lang='en' data-bs-theme='dark'>");
   page += F("<head>");
   page += F("<title>PedalinoMini&trade;</title>");
   page += F("<meta charset='utf-8'>");
@@ -135,19 +135,29 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   if (p >= 0) {
   page += F("<div class='container-fluid mt-3 mb-3'>");
 
-  page += F("<nav class='navbar navbar-expand-md navbar-light bg-light mb-3'>");
+  page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
   page += F("<div class='container-fluid'>");
-  page += F("<a class='navbar-brand' href='/'>");
-  page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
-  page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
-  page += F("<span class='navbar-toggler-icon'></span>");
-  page += F("</button>");
-  page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
   page += F("<ul class='navbar-nav mr-auto'>");
-  //page += F("<li class='nav-item");
-  //page += (p == 1 ? F(" active'>") : F("'>"));
-  //page += F("<a class='nav-link' href='/live'>Live</a>");
-  //page += F("</li>");
+
+  // Home nav item
+  page += F("<li class='nav-item");
+  page += (p == 0 ? F(" active'>") : F("'>"));
+  page += F("<a class='nav-link' href='/'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-house' viewBox='0 0 16 16'>");
+  page += F("<path d='M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z'/>");
+  page += F("</svg>");
+  page += F(" Home</a>");
+  page += F("</li>");
+
+  // page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+  // page += F("<div class='container-fluid'>");
+  // page += F("<a class='navbar-brand' href='/'>");
+  // page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
+  // page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
+  // page += F("<span class='navbar-toggler-icon'></span>");
+  // page += F("</button>");
+  // page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
+  // page += F("<ul class='navbar-nav mr-auto'>");
 
   if (trim_page(start, len)) return true;
 
@@ -233,6 +243,17 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("</svg>");
   page += F(" Configurations</a>");
   page += F("</li>");
+
+  page += F("<li class='nav-item");
+  page += (p == 9 ? F(" active'>") : F("'>"));    // Use p == 9 for the Update page
+  page += F("<a class='nav-link' href='/update'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cloud-upload' viewBox='0 0 16 16'>");
+  page += F("<path fill-rule='evenodd' d='M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z'/>");
+  page += F("<path fill-rule='evenodd' d='M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z'/>");
+  page += F("</svg>");
+  page += F(" Update</a>");
+  page += F("</li>");
+
   page += F("</ul>");
   }
   page += F("</div>");
@@ -254,7 +275,7 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
 
 
 /*
-  page += F("<div class='d-flex flex-column bg-light' style='width: 4.5rem;'>");
+  page += F("<div class='d-flex flex-column bg-dark' style='width: 4.5rem;'>");
   page += F("<a href='/' id='bootstrap' class='d-block p-3 link-dark text-decoration-none' title='PedalinoMini' data-bs-toggle='tooltip' data-bs-placement='right'>");
   page += F("<img src='/logo.png' width='32' height='32'>");
   page += F("<span class='visually-hidden'>Icon-only</span>");
@@ -383,7 +404,7 @@ void get_login_page() {
   page += F("<div class='text-center mb-4'>");
   page += F("<img class='mb-4' src='/logo.png' alt='' width='64' height='64'>");
   page += F("<h1 class='h3 mb-3 font-weight-normal'>PedalinoMini&trade;</h1>");
-  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/alf45tar/PedalinoMini'>More info</a></p>");
+  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/fuegovic/PedalinoMini'>More info</a></p>");
   page += F("</div>");
 
   page += F("<div class='form-label-group'>");
@@ -505,6 +526,8 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += PEDALINO_VERSION_MINOR;
   page += F(".");
   page += PEDALINO_VERSION_PATCH;
+  page += F(" - ");
+  page += PEDALINO_VERSION_SUFFIX;
   page += F("</dd>");
   page += F("<dt>Firmware Size</dt><dd>");
   page += sketchSize;
@@ -2410,61 +2433,61 @@ void get_pedals_page(unsigned int start, unsigned int len) {
       page += F("'");
       if (pedals[i-1].mode == PED_ANALOG) page += F(" selected");
       page += F(">Analog</option>");
-      page += F("<option value='");
-      page += PED_ANALOG_PAD;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG_PAD) page += F(" selected");
-      page += F(">Analog Pad</option>");
-      page += F("<option value='");
-      page += PED_JOG_WHEEL;
-      page += F("'");
-      if (pedals[i-1].mode == PED_JOG_WHEEL) page += F(" selected");
-      page += F(">Jog Wheel</option>");
-      page += F("<option value='");
-      page += PED_MOMENTARY2;
-      page += F("'");
-      if (pedals[i-1].mode == PED_MOMENTARY2) page += F(" selected");
-      page += F(">Momentary 2</option>");
-      page += F("<option value='");
-      page += PED_MOMENTARY3;
-      page += F("'");
-      if (pedals[i-1].mode == PED_MOMENTARY3) page += F(" selected");
-      page += F(">Momentary 3</option>");
-      page += F("<option value='");
-      page += PED_LATCH2;
-      page += F("'");
-      if (pedals[i-1].mode == PED_LATCH2) page += F(" selected");
-      page += F(">Latch 2</option>");
-      page += F("<option value='");
-      page += PED_LADDER;
-      page += F("'");
-      if (pedals[i-1].mode == PED_LADDER) page += F(" selected");
-      page += F(">Ladder</option>");
-      page += F("<option value='");
-      page += PED_ULTRASONIC;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ULTRASONIC) page += F(" selected");
-      page += F(">Ultrasonic</option>");
-      page += F("<option value='");
-      page += PED_ANALOG_MOMENTARY;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG_MOMENTARY) page += F(" selected");
-      page += F(">Analog+Momentary</option>");
-      page += F("<option value='");
-      page += PED_ANALOG_LATCH;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG_LATCH) page += F(" selected");
-      page += F(">Analog+Latch</option>");
-      page += F("<option value='");
-      page += PED_ANALOG_PAD_MOMENTARY;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG_PAD_MOMENTARY) page += F(" selected");
-      page += F(">Analog Pad+Momentary</option>");
-      page += F("<option value='");
-      page += PED_ANALOG4;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG4) page += F(" selected");
-      page += F(">Analog 4</option>");
+      // page += F("<option value='");
+      // page += PED_ANALOG_PAD;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ANALOG_PAD) page += F(" selected");
+      // page += F(">Analog Pad</option>");
+      // page += F("<option value='");
+      // page += PED_JOG_WHEEL;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_JOG_WHEEL) page += F(" selected");
+      // page += F(">Jog Wheel</option>");
+      // page += F("<option value='");
+      // page += PED_MOMENTARY2;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_MOMENTARY2) page += F(" selected");
+      // page += F(">Momentary 2</option>");
+      // page += F("<option value='");
+      // page += PED_MOMENTARY3;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_MOMENTARY3) page += F(" selected");
+      // page += F(">Momentary 3</option>");
+      // page += F("<option value='");
+      // page += PED_LATCH2;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_LATCH2) page += F(" selected");
+      // page += F(">Latch 2</option>");
+      // page += F("<option value='");
+      // page += PED_LADDER;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_LADDER) page += F(" selected");
+      // page += F(">Ladder</option>");
+      // page += F("<option value='");
+      // page += PED_ULTRASONIC;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ULTRASONIC) page += F(" selected");
+      // page += F(">Ultrasonic</option>");
+      // page += F("<option value='");
+      // page += PED_ANALOG_MOMENTARY;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ANALOG_MOMENTARY) page += F(" selected");
+      // page += F(">Analog+Momentary</option>");
+      // page += F("<option value='");
+      // page += PED_ANALOG_LATCH;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ANALOG_LATCH) page += F(" selected");
+      // page += F(">Analog+Latch</option>");
+      // page += F("<option value='");
+      // page += PED_ANALOG_PAD_MOMENTARY;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ANALOG_PAD_MOMENTARY) page += F(" selected");
+      // page += F(">Analog Pad+Momentary</option>");
+      // page += F("<option value='");
+      // page += PED_ANALOG4;
+      // page += F("'");
+      // if (pedals[i-1].mode == PED_ANALOG4) page += F(" selected");
+      // page += F(">Analog 4</option>");
     
 
     page += F("</select>");
@@ -3802,28 +3825,32 @@ void get_sequences_page(unsigned int start, unsigned int len) {
 
 void get_options_page(unsigned int start, unsigned int len) {
 
-  const String  bootswatch[] = { "bootstrap",
-                                 "cerulean",
-                                 "cosmo",
-                                 "cyborg",
-                                 "darkly",
-                                 "flatly",
-                                 "litera",
-                                 "journal",
-                                 "lumen",
-                                 "lux",
-                                 "materia",
-                                 "minty",
-                                 "pulse",
-                                 "sandstone",
-                                 "simplex",
-                                 "sketchy",
-                                 "slate",
-                                 "solar",
-                                 "spacelab",
-                                 "superhero",
-                                 "united",
-                                 "yeti"};
+  const String  bootswatch[] = {  "bootstrap",
+                                  "cerulean",
+                                  "cosmo",
+                                  "cyborg",
+                                  "darkly",
+                                  "flatly",
+                                  "journal",
+                                  "litera",
+                                  "lumen",
+                                  "lux",
+                                  "materia",
+                                  "minty",
+                                  "morph",
+                                  "pulse",
+                                  "quartz",
+                                  "sandstone",
+                                  "simplex",
+                                  "sketchy",
+                                  "slate",
+                                  "solar",
+                                  "spacelab",
+                                  "superhero",
+                                  "united",
+                                  "vapor",
+                                  "yeti",
+                                  "zephyr" };
 
   if (get_top_page(7, start, len)) return;
 
@@ -4044,7 +4071,7 @@ void get_options_page(unsigned int start, unsigned int len) {
   page += F("<div class='card-body'>");
   page += F("<div class='form-floating'>");
   page += F("<select class='form-select' id='bootstraptheme' name='theme'>");
-  for (unsigned int i = 0; i < 22; i++) {
+  for (unsigned int i = 0; i < sizeof(bootswatch) / sizeof(bootswatch[0]); i++) {
     page += F("<option value='");
     page += bootswatch[i];
     page += F("'");
@@ -4908,7 +4935,7 @@ void get_update_page(unsigned int start, unsigned int len) {
   page += F("</div></b></div>");
   page += F("<div class='col-4'>");
   page += F("Latest public version: <b>");
-  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/alf45tar/PedalinoMini/master/firmware/");
+  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/master/firmware/");
   page += xstr(PLATFORMIO_ENV);
   page += F("/version.txt?");
   page += (rand() % (999999 - 100000 + 1) + 100000);
@@ -4933,7 +4960,7 @@ void get_update_page(unsigned int start, unsigned int len) {
   page += F("</div>");
   page += F("<div class='col-4'>");
   page += F("<small>");
-  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/alf45tar/PedalinoMini/master/firmware/");
+  page += F("<div id='latestFirmwareVersion' w3-include-html='https://raw.githubusercontent.com/fuegovic/PedalinoMini/master/firmware/");
   page += xstr(PLATFORMIO_ENV);
   page += F("/firmware.bin.md5?");
   page += (rand() % (999999 - 100000 + 1) + 100000);

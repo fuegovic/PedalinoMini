@@ -21,11 +21,13 @@ extern "C" {
 #define PEDALINO_VERSION_MINOR   5
 /** Patch version number (x.x.X) */
 #define PEDALINO_VERSION_PATCH   0
+/** Patch version suffix (x.x.x-X) */
+#define PEDALINO_VERSION_SUFFIX  "🐦‍🔥"
 
 #define xstr(s) sstr(s)  // stringize the result of expansion of a macro argument
 #define sstr(s) #s
 
-#define VERSION xstr(PEDALINO_VERSION_MAJOR.PEDALINO_VERSION_MINOR.PEDALINO_VERSION_PATCH)
+#define VERSION xstr(PEDALINO_VERSION_MAJOR.PEDALINO_VERSION_MINOR.PEDALINO_VERSION_PATCH-PEDALINO_VERSION_SUFFIX)
 
 /**
  * Macro to convert PEDALINO version number into an integer

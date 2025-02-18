@@ -1153,7 +1153,7 @@ void load_factory_default()
   }
 
   byte c = 0;
-  for (byte p = 0; p < 6; p++) {
+  for (byte p = 0; p < PEDALS; p++) {
     byte b = 0;
     switch (pedals[p].mode) {
       case PED_NONE:                b = 0; break;

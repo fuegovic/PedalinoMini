@@ -145,7 +145,7 @@ const byte pinD[] = {
     GPIO_NUM_13,  // Pedal 11 - Digital Switch
     GPIO_NUM_17,  // Pedal 12 - Digital Switch
     GPIO_NUM_16,  // Pedal 13 - Digital Switch
-    GPIO_NUM_15,  // Pedal 14 - Digital Switch (shared with MIDI)
+    GPIO_NUM_23,  // Pedal 14 - Digital Switch (shared with MIDI)
     GPIO_NUM_0    // Pedal 15 - Digital Switch (shared with BOOT)
 };
 
@@ -164,7 +164,7 @@ const byte pinA[] = {
     GPIO_NUM_13,  // Pedal 11 - Digital Switch
     GPIO_NUM_17,  // Pedal 12 - Digital Switch
     GPIO_NUM_16,  // Pedal 13 - Digital Switch
-    GPIO_NUM_15,  // Pedal 14 - Digital Switch (shared with MIDI)
+    GPIO_NUM_23,  // Pedal 14 - Digital Switch (shared with MIDI)
     GPIO_NUM_0    // Pedal 15 - Digital Switch (shared with BOOT)
 };
 #define FACTORY_DEFAULT_PIN   GPIO_NUM_0
@@ -172,7 +172,7 @@ const byte pinA[] = {
 #define USB_MIDI_OUT_PIN      GPIO_NUM_19
 #define DIN_MIDI_IN_PIN       GPIO_NUM_15
 #define DIN_MIDI_OUT_PIN      GPIO_NUM_4
-#define BATTERY_PIN           GPIO_NUM_36   // GPIO_NUM_32 to GPIO_NUM_39 only
+// #define BATTERY_PIN           GPIO_NUM_36   // GPIO_NUM_32 to GPIO_NUM_39 only
 #define FASTLEDS_DATA_PIN     GPIO_NUM_5
 #endif
 
@@ -362,7 +362,7 @@ const char *pedalAnalogResponse[] = {"Linear", "Log", "Antilog"};
 #define PED_TIMESIGNATURE_LAST  7
 
 #define MIDI_RESOLUTION         128       // MIDI 7-bit CC resolution
-#define ADC_RESOLUTION_BITS       9       // hardware 9 to 12-bit ADC converter resolution
+#define ADC_RESOLUTION_BITS      10       // hardware 9 to 12-bit ADC converter resolution
                                           // software 1 to 16-bit resolution
 #define ADC_RESOLUTION (1 << ADC_RESOLUTION_BITS)
 
