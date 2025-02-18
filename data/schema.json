@@ -186,7 +186,6 @@
 
         "Actions": {
             "type": "array",
-            "maxItems": 15,
             "items": {
                 "type": "object",
                 "properties": {
@@ -197,7 +196,7 @@
                     "Control": {
                         "type": "integer",
                         "minimum": 0,
-                        "maximum": 100
+                        "maximum": 64
                     },
                     "Led": {
                         "type": "integer",
@@ -403,13 +402,13 @@
         "Pedals": {
             "type": "array",
             "minItems": 0,
-            "maxItems": 15,
+            "maxItems": 16,
             "items": {
                 "type": "object",
                 "properties": {
                     "Pedal": {
                         "type": "integer",
-                        "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                        "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                     },
                     "Mode": {
                         "type": "string",
@@ -465,19 +464,19 @@
                 "properties": {
                     "Pedal1": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                     },
                     "Button1": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                     },
                     "Pedal2": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                     },
                     "Button2": {
                         "type": "integer",
-                        "enum": [0, 1, 2, 3, 4, 5, 6]
+                        "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                     },
                     "Led": {
                         "type": "integer",
@@ -487,7 +486,5 @@
                 }
             }
         }
-    },
-    "required": ["Pedals", "Controls", "Actions"],
-    "additionalProperties": false
+    }
 }
