@@ -198,7 +198,7 @@ using namespace ace_button;
 #define DEBOUNCE_INTERVAL        5
 #define PED_PRESS_TIME         200
 #define PED_DOUBLE_PRESS_TIME  400
-#define PED_LONG_PRESS_TIME    500
+#define PED_LONG_PRESS_TIME   1000
 #define PED_REPEAT_PRESS_TIME 1000
 #define PED_SIMULTANEOUS_GAP    50
 
