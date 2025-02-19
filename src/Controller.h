@@ -72,6 +72,7 @@ void leds_refresh(byte l)
 
   fastleds[l] = lastLedColor[currentBank][l];
   fastleds[LEDS] = CRGB::Black;
+  update_profile_led();
   FastLED.show();
 }
 
@@ -1419,6 +1420,7 @@ void fire_action(action* act, byte p, byte i, byte e)
             case PED_ACTION_DEVICE_INFO:
               scrollingMode = !scrollingMode;
               leds_refresh();
+              update_profile_led();
               DPRINT("DEVICE INFO\n");
               //send_configuration_sysex();
               break;

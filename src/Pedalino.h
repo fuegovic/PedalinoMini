@@ -40,6 +40,11 @@ __________           .___      .__  .__                 _____  .__       .__    
 #define MAXACTIONNAME    16
 #define MAXBANKNAME      16
 
+#define PROFILE_LED      20    // Profile LED is the last LED
+#define PROFILE_A_COLOR  CRGB::DarkBlue   // Color for profile 0
+#define PROFILE_B_COLOR  CRGB::DarkRed       // Color for profile 1 
+#define PROFILE_C_COLOR  CRGB::DarkGreen   // Color for profile 2
+
 // https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
 // GPIOs 34 to 39 are GPIs – input only pins.
 // These pins don’t have internal pull-ups or pull-down resistors.

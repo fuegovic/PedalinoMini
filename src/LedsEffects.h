@@ -410,13 +410,24 @@ void ease2() {
   fadeToBlackBy(fastleds, LEDS, 2);                           // 8 bit, 1 = slow fade, 255 = fast fade
 }
 
+// void update_profile_led() {
+//   CRGB color;
+//   switch (currentProfile) {
+//     case 0:  color = CRGB::Orange;    break;
+//     case 1:  color = CRGB::Cyan;      break;
+//     case 2:  color = CRGB::Magenta;   break;
+//   }
+//   fastleds[19] = swap_rgb_order(color, rgbOrder);
+//   FastLED.show();
+// }
+
 void update_profile_led() {
   CRGB color;
   switch (currentProfile) {
-    case 0:  color = CRGB::Red;    break;
-    case 1:  color = CRGB::Green;  break;
-    case 2:  color = CRGB::Blue;   break;
+    case 0:  color = PROFILE_A_COLOR;  break;
+    case 1:  color = PROFILE_B_COLOR;  break;
+    case 2:  color = PROFILE_C_COLOR;  break;
   }
-  fastleds[18] = swap_rgb_order(color, rgbOrder);
+  fastleds[PROFILE_LED - 1] = swap_rgb_order(color, rgbOrder);
   FastLED.show();
 }

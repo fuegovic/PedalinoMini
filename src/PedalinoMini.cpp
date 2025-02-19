@@ -506,6 +506,7 @@ void setup()
 #endif
 
   set_initial_led_color();
+  update_profile_led();
 
   xTaskCreatePinnedToCore(
                     loop1,       /* Task function. */
