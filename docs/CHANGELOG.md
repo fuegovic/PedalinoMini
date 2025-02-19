@@ -1,11 +1,6 @@
 # Changelog
 
 ## ✨ New Features & Updates
-- 💡 Profile LED Indicator (LED 19):
-  - Profile A: Red
-  - Profile B: Green
-  - Profile C: Blue
-  - Updates automatically on profile changes
 - 🌙 Dark Mode by default
 - 🎨 Added new Bootswatch themes
 - 📊 15 controls per page
@@ -19,6 +14,11 @@
 - 🔧 Updated JSON schema to support 15 pedals
 - 💾 Updated factory default
 - 💡 Added new Fire Ocean LED effect
+- 💡 Profile LED Indicator (LED 20):
+  - Profile A: Cyan
+  - Profile B: Orange
+  - Profile C: Magenta
+  - Updates automatically on profile changes
 - 🔄 Changed default LED effects in device info mode:
   - Profile A: Pacifica (ocean waves)
   - Profile B: Fire Ocean (lava waves)
