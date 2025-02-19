@@ -1,6 +1,11 @@
 # Changelog
 
 ## ✨ New Features & Updates
+- 💡 Profile LED Indicator (LED 19):
+  - Profile A: Red
+  - Profile B: Green
+  - Profile C: Blue
+  - Updates automatically on profile changes
 - 🌙 Dark Mode by default
 - 🎨 Added new Bootswatch themes
 - 📊 15 controls per page
@@ -25,6 +30,10 @@
 - Profile- : Backward cycling (A→C→B→A)
 - Auto-saves settings when switching
 - Shows current profile on screen
+- LED 19 indicates active profile:
+  - Red: Profile A
+  - Green: Profile B
+  - Blue: Profile C
 
 ## 📌 Pin Configuration Guide
 

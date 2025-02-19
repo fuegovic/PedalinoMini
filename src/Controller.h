@@ -512,6 +512,7 @@ void switch_profile_or_bank(byte channel, byte number, byte value) {
   if (channel == 16 && number == midi::BankSelect && value > 0 && value <= PROFILES) {
     currentProfile = value;
     reloadProfile = true;
+    update_profile_led();
     DPRINT("PROFILE.....%d\n", currentProfile);
   }
   if (channel == 16 && number == midi::BankSelect+32 && value >= 0 && value <= BANKS) {
@@ -1376,6 +1377,7 @@ void fire_action(action* act, byte p, byte i, byte e)
                     currentProfile = 0;  // Fallback to Profile A
             }
             reloadProfile = true;
+            update_profile_led();
             DPRINT("PROFILE+.....%d (Profile %c)\n", currentProfile, 'A' + currentProfile);
             break;
         
@@ -1396,6 +1398,7 @@ void fire_action(action* act, byte p, byte i, byte e)
                     currentProfile = 0;  // Fallback to Profile A
             }
             reloadProfile = true;
+            update_profile_led();
             DPRINT("PROFILE-.....%d (Profile %c)\n", currentProfile, 'A' + currentProfile);
             break;
 
@@ -2596,4 +2599,5 @@ void controller_setup()
   }
 */
   set_initial_led_color();
+  update_profile_led();
 }

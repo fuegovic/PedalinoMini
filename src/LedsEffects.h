@@ -409,3 +409,14 @@ void ease2() {
   fastleds[(millis() / 1000) % LEDS] = swap_rgb_order(CRGB::Cyan, rgbOrder);
   fadeToBlackBy(fastleds, LEDS, 2);                           // 8 bit, 1 = slow fade, 255 = fast fade
 }
+
+void update_profile_led() {
+  CRGB color;
+  switch (currentProfile) {
+    case 0:  color = CRGB::Red;    break;
+    case 1:  color = CRGB::Green;  break;
+    case 2:  color = CRGB::Blue;   break;
+  }
+  fastleds[18] = swap_rgb_order(color, rgbOrder);
+  FastLED.show();
+}
