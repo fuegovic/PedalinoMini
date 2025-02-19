@@ -548,13 +548,18 @@ void loop()
     if (scrollingMode && !displayOff) {
       switch (currentProfile) {
         case 0:
+          pacifica_loop();  
+          //plasma();
+          //pride();
           //blendwave();
-          ease2();
+          //ease2();
           break;
         case 1:
-          pacifica_loop();
+          fireocean_loop();
           break;
         case 2:
+          //blur();
+          //confetti_pal();
           pride();
           break;
       }

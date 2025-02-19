@@ -12,6 +12,12 @@
 - 🏠 Replaced logo with home icon in navbar
 - 🔄 Added update menu item to navbar
 - 🔧 Updated JSON schema to support 15 pedals
+- 💾 Updated factory default
+- 💡 Added new Fire Ocean LED effect
+- 🔄 Changed default LED effects in device info mode:
+  - Profile A: Pacifica (ocean waves)
+  - Profile B: Fire Ocean (lava waves)
+  - Profile C: Pride (rainbow waves)
 
 ## 🔄 Profile System
 - Cycles through profiles A → B → C
