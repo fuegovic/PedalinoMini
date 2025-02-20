@@ -40,9 +40,9 @@ __________           .___      .__  .__                 _____  .__       .__    
 #define MAXACTIONNAME    16
 #define MAXBANKNAME      16
 
-#define PROFILE_LED      20    // Profile LED is the last LED
+#define PROFILE_LED      20                   // Profile Indicator LED
 #define PROFILE_A_COLOR  CRGB(0, 255, 255);   // Color for profile 0
-#define PROFILE_B_COLOR  CRGB(255, 75, 0);      // Color for profile 1 
+#define PROFILE_B_COLOR  CRGB(255, 75, 0);    // Color for profile 1 
 #define PROFILE_C_COLOR  CRGB(255, 0, 255);   // Color for profile 2
 
 // https://randomnerdtutorials.com/esp32-pinout-reference-gpios/

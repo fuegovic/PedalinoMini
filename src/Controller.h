@@ -61,6 +61,7 @@ void leds_refresh()
     fastleds[l] = lastLedColor[currentBank][l];
   fastleds[LEDS] = CRGB::Black;
   FastLED.show();
+  update_profile_led();
 }
 
 void leds_refresh(byte l)
@@ -72,8 +73,8 @@ void leds_refresh(byte l)
 
   fastleds[l] = lastLedColor[currentBank][l];
   fastleds[LEDS] = CRGB::Black;
-  update_profile_led();
   FastLED.show();
+  update_profile_led();
 }
 
 void set_led_color(byte l, CRGB c, byte b)
@@ -1763,6 +1764,7 @@ void controller_event_handler_analog(byte pedal, byte button, int value)
                           0, MIDI_RESOLUTION - 1,
                           currentBank, controls[act->control].pedal1);
               leds_refresh();
+              // update_profile_led();
               break;
 
             case PED_ACTION_TAP:
