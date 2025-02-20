@@ -392,46 +392,7 @@ void get_footer_page() {
   page += F("</html>");
 }
 
-void get_login_page() {
-
-  get_top_page(-1, 0, 65535);
-
-  page += F("<div class='col-4'>");
-  page += F("</div>");
-
-  page += F("<div class='col-4'>");
-  page += F("<form class='form-signin'>");
-  page += F("<div class='text-center mb-4'>");
-  page += F("<img class='mb-4' src='/logo.png' alt='' width='64' height='64'>");
-  page += F("<h1 class='h3 mb-3 font-weight-normal'>PedalinoMini&trade;</h1>");
-  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/fuegovic/PedalinoMini/blob/single/docs/CHANGELOG.md'>More info</a></p>");
-  page += F("</div>");
-
-  page += F("<div class='form-label-group'>");
-  page += F("<input type='text' id='username' class='form-control' placeholder='Username' required='' autofocus=''>");
-  page += F("<label for='username'>Username</label>");
-  page += F("</div>");
-
-  page += F("<div class='form-label-group'>");
-  page += F("<input type='password' id='password' class='form-control' placeholder='Password' required=''>");
-  page += F("<label for='password'>Password</label>");
-  page += F("</div>");
-
-  page += F("<div class='checkbox mb-3'>");
-  page += F("<label>");
-  page += F("<input type='checkbox' value='remember-me'> Remember me");
-  page += F("</label>");
-  page += F("</div>");
-  page += F("<button class='btn btn-lg btn-primary btn-block' type='submit'>Sign in</button>");
-  page += F("<p class='mt-5 mb-3 text-muted text-center'>© 2018-2019</p>");
-  page += F("</form>");
-  page += F("</div>");
-
-  page += F("<div class='col-4'>");
-  page += F("</div>");
-
-  get_footer_page();
-}
+#include "WebPages/LoginPage.h"
 
 void get_root_page(unsigned int start, unsigned int len) {
 
