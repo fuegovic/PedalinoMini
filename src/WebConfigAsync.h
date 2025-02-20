@@ -6500,29 +6500,88 @@ void http_handle_not_found(AsyncWebServerRequest *request) {
 
 
 #ifdef WEBSOCKET
-void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len){
+void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
+  static uint32_t lastPing = 0;
+  const uint32_t PING_INTERVAL = 2000;  // Send ping every 2 seconds
+  const uint32_t PING_TIMEOUT = 5000;   // Consider connection lost after 5 seconds without pong
 
-  //static bool connected = false;
-
-  if(type == WS_EVT_CONNECT){
-    //client connected
+  if (type == WS_EVT_CONNECT) {
+    // Client connected
     DPRINT("ws[%s][%u] connect\n", server->url(), client->id());
-    //client->printf("Hello Client %u :)", client->id());
-    //client->ping();
-    //client->keepAlivePeriod(1);
-    //connected = true;
     wsClient = client;
-  } else if(type == WS_EVT_DISCONNECT){
-    //client disconnected
+    client->ping();
+    lastPing = millis();
+    isConnected = true;
+    
+    // Set keep-alive period and timeout
+    client->keepAlivePeriod(2);
+    client->keepAliveTimeout(5);
+    
+    // Send initial state as JSON
+    DynamicJsonDocument doc(2048);
+    doc["mode"] = MTC.getMode() == MidiTimeCode::SynchroClockMaster ? "clock-master" : 
+                  MTC.getMode() == MidiTimeCode::SynchroClockSlave ? "clock-slave" : "none";
+    doc["bpm"] = bpm;
+    doc["timeSignature"] = timeSignature == PED_TIMESIGNATURE_2_4 ? "2/4" :
+                          timeSignature == PED_TIMESIGNATURE_3_4 ? "3/4" :
+                          timeSignature == PED_TIMESIGNATURE_4_4 ? "4/4" :
+                          timeSignature == PED_TIMESIGNATURE_3_8 ? "3/8" :
+                          timeSignature == PED_TIMESIGNATURE_6_8 ? "6/8" :
+                          timeSignature == PED_TIMESIGNATURE_9_8 ? "9/8" :
+                          timeSignature == PED_TIMESIGNATURE_12_8 ? "12/8" : "4/4";
+    doc["currentBank"] = currentBank;
+    doc["isPlaying"] = MTC.isPlaying();
+    doc["mtcMode"] = currentMidiTimeCode;
+    doc["displayEnabled"] = true;
+    doc["displayBuffer"] = ""; // Will be updated via binary messages
+
+    String output;
+    serializeJson(doc, output);
+    client->text(output);
+
+    // Initialize display buffer
+    if (wsClient && display.buffer) {
+      wsClient->binary(display.buffer, 128*64);
+    }
+
+    // Schedule next ping
+    client->ping();
+
+    // Send initial display update
+    if (wsClient && display.buffer) {
+      wsClient->binary(display.buffer, 128*64);
+    }
+    
+  } else if (type == WS_EVT_DISCONNECT) {
+    // Client disconnected
     DPRINT("ws[%s][%u] disconnect\n", server->url(), client->id());
-    //connected = false;
-    wsClient = NULL;
-  } else if(type == WS_EVT_ERROR){
-    //error was received from the other end
+    isConnected = false;
+    if (wsClient == client) {
+      wsClient = NULL;
+    }
+    
+  } else if (type == WS_EVT_ERROR) {
+    // Error received
     DPRINT("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
-  } else if(type == WS_EVT_PONG){
-    //pong message was received (in response to a ping request maybe)
-    DPRINT("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len)?(char*)data:"");
+    if (wsClient == client) {
+      wsClient = NULL;
+      isConnected = false;
+    }
+    
+  } else if (type == WS_EVT_PONG) {
+    // Pong received (response to ping)
+    DPRINT("ws[%s][%u] pong received\n", server->url(), client->id());
+    lastPing = millis();
+    
+    // Check if connection timed out
+    if (millis() - lastPing > PING_TIMEOUT) {
+      DPRINT("ws[%s][%u] connection timeout\n", server->url(), client->id());
+      client->close();
+      if (wsClient == client) {
+        wsClient = NULL;
+        isConnected = false;
+      }
+    }
   } else if(type == WS_EVT_DATA){
     //data packet
     AwsFrameInfo * info = (AwsFrameInfo*)arg;
