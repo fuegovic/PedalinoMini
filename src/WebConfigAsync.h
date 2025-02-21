@@ -132,38 +132,38 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
 
   if (trim_page(start, len)) return true;
   
-  // Home nav item - home btn
-  if (p >= 0) {
-  page += F("<div class='container-fluid mt-3 mb-3'>");
-
-  page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
-  page += F("<div class='container-fluid'>");
-  page += F("<ul class='navbar-nav mr-auto'>");
-
-  page += F("<li class='nav-item");
-  page += (p == 0 ? F(" active'>") : F("'>"));
-  page += F("<a class='nav-link' href='/'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-house' viewBox='0 0 16 16'>");
-  page += F("<path d='M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z'/>");
-  page += F("</svg>");
-  page += F(" Home</a>");
-  page += F("</li>");
-  //
-
-  // // Home nav item alt - logo.png
+  // // Home nav item - home btn
   // if (p >= 0) {
-  //   page += F("<div class='container-fluid mt-3 mb-3'>");
+  // page += F("<div class='container-fluid mt-3 mb-3'>");
+
+  // page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+  // page += F("<div class='container-fluid'>");
+  // page += F("<ul class='navbar-nav mr-auto'>");
+
+  // page += F("<li class='nav-item");
+  // page += (p == 0 ? F(" active'>") : F("'>"));
+  // page += F("<a class='nav-link' href='/'>");
+  // page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-house' viewBox='0 0 16 16'>");
+  // page += F("<path d='M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z'/>");
+  // page += F("</svg>");
+  // page += F(" Home</a>");
+  // page += F("</li>");
+  // //
+
+  // Home nav item alt - logo.png
+  if (p >= 0) {
+    page += F("<div class='container-fluid mt-3 mb-3'>");
   
-  //   page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
-  //   page += F("<div class='container-fluid'>");
-  //   page += F("<a class='navbar-brand' href='/'>");
-  //   page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
-  //   page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
-  //   page += F("<span class='navbar-toggler-icon'></span>");
-  //   page += F("</button>");
-  //   page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
-  //   page += F("<ul class='navbar-nav mr-auto'>");
-  // //  
+    page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+    page += F("<div class='container-fluid'>");
+    page += F("<a class='navbar-brand' href='/'>");
+    page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
+    page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
+    page += F("<span class='navbar-toggler-icon'></span>");
+    page += F("</button>");
+    page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
+    page += F("<ul class='navbar-nav mr-auto'>");
+  //  
 
   if (trim_page(start, len)) return true;
 
@@ -311,14 +311,14 @@ void get_footer_page() {
 
 #include "WebPages/LoginPage.h"
 
-// add status items Helper function 
+// Helper function to add status items
 void addStatusItem(const char* label, const String& value) {
-  page += F("<div class='status-item'>");
-  page += F("<div class='status-label'>");
+  page += F("<div class='row g-1 mb-2'>");   // Added mb-2 class for consistent spacing
+  page += F("<div class='col-6'>");
   page += label;
   page += F("</div>");
-  page += F("<div class='status-value'>");
-  page += value;
+  page += F("<div class='col-6 text-end'>");
+  page += value; 
   page += F("</div>");
   page += F("</div>");
 }
@@ -341,12 +341,12 @@ void get_root_page(unsigned int start, unsigned int len) {
     "  text-align: right; "
     "}"
     "</style>");
-  // Modify the subtitle to use larger font size (fs-5 instead of fs-6)
-  page += F("<h4 class='display-4 text-center mb-4'>");
+
+    page += F("<h4 class='display-4 text-center mb-4'>");
   page += F("PedalinoMini™ 🐦‍🔥");
   page += F("<br class='mb-0'><small class='text-muted fs-5'>Wireless MIDI foot controller</small>");
   page += F("</h4>");
-  page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-2 g-md-3 mx-3'>");
+  page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 mx-3'>");
 
   // Product Information Card
   page += F("<div class='col'>");
@@ -358,6 +358,14 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("</svg> Product Information</h5>");
   page += F("<div class='card-body'>");
   addStatusItem("Model", String(MODEL));
+  page += F("<div class='row g-1 mb-2'>");
+  page += F("<div class='col-6'>Source Code</div>");
+  page += F("<div class='col-6 text-end'>");
+  page += F("<a href='");
+  page += PEDALINO_GITHUB_URL;
+  page += F("' target='_blank'>GitHub</a>");
+  page += F("</div></div>");
+  page += F("<hr class='my-2'>");
   addStatusItem("Profiles", String(PROFILES));
   addStatusItem("Banks", String(BANKS));
   addStatusItem("Pedals", String(PEDALS));
@@ -376,12 +384,34 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("<path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z'/>");
   page += F("</svg> Hardware</h5>");
   page += F("<div class='card-body'>");
+
+  // Board Information Section
+  page += F("<h6 class='border-bottom pb-2'>Board Information</h6>");
   addStatusItem("Board", ARDUINO_BOARD);
   addStatusItem("Chip", ESP.getChipModel());
+  addStatusItem("Chip Revision", String(ESP.getChipRevision()));
+  addStatusItem("Chip ID", getChipId());
+
+  // CPU Information Section  
+  page += F("<h6 class='border-bottom pb-2 mt-3'>CPU Information</h6>");
+  addStatusItem("CPU Core", String(xPortGetCoreID()));
   addStatusItem("CPU Frequency", String(ESP.getCpuFreqMHz()) + " MHz");
+
+  // Memory Information Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>Memory Information</h6>");
   addStatusItem("Flash Size", String(ESP.getFlashChipSize() / (1024 * 1024)) + " MB");
-  addStatusItem("Memory Used", String((ESP.getPsramSize() - ESP.getFreePsram()) / 1024) + "/" + String(ESP.getPsramSize() / 1024) + " kB");
+  addStatusItem("Flash Frequency", String(ESP.getFlashChipSpeed() / 1000000) + " MHz");
+  addStatusItem("Memory Used", String((ESP.getHeapSize() - ESP.getFreeHeap()) / 1024) + "/" + String(ESP.getHeapSize() / 1024) + " kB");
+  addStatusItem("Max Memory Allocation", String(maxAllocation / 1024) + " kB");
+
+  // Storage Information Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>Storage Information</h6>"); 
+  nvs_stats_t nvs_stats;
+  if (nvs_get_stats("nvs", &nvs_stats) == ESP_OK) {
+    addStatusItem("NVS Used", String(nvs_stats.used_entries) + "/" + String(nvs_stats.total_entries) + " entries");
+  }
   addStatusItem("SPIFFS", String(SPIFFS.usedBytes() / 1024) + "/" + String(SPIFFS.totalBytes() / 1024) + " kB");
+
   page += F("</div></div></div>");
 
   if (trim_page(start, len)) return;
@@ -395,16 +425,42 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("<path d='M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z'/>");
   page += F("</svg> Network</h5>");
   page += F("<div class='card-body'>");
-  
+
   if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
+    // STA Mode Section
+    page += F("<h6 class='border-bottom pb-2'>WiFi</h6>");
     addStatusItem("SSID", wifiSSID);
     addStatusItem("IP Address", WiFi.localIP().toString());
     addStatusItem("Signal", String(WiFi.RSSI()) + " dBm");
+    addStatusItem("BSSID", WiFi.BSSIDstr());
+    addStatusItem("Channel", String(WiFi.channel()));
+    addStatusItem("MAC Address", WiFi.macAddress());
+    
+    // Network Configuration
+    page += F("<h6 class='border-bottom pb-2 mt-3'>Network Configuration</h6>"); 
+    addStatusItem("Subnet Mask", WiFi.subnetMask().toString());
+    addStatusItem("Gateway", WiFi.gatewayIP().toString());
+    addStatusItem("DNS", WiFi.dnsIP(0).toString());
+    addStatusItem("Hostname", String(WiFi.getHostname()) + ".local");
   }
-  
+
+  if (WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA) {
+    // AP Mode Section  
+    page += F("<h6 class='border-bottom pb-2");
+    if (WiFi.getMode() == WIFI_AP_STA) page += F(" mt-3");
+    page += F("'>Hotspot</h6>");
+    addStatusItem("AP SSID", ssidSoftAP);
+    addStatusItem("AP MAC", WiFi.softAPmacAddress());
+    addStatusItem("AP IP", WiFi.softAPIP().toString());
+    addStatusItem("AP Hostname", WiFi.softAPgetHostname());
+    addStatusItem("Connected Stations", String(WiFi.softAPgetStationNum()));
+  }
+
+  // MIDI Connectivity Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>MIDI Connectivity</h6>");
   addStatusItem("MIDI Network", appleMidiConnected ? "Connected" : "Disconnected");
   #ifdef BLE
-  addStatusItem("Bluetooth LE", bleMidiConnected ? "Connected" : "Disconnected");
+  addStatusItem("Bluetooth LE", bleMidiConnected ? "Connected" : "Disconnected"); 
   #endif
   page += F("</div></div></div>");
 
@@ -420,8 +476,10 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("</svg> System</h5>");
   page += F("<div class='card-body'>");
   
-  // Boot Mode
-  page += F("<div class='row g-1'><div class='col-6'>Boot Mode</div><div class='col-6 text-end'>");
+  page += F("<div class='card-body'>");
+
+  // Boot Mode Section
+  page += F("<h6 class='border-bottom pb-2'>Boot Mode</h6>");
   switch (bootMode) {
     case PED_BOOT_NORMAL:
       page += F("Normal");
@@ -439,14 +497,27 @@ void get_root_page(unsigned int start, unsigned int len) {
       page += F("Access Point without BLE");
       break;
   }
-  page += F("</div></div>");
-  
+
+  // System Information Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>System Information</h6>");
   addStatusItem("SDK Version", ESP.getSdkVersion());
   addStatusItem("Free Memory", String(freeMemory / 1024) + " kB");
-  
-  // Uptime with JavaScript update
-  page += F("<div class='row g-1'><div class='col-6'>Uptime</div><div class='col-6 text-end' id='uptime'></div></div>");
-  
+  addStatusItem("Uptime", "<span id='uptime'></span>");
+
+  // Firmware Details Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>Firmware Details</h6>");
+  addStatusItem("Version", String(PEDALINO_VERSION_MAJOR) + "." + 
+                        String(PEDALINO_VERSION_MINOR) + "." + 
+                        String(PEDALINO_VERSION_PATCH));
+  addStatusItem("Size", String(sketchSize) + " bytes");
+  addStatusItem("Hash", sketchMD5);
+  addStatusItem("Bootstrap Version", "<span id='bootstrap-version'></span>");
+  addStatusItem("ESP32 Platform", String(ESP32_PLATFORM_VERSION));
+  addStatusItem("IDF Version", String(ESP_IDF_VERSION_MAJOR) + "." +
+                            String(ESP_IDF_VERSION_MINOR) + "." +
+                            String(ESP_IDF_VERSION_PATCH));
+  addStatusItem("Build Env", xstr(PLATFORMIO_ENV));
+
   page += F("</div></div></div>");
 
   page += F("</div></div>");
@@ -472,6 +543,16 @@ void get_root_page(unsigned int start, unsigned int len) {
             "setInterval(updateUptime, 1000);"
             "updateUptime();"
             "</script>");
+  
+  page += F("<script>"
+    "document.addEventListener('DOMContentLoaded', function() {"
+    "  if (typeof bootstrap !== 'undefined') {"
+    "    document.getElementById('bootstrap-version').textContent = bootstrap.Tooltip.VERSION;"
+    "  } else {"
+    "    document.getElementById('bootstrap-version').textContent = 'Not available';"
+    "  }"
+    "});"
+    "</script>");
 
   get_footer_page();
 
@@ -978,28 +1059,6 @@ void get_actions_page(unsigned int start, unsigned int len) {
   page += F("</div>");
   page += F("</div>");
   page += F("</div>");
-  /*
-  page += F("<div class='col-auto'>");
-  page += F("<div class='btn-group' role='group'>");
-  page += F("<button id='btnGroupNewAction' type='button' class='btn btn-primary btn-sm dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-plus-circle-dotted' viewBox='0 0 16 16'>");
-  page += F("<path d='M8 0c-.176 0-.35.006-.523.017l.064.998a7.117 7.117 0 0 1 .918 0l.064-.998A8.113 8.113 0 0 0 8 0zM6.44.152c-.346.069-.684.16-1.012.27l.321.948c.287-.098.582-.177.884-.237L6.44.153zm4.132.271a7.946 7.946 0 0 0-1.011-.27l-.194.98c.302.06.597.14.884.237l.321-.947zm1.873.925a8 8 0 0 0-.906-.524l-.443.896c.275.136.54.29.793.459l.556-.831zM4.46.824c-.314.155-.616.33-.905.524l.556.83a7.07 7.07 0 0 1 .793-.458L4.46.824zM2.725 1.985c-.262.23-.51.478-.74.74l.752.66c.202-.23.418-.446.648-.648l-.66-.752zm11.29.74a8.058 8.058 0 0 0-.74-.74l-.66.752c.23.202.447.418.648.648l.752-.66zm1.161 1.735a7.98 7.98 0 0 0-.524-.905l-.83.556c.169.253.322.518.458.793l.896-.443zM1.348 3.555c-.194.289-.37.591-.524.906l.896.443c.136-.275.29-.54.459-.793l-.831-.556zM.423 5.428a7.945 7.945 0 0 0-.27 1.011l.98.194c.06-.302.14-.597.237-.884l-.947-.321zM15.848 6.44a7.943 7.943 0 0 0-.27-1.012l-.948.321c.098.287.177.582.237.884l.98-.194zM.017 7.477a8.113 8.113 0 0 0 0 1.046l.998-.064a7.117 7.117 0 0 1 0-.918l-.998-.064zM16 8a8.1 8.1 0 0 0-.017-.523l-.998.064a7.11 7.11 0 0 1 0 .918l.998.064A8.1 8.1 0 0 0 16 8zM.152 9.56c.069.346.16.684.27 1.012l.948-.321a6.944 6.944 0 0 1-.237-.884l-.98.194zm15.425 1.012c.112-.328.202-.666.27-1.011l-.98-.194c-.06.302-.14.597-.237.884l.947.321zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a6.999 6.999 0 0 1-.458-.793l-.896.443zm13.828.905c.194-.289.37-.591.524-.906l-.896-.443c-.136.275-.29.54-.459.793l.831.556zm-12.667.83c.23.262.478.51.74.74l.66-.752a7.047 7.047 0 0 1-.648-.648l-.752.66zm11.29.74c.262-.23.51-.478.74-.74l-.752-.66c-.201.23-.418.447-.648.648l.66.752zm-1.735 1.161c.314-.155.616-.33.905-.524l-.556-.83a7.07 7.07 0 0 1-.793.458l.443.896zm-7.985-.524c.289.194.591.37.906.524l.443-.896a6.998 6.998 0 0 1-.793-.459l-.556.831zm1.873.925c.328.112.666.202 1.011.27l.194-.98a6.953 6.953 0 0 1-.884-.237l-.321.947zm4.132.271a7.944 7.944 0 0 0 1.012-.27l-.321-.948a6.954 6.954 0 0 1-.884.237l.194.98zm-2.083.135a8.1 8.1 0 0 0 1.046 0l-.064-.998a7.11 7.11 0 0 1-.918 0l-.064.998zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z'/>");
-  page += F("</svg>");
-  page += F(" New Action</button>");
-  page += F("<div class='dropdown-menu' aria-labelledby='btnGroupNewAction'>");
-  for (i = 1; i <= PEDALS; i++) {
-    page += F("<button type='submit' class='dropdown-item' name='action' value='new");
-    page += i;
-    page += F("'>Pedal ");
-    page += i;
-    page += F("</button>");
-
-    if (trim_page(start, len)) return;
-  }
-  page += F("</div>");
-  page += F("</div>");
-  page += F("</div>");
-  */
   page += F("</div>");
 
   i = 1;
@@ -1798,24 +1857,7 @@ void get_actions_page(unsigned int start, unsigned int len) {
   }
   page += F("</div>");
   page += F("</div>");
-  /*
-  page += F("<div class='row'>");
-  page += F("<div class='col-auto'>");
-  page += F("<button type='submit' name='action' value='apply' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'>");
-  page += F("<path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'/>");
-  page += F("<path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'/>");
-  page += F("</svg>");
-  page += F(" Apply</button>");
-  page += F(" ");
-  page += F("<button type='submit' name='action' value='save' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-save' viewBox='0 0 16 16'>");
-  page += F("<path d='M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z'>");
-  page += F("</svg>");
-  page += F(" Save</button>");
-  page += F("</div>");
-  page += F("</div>");
-  */
+
   page += F("</form>");
 
   if (trim_page(start, len)) return;
@@ -2900,26 +2942,6 @@ void get_controls_page(unsigned int start, unsigned int len) {
 
   page += F("</div>");
   page += F("</div>");
-/*
-  page += F("<div class='container'>");
-  page += F("<div class='row mt-3'>");
-  page += F("<div class='col-auto'>");
-  page += F("<button type='submit' name='action' value='apply' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'>");
-  page += F("<path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'/>");
-  page += F("<path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'/>");
-  page += F("</svg>");
-  page += F(" Apply</button>");
-  page += F(" ");
-  page += F("<button type='submit' name='action' value='save' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-save' viewBox='0 0 16 16'>");
-  page += F("<path d='M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z'>");
-  page += F("</svg>");
-  page += F(" Save</button>");
-  page += F("</div>");
-  page += F("</div>");
-  page += F("</div>");
-*/
 
   page += F("</div>");
   page += F("</div>");
@@ -3382,26 +3404,6 @@ void get_sequences_page(unsigned int start, unsigned int len) {
     page += F("' id='ledLabel");
     page += i;
     page += F("'>Led</label>");
-    /*
-    page += F("<select class='form-select' id='ledSelect");
-    page += i;
-    page += F("' name='led");
-    page += i;
-    page += F("'>");
-    for (unsigned int l = 0; l <= LEDS; l++) {
-      page += F("<option value='");
-      page += (l+1);
-      page += F("'");
-      if (sequences[s-1][i-1].led == l) page += F(" selected");
-      page += F(">");
-      if (l != LEDS) page += (l+1);
-      page += F("</option>");
-    }
-    page += F("</select>");
-    page += F("<label for='ledSelect");
-    page += i;
-    page += F("'>Led</label>");
-    */
     page += F("</div>");
     page += F("</div>");
 
@@ -3431,24 +3433,6 @@ void get_sequences_page(unsigned int start, unsigned int len) {
   }
   page += F("</div>");
   page += F("</div>");
-  /*
-  page += F("<div class='row'>");
-  page += F("<div class='col-auto'>");
-  page += F("<button type='submit' name='action' value='apply' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'>");
-  page += F("<path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'/>");
-  page += F("<path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'/>");
-  page += F("</svg>");
-  page += F(" Apply</button>");
-  page += F(" ");
-  page += F("<button type='submit' name='action' value='save' class='btn btn-primary btn-sm'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-save' viewBox='0 0 16 16'>");
-  page += F("<path d='M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z'>");
-  page += F("</svg>");
-  page += F(" Save</button>");
-  page += F("</div>");
-  page += F("</div>");
-  */
   page += F("</form>");
 
   if (trim_page(start, len)) return;
@@ -6528,4 +6512,4 @@ inline void http_run() {
   }
 }
 
-#endif  // WIFI
+#endif

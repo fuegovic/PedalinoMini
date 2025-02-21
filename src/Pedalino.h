@@ -17,7 +17,7 @@ __________           .___      .__  .__                 _____  .__       .__    
 #include <vector>
 #include <Arduino.h>
 
-#define MODEL           "PedalinoMini 🐦‍🔥"
+#define MODEL           "PedalinoMini™ 🐦‍🔥"
 
 #define INTERFACES        6
 #define PROFILES          3
@@ -31,7 +31,7 @@ __________           .___      .__  .__                 _____  .__       .__    
 #define ADC_INPUTS        4   // ADS1115 number of analog inputs
 #define ADC_CHANNELS      (ADC_BOARDS * ADC_INPUTS)
 #define LEDS             20   // number of WS2812B leds (254 max)
-#define LED_RGB_ORDER   RGB   // do not change it, RGB order is managed by program because FastLED library does not support changing RGB order at runtime
+#define LED_RGB_ORDER   GRB   // RGB order, will identify as "RGB" in the webUI
 #define SLOTS_ROWS        2
 #define SLOTS_COLS        3
 #define SLOTS             SLOTS_ROWS * SLOTS_COLS
