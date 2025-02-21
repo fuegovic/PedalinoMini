@@ -17,7 +17,7 @@ __________           .___      .__  .__                 _____  .__       .__    
 #include <vector>
 #include <Arduino.h>
 
-#define MODEL           "PedalinoMini™"
+#define MODEL           "PedalinoMini 🐦‍🔥"
 
 #define INTERFACES        6
 #define PROFILES          3

@@ -131,7 +131,8 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("<body>");
 
   if (trim_page(start, len)) return true;
-
+  
+  // Home nav item - home btn
   if (p >= 0) {
   page += F("<div class='container-fluid mt-3 mb-3'>");
 
@@ -139,7 +140,6 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("<div class='container-fluid'>");
   page += F("<ul class='navbar-nav mr-auto'>");
 
-  // Home nav item
   page += F("<li class='nav-item");
   page += (p == 0 ? F(" active'>") : F("'>"));
   page += F("<a class='nav-link' href='/'>");
@@ -148,16 +148,22 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("</svg>");
   page += F(" Home</a>");
   page += F("</li>");
+  //
 
-  // page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
-  // page += F("<div class='container-fluid'>");
-  // page += F("<a class='navbar-brand' href='/'>");
-  // page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
-  // page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
-  // page += F("<span class='navbar-toggler-icon'></span>");
-  // page += F("</button>");
-  // page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
-  // page += F("<ul class='navbar-nav mr-auto'>");
+  // // Home nav item alt - logo.png
+  // if (p >= 0) {
+  //   page += F("<div class='container-fluid mt-3 mb-3'>");
+  
+  //   page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+  //   page += F("<div class='container-fluid'>");
+  //   page += F("<a class='navbar-brand' href='/'>");
+  //   page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
+  //   page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
+  //   page += F("<span class='navbar-toggler-icon'></span>");
+  //   page += F("</button>");
+  //   page += F("<div class='collapse navbar-collapse' id='navbarNavDropdown'>");
+  //   page += F("<ul class='navbar-nav mr-auto'>");
+  // //  
 
   if (trim_page(start, len)) return true;
 
@@ -273,95 +279,6 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("</div>");
   page += F("</nav>");
 
-
-/*
-  page += F("<div class='d-flex flex-column bg-dark' style='width: 4.5rem;'>");
-  page += F("<a href='/' id='bootstrap' class='d-block p-3 link-dark text-decoration-none' title='PedalinoMini' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<img src='/logo.png' width='32' height='32'>");
-  page += F("<span class='visually-hidden'>Icon-only</span>");
-  page += F("</a>");
-  page += F("<ul class='nav nav-pills nav-flush flex-column mb-auto text-center'>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/actions' class='nav-link active py-3 border-bottom' title='Actions' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-clipboard-check' viewBox='0 0 16 16'>");
-  page += F("<path fill-rule='evenodd' d='M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z'/>");
-  page += F("<path d='M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z'/>");
-  page += F("<path d='M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z'/>");
-  page += F("<use xlink:href='#home'/></svg>");
-  page += F("</a>");
-  page += F("</li>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/pedals' class='nav-link py-3 border-bottom' title='Pedals' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-controller' viewBox='0 0 16 16'>");
-  page += F("<path d='M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z'/>");
-  page += F("<path d='M3.051 3.26a.5.5 0 0 1 .354-.613l1.932-.518a.5.5 0 0 1 .62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 0 1 .622-.399l1.932.518a.5.5 0 0 1 .306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 0 1-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 0 1-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 0 1 .433-.335.504.504 0 0 1-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 0 0-.748 2.295 12.351 12.351 0 0 0-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 0 0 .426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 0 0 .426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 0 0-.339-2.406 13.753 13.753 0 0 0-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("</li>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/interfaces' class='nav-link py-3 border-bottom' title='Interfaces' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-hdd-network' viewBox='0 0 16 16'>");
-  page += F("<path d='M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z'/>");
-  page += F("<path d='M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8.5v3a1.5 1.5 0 0 1 1.5 1.5h5.5a.5.5 0 0 1 0 1H10A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5H.5a.5.5 0 0 1 0-1H6A1.5 1.5 0 0 1 7.5 10V7H2a2 2 0 0 1-2-2V4zm1 0v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1zm6 7.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("</li>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/sequences' class='nav-link py-3 border-bottom' title='Sequences' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-camera-reels' viewBox='0 0 16 16'>");
-  page += F("<path d='M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z'/>");
-  page += F("<path d='M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z'/>");
-  page += F("<path d='M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("</li>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/options' class='nav-link py-3 border-bottom' title='Options' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-gear' viewBox='0 0 16 16'>");
-  page += F("<path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/>");
-  page += F("<path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("</li>");
-  page += F("<li class='nav-item'>");
-  page += F("<a href='/configurations' class='nav-link py-3 border-bottom' title='Configurations' data-bs-toggle='tooltip' data-bs-placement='right'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-file-code' viewBox='0 0 16 16'>");
-  page += F("<path d='M6.646 5.646a.5.5 0 1 1 .708.708L5.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zm2.708 0a.5.5 0 1 0-.708.708L10.293 8 8.646 9.646a.5.5 0 0 0 .708.708l2-2a.5.5 0 0 0 0-.708l-2-2z'/>");
-  page += F("<path d='M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("</li>");
-
-  page += F("</ul>");
-  page += F("<div class='dropdown border-top'>");
-  page += F("<a href='#' class='d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle' id='dropdownUser3' data-bs-toggle='dropdown' aria-expanded='false'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-stack' viewBox='0 0 16 16'>");
-  page += F("<path d='m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z'/>");
-  page += F("<path d='m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z'/>");
-  page += F("</svg>");
-  page += F("</a>");
-  page += F("<ul class='dropdown-menu text-small shadow' aria-labelledby='dropdownUser3'>");
-  page += F("<li><a class='dropdown-item' href='#'>Profile A</a></li>");
-  page += F("<li><a class='dropdown-item' href='#'>Profile B</a></li>");
-  page += F("<li><a class='dropdown-item' href='#'>Profile C</a></li>");
-  page += F("<li><hr class='dropdown-divider'></li>");
-  page += F("<li><a class='dropdown-item' href='#'>Sign out</a></li>");
-  page += F("</ul>");
-  page += F("</div>");
-  page += F("</div>");
-  page += F("<script>");
-  page += F("(function () {\n"
-              "'use strict'\n"
-              "var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'))\n"
-              "tooltipTriggerList.forEach(function (tooltipTriggerEl) {\n"
-                "new bootstrap.Tooltip(tooltipTriggerEl)\n"
-              "})\n"
-            "})()\n");
-  page += F("</script>");
-
-  page += F("<div class='container mt-3 mb-3'>");
-*/
-
   if (alert != "") {
     page += F("<div class='alert alert-success alert-dismissible fade show' role='alert'>");
     page += alert;
@@ -394,38 +311,117 @@ void get_footer_page() {
 
 #include "WebPages/LoginPage.h"
 
+// add status items Helper function 
+void addStatusItem(const char* label, const String& value) {
+  page += F("<div class='status-item'>");
+  page += F("<div class='status-label'>");
+  page += label;
+  page += F("</div>");
+  page += F("<div class='status-value'>");
+  page += value;
+  page += F("</div>");
+  page += F("</div>");
+}
+
 void get_root_page(unsigned int start, unsigned int len) {
 
   if (get_top_page(0, start, len)) return;
+  page += F("<style>"
+    ".status-item { "
+    "  display: flex; "
+    "  justify-content: space-between; "
+    "  align-items: center; "
+    "  margin-bottom: 0.5rem; "
+    "}"
+    ".status-label { "
+    "  color: var(--bs-body-color); "
+    "}"
+    ".status-value { "
+    "  color: var(--bs-secondary-color); "
+    "  text-align: right; "
+    "}"
+    "</style>");
+  // Modify the subtitle to use larger font size (fs-5 instead of fs-6)
+  page += F("<h4 class='display-4 text-center mb-4'>");
+  page += F("PedalinoMini™ 🐦‍🔥");
+  page += F("<br class='mb-0'><small class='text-muted fs-5'>Wireless MIDI foot controller</small>");
+  page += F("</h4>");
+  page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-2 g-md-3 mx-3'>");
 
-  page += F("<h4 class='display-4'>Wireless MIDI foot controller</h4>");
-
-  page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4'>");
-
+  // Product Information Card
   page += F("<div class='col'>");
-  page += F("<h3>Product</h3>");
-  page += F("<dt>Model</dt><dd>");
-  page += MODEL;
-  page += F("</dd>");
-  page += F("<dt>Profiles</dt><dd>");
-  page += PROFILES;
-  page += F("</dd>");
-  page += F("<dt>Banks</dt><dd>");
-  page += BANKS;
-  page += F("</dd>");
-  page += F("<dt>Pedals</dt><dd>");
-  page += PEDALS;
-  page += F("</dd>");
-  page += F("<dt>Controls</dt><dd>");
-  page += CONTROLS;
-  page += F("</dd>");
-  page += F("<dt>Sequences</dt><dd>");
-  page += SEQUENCES;
-  page += F("</dd>");
-  page += F("<dt>Leds</dt><dd>");
-  page += LEDS;
-  page += F("</dd>");
-  page += F("<dt>Boot Mode</dt><dd>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-info-circle' viewBox='0 0 16 16'>");
+  page += F("<path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'/>");
+  page += F("<path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/>");
+  page += F("</svg> Product Information</h5>");
+  page += F("<div class='card-body'>");
+  addStatusItem("Model", String(MODEL));
+  addStatusItem("Profiles", String(PROFILES));
+  addStatusItem("Banks", String(BANKS));
+  addStatusItem("Pedals", String(PEDALS));
+  addStatusItem("Controls", String(CONTROLS));
+  addStatusItem("Sequences", String(SEQUENCES));
+  addStatusItem("LEDs", String(LEDS));
+  page += F("</div></div></div>");
+
+  if (trim_page(start, len)) return;
+
+  // Hardware Information Card
+  page += F("<div class='col'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 16 16'>");
+  page += F("<path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z'/>");
+  page += F("</svg> Hardware</h5>");
+  page += F("<div class='card-body'>");
+  addStatusItem("Board", ARDUINO_BOARD);
+  addStatusItem("Chip", ESP.getChipModel());
+  addStatusItem("CPU Frequency", String(ESP.getCpuFreqMHz()) + " MHz");
+  addStatusItem("Flash Size", String(ESP.getFlashChipSize() / (1024 * 1024)) + " MB");
+  addStatusItem("Memory Used", String((ESP.getPsramSize() - ESP.getFreePsram()) / 1024) + "/" + String(ESP.getPsramSize() / 1024) + " kB");
+  addStatusItem("SPIFFS", String(SPIFFS.usedBytes() / 1024) + "/" + String(SPIFFS.totalBytes() / 1024) + " kB");
+  page += F("</div></div></div>");
+
+  if (trim_page(start, len)) return;
+
+  // Network Status Card
+  page += F("<div class='col'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 16 16'>");
+  page += F("<path d='M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.802 6.716 2.164.205.148.49.13.668-.049z'/>");
+  page += F("<path d='M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z'/>");
+  page += F("</svg> Network</h5>");
+  page += F("<div class='card-body'>");
+  
+  if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
+    addStatusItem("SSID", wifiSSID);
+    addStatusItem("IP Address", WiFi.localIP().toString());
+    addStatusItem("Signal", String(WiFi.RSSI()) + " dBm");
+  }
+  
+  addStatusItem("MIDI Network", appleMidiConnected ? "Connected" : "Disconnected");
+  #ifdef BLE
+  addStatusItem("Bluetooth LE", bleMidiConnected ? "Connected" : "Disconnected");
+  #endif
+  page += F("</div></div></div>");
+
+  if (trim_page(start, len)) return;
+
+  // System Status Card
+  page += F("<div class='col'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'>");
+  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-gear' viewBox='0 0 16 16'>");
+  page += F("<path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/>");
+  page += F("<path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z'/>");
+  page += F("</svg> System</h5>");
+  page += F("<div class='card-body'>");
+  
+  // Boot Mode
+  page += F("<div class='row g-1'><div class='col-6'>Boot Mode</div><div class='col-6 text-end'>");
   switch (bootMode) {
     case PED_BOOT_NORMAL:
       page += F("Normal");
@@ -443,222 +439,39 @@ void get_root_page(unsigned int start, unsigned int len) {
       page += F("Access Point without BLE");
       break;
   }
-  page += F("</dd>");
-  page += F("<dt>PlatformIO ESP32 Platform</dt><dd>");
-  page += xstr(ESP32_PLATFORM_VERSION);
-  page += F("</dd>");
-  page += F("<dt>IDF Version</dt><dd>");
-  page += ESP_IDF_VERSION_MAJOR;
-  page += F(".");
-  page += ESP_IDF_VERSION_MINOR;
-  page += F(".");
-  page += ESP_IDF_VERSION_PATCH;
-  page += F("</dd>");
-  page += F("<dt>SDK Version</dt><dd>");
-  page += ESP.getSdkVersion();
-  page += F("</dd>");
-/*
-  page += F("<dt>Arduino Version</dt><dd>");
-  page += ESP_ARDUINO_VERSION_MAJOR;
-  page += F(".");
-  page += ESP_ARDUINO_VERSION_MINOR;
-  page += F(".");
-  page += ESP_ARDUINO_VERSION_PATCH;
-  page += F("</dd>");
-*/
-  page += F("<dt>PlatformIO Build Env</dt><dd>");
-  page += xstr(PLATFORMIO_ENV);
-  page += F("</dd>");
-
-  page += F("<dt>Bootstrap Version</dt><dd><span id='bootstrap-version'></span></dd>");
-  page += F("<script>"
-            "   document.addEventListener('DOMContentLoaded', function() {"
-            "     if (typeof bootstrap !== 'undefined') {"
-            "       document.getElementById('bootstrap-version').textContent = bootstrap.Tooltip.VERSION;"
-            "     } else {"
-            "       document.getElementById('bootstrap-version').textContent = 'Not available';"
-            "     }"
-            "   });"
-            "</script>");
-
-  page += F("<dt>Firmware</dt><dd>");
-  page += PEDALINO_VERSION_MAJOR;
-  page += F(".");
-  page += PEDALINO_VERSION_MINOR;
-  page += F(".");
-  page += PEDALINO_VERSION_PATCH;
-  page += F(" - ");
-  page += PEDALINO_VERSION_SUFFIX;
-  page += F("</dd>");
-  page += F("<dt>Firmware Size</dt><dd>");
-  page += sketchSize;
-  page += F(" bytes</dd>");
-  page += F("<dt>Firmware Hash</dt><dd>");
-  page += sketchMD5;
-  page += F("</dd>");
-  page += F("</div>");
+  page += F("</div></div>");
   
-  if (trim_page(start, len)) return;
+  addStatusItem("SDK Version", ESP.getSdkVersion());
+  addStatusItem("Free Memory", String(freeMemory / 1024) + " kB");
+  
+  // Uptime with JavaScript update
+  page += F("<div class='row g-1'><div class='col-6'>Uptime</div><div class='col-6 text-end' id='uptime'></div></div>");
+  
+  page += F("</div></div></div>");
 
-  page += F("<div class='col'>");
-  page += F("<h3>Hardware</h3>");
-  page += F("<dt>Board</dt><dd>");
-  page += ARDUINO_BOARD;
-  page += F("</dd>");
-  page += F("<dt>Chip</dt><dd>");
-  page += ESP.getChipModel();
-  page += F("</dd>");
-  page += F("<dt>Chip Revision</dt><dd>");
-  page += ESP.getChipRevision();
-  page += F("</dd>");
-  page += F("</dd>");
-  page += F("<dt>Chip ID</dt><dd>");
-  page += getChipId();
-  page += F("</dd>");
-  page += F("<dt>CPU Frequency</dt><dd>");
-  page += ESP.getCpuFreqMHz();
-  page += F(" MHz</dd>");
-  page += F("<dt>Flash Chip Frequency</dt><dd>");
-  page += ESP.getFlashChipSpeed() / 1000000;
-  page += F(" MHz</dd>");
-  page += F("<dt>Flash Size</dt><dd>");
-  page += ESP.getFlashChipSize() / (1024 * 1024);
-  page += F(" MB</dd>");
-  page += F("<dt>PSRAM Used/Total</dt><dd>");
-  page += (ESP.getPsramSize() - ESP.getFreePsram()) / 1024;
-  page += F("/");
-  page += ESP.getPsramSize() / 1024;
-  page += F(" kB</dd>");
-  nvs_stats_t nvs_stats;
-  if (nvs_get_stats("nvs", &nvs_stats) == ESP_OK) {
-    page += F("<dt>NVS Used/Total</dt><dd>");
-    page += nvs_stats.used_entries;
-    page += F("/");
-    page += nvs_stats.total_entries;
-    page += F(" entries</dd>");
-  }
-  page += F("<dt>SPIFFS Used/Total</dt><dd>");
-  page += SPIFFS.usedBytes() / 1024;
-  page += F("/");
-  page += SPIFFS.totalBytes() / 1024;
-  page += F(" kB</dd>");
-  page += F("<dt>Free Heap Size (Max Allocation)</dt><dd>");
-  page += freeMemory / 1024;
-  page += F(" kB (");
-  page += maxAllocation / 1024;
-  page += F(" kB)</dd>");
-#ifdef BATTERY
-#ifdef ARDUINO_BPI_LEAF_S3
-  page += F("<dt>Battery Voltage</dt><dd>");
-  page += String(batteryVoltage / 1000.0, 1);
-  page += F(" V ");
-  page += F("</dd>");
-#else
-  page += F("<dt>Input Voltage</dt><dd>");
-  page += String(batteryVoltage / 1000.0, 1);
-  page += F(" V ");
-  page += batteryVoltage > 4300 ? F("plugged") : F("on battery");
-  page += F("</dd>");
-#endif // ARDUINO_BPI_LEAF_S3
-#endif // BATTERY
-  page += F("<dt>Uptime</dt><dd>");
-  unsigned long sec = (millis() / 1000) % 60;
-  unsigned long min = (millis() / 1000 / 60) % 60;
-  unsigned long h   = (millis() / 1000 / 60 / 60) % 24;
-  unsigned long day = (millis() / 1000 / 60 / 60 / 24);
-  if (day > 0) { page += day; page += F("d "); }
-  if (h   > 0) { page += h;   page += F("h "); }
-  if (min > 0) { page += min; page += F("m "); }
-  page += sec;
-  page += F("s");
-  page += F("</dd>");
-  page += F("<dt>Webserver Running On Core</dt><dd>");
-  page += xPortGetCoreID();
-  page += F("</dd>");
-  page += F("</div>");
+  page += F("</div></div>");
 
-  if (trim_page(start, len)) return;
-
-  page += F("<div class='col'>");
-  if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
-  page += F("<h3>Wireless STA</h3>");
-  page += F("<dt>SSID</dt><dd>");
-  page += wifiSSID;
-  page += F("</dd>");
-  page += F("<dt>BSSID</dt><dd>");
-  page += WiFi.BSSIDstr();
-  page += F("</dd>");
-  page += F("<dt>RSSI</dt><dd>");
-  page += WiFi.RSSI();
-  page += F(" dBm</dd>");
-  page += F("<dt>Channel</dt><dd>");
-  page += WiFi.channel();
-  page += F("</dd>");
-  page += F("<dt>Station MAC</dt><dd>");
-  page += WiFi.macAddress();
-  page += F("</dd>");
-  }
-
-  if (WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA) {
-  page += F("<h3>Wireless AP</h3>");
-  page += F("<dt>AP SSID</dt><dd>");
-  page += ssidSoftAP;
-  page += F("</dd>");
-  page += F("<dt>AP MAC Address</dt><dd>");
-  page += WiFi.softAPmacAddress();
-  page += F("</dd>");
-  page += F("<dt>AP IP Address</dt><dd>");
-  page += WiFi.softAPIP().toString();
-  page += F("</dd>");
-  page += F("<dt>Channel</dt><dd>");
-  page += WiFi.channel();
-  page += F("</dd>");
-  page += F("<dt>Hostname</dt><dd>");
-  page += WiFi.softAPgetHostname();
-  page += F("</dd>");
-  page += F("<dt>Connected Stations</dt><dd>");
-  page += WiFi.softAPgetStationNum();
-  page += F("</dd>");
-  }
-  page += F("</div>");
-
-  page += F("<div class='col'>");
-  page += F("<h3>Network</h3>");
-  page += F("<dt>Hostname</dt><dd>");
-  page += WiFi.getHostname();
-  page += F(".local");
-  page += F("</dd>");
-  page += F("<dt>IP address</dt><dd>");
-  page += WiFi.localIP().toString();
-  page += F("</dd>");
-  page += F("<dt>Subnet mask</dt><dd>");
-  page += WiFi.subnetMask().toString();
-  page += F("</dd>");
-  page += F("<dt>Gataway IP</dt><dd>");
-  page += WiFi.gatewayIP().toString();
-  page += F("</dd>");
-  page += F("<dt>DNS 1</dt><dd>");
-  page += WiFi.dnsIP(0).toString();
-  page += F("</dd>");
-  page += F("<dt>DNS 2</dt><dd>");
-  page += WiFi.dnsIP(1).toString();
-  page += F("</dd>");
-  page += F("<dt>MIDI Network</dt><dd>");
-  if (appleMidiConnected) {
-    page += F("Connected to<br>");
-    page += appleMidiSessionName;
-  }
-  else page += F("Disconnected");
-  page += F("</dd>");
-#ifdef BLE
-  page += F("<dt>Bluetooth LE MIDI</dt><dd>");
-  if (bleMidiConnected) page += F("Connected");
-  else page += F("Disconnected");
-  page += F("</dd>");
-#endif
-  page += F("</div>");
-
-  page += F("</div>");
+  // Add JavaScript for uptime
+  page += F("<script>"
+            "function updateUptime() {"
+            "  const uptimeElement = document.getElementById('uptime');"
+            "  const milliseconds = ");
+  page += millis();
+  page += F(";"
+            "  const seconds = Math.floor(milliseconds / 1000) % 60;"
+            "  const minutes = Math.floor(milliseconds / (1000 * 60)) % 60;"
+            "  const hours = Math.floor(milliseconds / (1000 * 60 * 60)) % 24;"
+            "  const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));"
+            "  let uptimeString = '';"
+            "  if (days > 0) uptimeString += days + 'd ';"
+            "  if (hours > 0) uptimeString += hours + 'h ';"
+            "  if (minutes > 0) uptimeString += minutes + 'm ';"
+            "  uptimeString += seconds + 's';"
+            "  uptimeElement.textContent = uptimeString;"
+            "}"
+            "setInterval(updateUptime, 1000);"
+            "updateUptime();"
+            "</script>");
 
   get_footer_page();
 
@@ -2394,62 +2207,6 @@ void get_pedals_page(unsigned int start, unsigned int len) {
       page += F("'");
       if (pedals[i-1].mode == PED_ANALOG) page += F(" selected");
       page += F(">Analog</option>");
-      // page += F("<option value='");
-      // page += PED_ANALOG_PAD;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ANALOG_PAD) page += F(" selected");
-      // page += F(">Analog Pad</option>");
-      // page += F("<option value='");
-      // page += PED_JOG_WHEEL;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_JOG_WHEEL) page += F(" selected");
-      // page += F(">Jog Wheel</option>");
-      // page += F("<option value='");
-      // page += PED_MOMENTARY2;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_MOMENTARY2) page += F(" selected");
-      // page += F(">Momentary 2</option>");
-      // page += F("<option value='");
-      // page += PED_MOMENTARY3;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_MOMENTARY3) page += F(" selected");
-      // page += F(">Momentary 3</option>");
-      // page += F("<option value='");
-      // page += PED_LATCH2;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_LATCH2) page += F(" selected");
-      // page += F(">Latch 2</option>");
-      // page += F("<option value='");
-      // page += PED_LADDER;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_LADDER) page += F(" selected");
-      // page += F(">Ladder</option>");
-      // page += F("<option value='");
-      // page += PED_ULTRASONIC;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ULTRASONIC) page += F(" selected");
-      // page += F(">Ultrasonic</option>");
-      // page += F("<option value='");
-      // page += PED_ANALOG_MOMENTARY;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ANALOG_MOMENTARY) page += F(" selected");
-      // page += F(">Analog+Momentary</option>");
-      // page += F("<option value='");
-      // page += PED_ANALOG_LATCH;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ANALOG_LATCH) page += F(" selected");
-      // page += F(">Analog+Latch</option>");
-      // page += F("<option value='");
-      // page += PED_ANALOG_PAD_MOMENTARY;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ANALOG_PAD_MOMENTARY) page += F(" selected");
-      // page += F(">Analog Pad+Momentary</option>");
-      // page += F("<option value='");
-      // page += PED_ANALOG4;
-      // page += F("'");
-      // if (pedals[i-1].mode == PED_ANALOG4) page += F(" selected");
-      // page += F(">Analog 4</option>");
-    
 
     page += F("</select>");
     page += F("<label for='modeSelect");

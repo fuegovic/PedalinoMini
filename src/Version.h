@@ -1,14 +1,3 @@
-/*
-__________           .___      .__  .__                 _____  .__       .__     ___ ________________    ___
-\______   \ ____   __| _/____  |  | |__| ____   ____   /     \ |__| ____ |__|   /  / \__    ___/     \   \  \
- |     ___// __ \ / __ |\__  \ |  | |  |/    \ /  _ \ /  \ /  \|  |/    \|  |  /  /    |    | /  \ /  \   \  \
- |    |   \  ___// /_/ | / __ \|  |_|  |   |  (  <_> )    Y    \  |   |  \  | (  (     |    |/    Y    \   )  )
- |____|    \___  >____ |(____  /____/__|___|  /\____/\____|__  /__|___|  /__|  \  \    |____|\____|__  /  /  /
-               \/     \/     \/             \/               \/        \/       \__\                 \/  /__/
-                                                                                   (c) 2018-2024 alf45star
-                                                                       https://github.com/alf45tar/PedalinoMini
- */
-
 #pragma once
 
 #ifdef __cplusplus
@@ -23,6 +12,8 @@ extern "C" {
 #define PEDALINO_VERSION_PATCH   2
 /** Patch version suffix (x.x.x-X) */
 #define PEDALINO_VERSION_SUFFIX  "🐦‍🔥"
+
+#define PEDALINO_GITHUB_URL "https://github.com/fuegovic/PedalinoMini/tree/single"
 
 #define xstr(s) sstr(s)  // stringize the result of expansion of a macro argument
 #define sstr(s) #s
