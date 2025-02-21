@@ -15,13 +15,13 @@
 - 💾 Updated factory default
 - 💡 Added new Fire Ocean LED effect
 - 💡 Profile LED Indicator (LED 20):
-  - Profile A: Cyan
-  - Profile B: Orange
+  - Profile A: Orange
+  - Profile B: Cyan
   - Profile C: Magenta
   - Updates automatically on profile changes
 - 🔄 Changed default LED effects in device info mode:
-  - Profile A: Pacifica (ocean waves)
-  - Profile B: Fire Ocean (lava waves)
+  - Profile A: Fire Ocean (lava waves)
+  - Profile B: Pacifica (ocean waves)
   - Profile C: Pride (rainbow waves)
 
 ## 🔄 Profile System
