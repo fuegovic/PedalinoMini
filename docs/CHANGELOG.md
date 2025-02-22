@@ -3,6 +3,11 @@
 ## ✨ New Features & Updates
 - 🌙 Dark Mode by default
 - 🎨 Added new Bootswatch themes
+- 🏠 Redesigned homepage with card-based layout:
+  - Product Information card: Version, model details and GitHub link
+  - Hardware card: Board specs, CPU info and memory stats
+  - Network card: WiFi/Hotspot status and MIDI connectivity
+  - System card: Uptime, firmware details and build info
 - 📊 15 controls per page
 - 🎛️ Pre-assigned pedals to all available controls
 - 🔄 Profile+ & Profile- now cycle through profiles
@@ -23,6 +28,7 @@
   - Profile A: Fire Ocean (lava waves)
   - Profile B: Pacifica (ocean waves)
   - Profile C: Pride (rainbow waves)
+- 
 
 ## 🔄 Profile System
 - Cycles through profiles A → B → C

@@ -154,7 +154,8 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   if (p >= 0) {
     page += F("<div class='container-fluid mt-3 mb-3'>");
   
-    page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+    // page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
+    page += F("<nav class='navbar navbar-expand-md navbar-dark mb-3' style='background-color: #212529;'>");
     page += F("<div class='container-fluid'>");
     page += F("<a class='navbar-brand' href='/'>");
     page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
@@ -311,61 +312,52 @@ void get_footer_page() {
 
 #include "WebPages/LoginPage.h"
 
-// Helper function to add status items
+// Optimized status item helper
 void addStatusItem(const char* label, const String& value) {
-  page += F("<div class='row g-1 mb-2'>");   // Added mb-2 class for consistent spacing
-  page += F("<div class='col-6'>");
+  page += F("<div class='row g-1 mb-2'><div class='col-6'>");
   page += label;
-  page += F("</div>");
-  page += F("<div class='col-6 text-end'>");
-  page += value; 
-  page += F("</div>");
-  page += F("</div>");
+  page += F("</div><div class='col-6 text-end'>");
+  page += value;
+  page += F("</div></div>");
+}
+
+// Reusable SVG icons stored in PROGMEM to save RAM
+const char INFO_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-info-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'/><path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg>";
+const char HARDWARE_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 16 16'><path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z'/></svg>";
+const char NETWORK_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 16 16'>"
+"<path d='M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3c-2.82 0-5.432.952-7.337 2.38a.485.485 0 0 0-.047.735.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.597 0 4.99.883 6.766 2.166a.518.518 0 0 0 .668-.05'/>"
+"<path d='M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-2.086 0-4.02.666-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z'/>"
+"</svg>";
+const char SYSTEM_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-gear' viewBox='0 0 16 16'>"
+"<path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/>"
+"<path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z'/>"
+"</svg>";
+
+// Reusable card component
+void addCard(const char* icon, const char* title) {
+  page += F("<div class='col'><div class='card h-100'><h5 class='card-header'>");
+  page += FPSTR(icon);
+  page += F(" ");
+  page += title;
+  page += F("</h5><div class='card-body'>");
 }
 
 void get_root_page(unsigned int start, unsigned int len) {
-
   if (get_top_page(0, start, len)) return;
-  page += F("<style>"
-    ".status-item { "
-    "  display: flex; "
-    "  justify-content: space-between; "
-    "  align-items: center; "
-    "  margin-bottom: 0.5rem; "
-    "}"
-    ".status-label { "
-    "  color: var(--bs-body-color); "
-    "}"
-    ".status-value { "
-    "  color: var(--bs-secondary-color); "
-    "  text-align: right; "
-    "}"
-    "</style>");
 
-    page += F("<h4 class='display-4 text-center mb-4'>");
-  page += F("PedalinoMini™ 🐦‍🔥");
-  page += F("<br class='mb-0'><small class='text-muted fs-5'>Wireless MIDI foot controller</small>");
-  page += F("</h4>");
+  // Minimal CSS using utility classes instead
+  page += F("<h4 class='display-4 text-center mb-4'>PedalinoMini™ 🐦‍🔥<br class='mb-0'>");
+  page += F("<small class='text-muted fs-5'>Wireless MIDI foot controller</small></h4>");
   page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 mx-3'>");
 
   // Product Information Card
-  page += F("<div class='col'>");
-  page += F("<div class='card h-100'>");
-  page += F("<h5 class='card-header'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-info-circle' viewBox='0 0 16 16'>");
-  page += F("<path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'/>");
-  page += F("<path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/>");
-  page += F("</svg> Product Information</h5>");
-  page += F("<div class='card-body'>");
+  addCard(INFO_ICON, "Product Information");
   addStatusItem("Model", String(MODEL));
-  page += F("<div class='row g-1 mb-2'>");
-  page += F("<div class='col-6'>Source Code</div>");
-  page += F("<div class='col-6 text-end'>");
-  page += F("<a href='");
+  page += F("<div class='row g-1 mb-2'><div class='col-6'>Source Code</div>");
+  page += F("<div class='col-6 text-end'><a href='");
   page += PEDALINO_GITHUB_URL;
-  page += F("' target='_blank'>GitHub</a>");
-  page += F("</div></div>");
-  page += F("<hr class='my-2'>");
+  page += F("' target='_blank'>GitHub</a></div></div><hr class='my-2'>");
+  
   addStatusItem("Profiles", String(PROFILES));
   addStatusItem("Banks", String(BANKS));
   addStatusItem("Pedals", String(PEDALS));
@@ -377,19 +369,12 @@ void get_root_page(unsigned int start, unsigned int len) {
   if (trim_page(start, len)) return;
 
   // Hardware Information Card
-  page += F("<div class='col'>");
-  page += F("<div class='card h-100'>");
-  page += F("<h5 class='card-header'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 16 16'>");
-  page += F("<path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z'/>");
-  page += F("</svg> Hardware</h5>");
-  page += F("<div class='card-body'>");
+  addCard(HARDWARE_ICON, "Hardware");
 
-  // Board Information Section
+  // Board Information
   page += F("<h6 class='border-bottom pb-2'>Board Information</h6>");
   addStatusItem("Board", ARDUINO_BOARD);
   addStatusItem("Chip", ESP.getChipModel());
-  addStatusItem("Chip Revision", String(ESP.getChipRevision()));
   addStatusItem("Chip ID", getChipId());
 
   // CPU Information Section  
@@ -404,158 +389,115 @@ void get_root_page(unsigned int start, unsigned int len) {
   addStatusItem("Memory Used", String((ESP.getHeapSize() - ESP.getFreeHeap()) / 1024) + "/" + String(ESP.getHeapSize() / 1024) + " kB");
   addStatusItem("Max Memory Allocation", String(maxAllocation / 1024) + " kB");
 
-  // Storage Information Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>Storage Information</h6>"); 
+  // Storage Information
   nvs_stats_t nvs_stats;
   if (nvs_get_stats("nvs", &nvs_stats) == ESP_OK) {
-    addStatusItem("NVS Used", String(nvs_stats.used_entries) + "/" + String(nvs_stats.total_entries) + " entries");
+    addStatusItem("NVS Used", String(nvs_stats.used_entries) + "/" + String(nvs_stats.total_entries));
   }
-  addStatusItem("SPIFFS", String(SPIFFS.usedBytes() / 1024) + "/" + String(SPIFFS.totalBytes() / 1024) + " kB");
-
   page += F("</div></div></div>");
 
   if (trim_page(start, len)) return;
 
   // Network Status Card
-  page += F("<div class='col'>");
-  page += F("<div class='card h-100'>");
-  page += F("<h5 class='card-header'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 16 16'>");
-  page += F("<path d='M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.802 6.716 2.164.205.148.49.13.668-.049z'/>");
-  page += F("<path d='M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z'/>");
-  page += F("</svg> Network</h5>");
-  page += F("<div class='card-body'>");
-
+  addCard(NETWORK_ICON, "Network");
   if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
-    // STA Mode Section
-    page += F("<h6 class='border-bottom pb-2'>WiFi</h6>");
     addStatusItem("SSID", wifiSSID);
-    addStatusItem("IP Address", WiFi.localIP().toString());
+    addStatusItem("IP", WiFi.localIP().toString());
     addStatusItem("Signal", String(WiFi.RSSI()) + " dBm");
-    addStatusItem("BSSID", WiFi.BSSIDstr());
-    addStatusItem("Channel", String(WiFi.channel()));
-    addStatusItem("MAC Address", WiFi.macAddress());
-    
-    // Network Configuration
-    page += F("<h6 class='border-bottom pb-2 mt-3'>Network Configuration</h6>"); 
-    addStatusItem("Subnet Mask", WiFi.subnetMask().toString());
-    addStatusItem("Gateway", WiFi.gatewayIP().toString());
-    addStatusItem("DNS", WiFi.dnsIP(0).toString());
-    addStatusItem("Hostname", String(WiFi.getHostname()) + ".local");
   }
 
   if (WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA) {
-    // AP Mode Section  
-    page += F("<h6 class='border-bottom pb-2");
-    if (WiFi.getMode() == WIFI_AP_STA) page += F(" mt-3");
-    page += F("'>Hotspot</h6>");
+    page += F("<h6 class='border-bottom pb-2 mt-3'>Hotspot</h6>");
     addStatusItem("AP SSID", ssidSoftAP);
-    addStatusItem("AP MAC", WiFi.softAPmacAddress());
     addStatusItem("AP IP", WiFi.softAPIP().toString());
-    addStatusItem("AP Hostname", WiFi.softAPgetHostname());
-    addStatusItem("Connected Stations", String(WiFi.softAPgetStationNum()));
   }
 
-  // MIDI Connectivity Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>MIDI Connectivity</h6>");
-  addStatusItem("MIDI Network", appleMidiConnected ? "Connected" : "Disconnected");
+  // MIDI Status
+  page += F("<h6 class='border-bottom pb-2 mt-3'>MIDI</h6>");
+  addStatusItem("Network MIDI", appleMidiConnected ? "Connected" : "Disconnected");
   #ifdef BLE
-  addStatusItem("Bluetooth LE", bleMidiConnected ? "Connected" : "Disconnected"); 
+  addStatusItem("BLE MIDI", bleMidiConnected ? "Connected" : "Disconnected");
   #endif
   page += F("</div></div></div>");
 
   if (trim_page(start, len)) return;
 
   // System Status Card
-  page += F("<div class='col'>");
-  page += F("<div class='card h-100'>");
-  page += F("<h5 class='card-header'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-gear' viewBox='0 0 16 16'>");
-  page += F("<path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/>");
-  page += F("<path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z'/>");
-  page += F("</svg> System</h5>");
-  page += F("<div class='card-body'>");
+  addCard(SYSTEM_ICON, "System");
   
-  page += F("<div class='card-body'>");
-
-  // Boot Mode Section
-  page += F("<h6 class='border-bottom pb-2'>Boot Mode</h6>");
-  switch (bootMode) {
-    case PED_BOOT_NORMAL:
-      page += F("Normal");
-      break;
-    case PED_BOOT_BLE:
-      page += F("BLE only");
-      break;
-    case PED_BOOT_WIFI:
-      page += F("WiFi only");
-      break;
-    case PED_BOOT_AP:
-      page += F("Access Point and BLE");
-      break;
-    case PED_BOOT_AP_NO_BLE:
-      page += F("Access Point without BLE");
-      break;
-  }
-
   // System Information Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>System Information</h6>");
+  page += F("<h6 class='border-bottom pb-2'>System Information</h6>");
   addStatusItem("SDK Version", ESP.getSdkVersion());
   addStatusItem("Free Memory", String(freeMemory / 1024) + " kB");
   addStatusItem("Uptime", "<span id='uptime'></span>");
 
-  // Firmware Details Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>Firmware Details</h6>");
-  addStatusItem("Version", String(PEDALINO_VERSION_MAJOR) + "." + 
-                        String(PEDALINO_VERSION_MINOR) + "." + 
-                        String(PEDALINO_VERSION_PATCH));
+  // Firmware Section
+  page += F("<h6 class='border-bottom pb-2 mt-3'>Firmware</h6>");
+  
+  char version[16];
+  snprintf(version, sizeof(version), "%d.%d.%d", 
+           PEDALINO_VERSION_MAJOR, 
+           PEDALINO_VERSION_MINOR, 
+           PEDALINO_VERSION_PATCH);
+  addStatusItem("Version", version);
+  
   addStatusItem("Size", String(sketchSize) + " bytes");
   addStatusItem("Hash", sketchMD5);
-  addStatusItem("Bootstrap Version", "<span id='bootstrap-version'></span>");
-  addStatusItem("ESP32 Platform", String(ESP32_PLATFORM_VERSION));
-  addStatusItem("IDF Version", String(ESP_IDF_VERSION_MAJOR) + "." +
-                            String(ESP_IDF_VERSION_MINOR) + "." +
-                            String(ESP_IDF_VERSION_PATCH));
+  addStatusItem("Bootstrap", "<span id='bsver'></span>");
+  addStatusItem("ESP32 Platform", ESP32_PLATFORM_VERSION);
+  
+  char idfVer[16];
+  snprintf(idfVer, sizeof(idfVer), "%d.%d.%d", 
+           ESP_IDF_VERSION_MAJOR, 
+           ESP_IDF_VERSION_MINOR, 
+           ESP_IDF_VERSION_PATCH);
+  addStatusItem("IDF Version", idfVer);
+  
   addStatusItem("Build Env", xstr(PLATFORMIO_ENV));
-
   page += F("</div></div></div>");
 
-  page += F("</div></div>");
-
-  // Add JavaScript for uptime
-  page += F("<script>"
-            "function updateUptime() {"
-            "  const uptimeElement = document.getElementById('uptime');"
-            "  const milliseconds = ");
-  page += millis();
-  page += F(";"
-            "  const seconds = Math.floor(milliseconds / 1000) % 60;"
-            "  const minutes = Math.floor(milliseconds / (1000 * 60)) % 60;"
-            "  const hours = Math.floor(milliseconds / (1000 * 60 * 60)) % 24;"
-            "  const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));"
-            "  let uptimeString = '';"
-            "  if (days > 0) uptimeString += days + 'd ';"
-            "  if (hours > 0) uptimeString += hours + 'h ';"
-            "  if (minutes > 0) uptimeString += minutes + 'm ';"
-            "  uptimeString += seconds + 's';"
-            "  uptimeElement.textContent = uptimeString;"
-            "}"
-            "setInterval(updateUptime, 1000);"
-            "updateUptime();"
-            "</script>");
+  // Close the row of cards
+  page += F("</div>");
   
-  page += F("<script>"
-    "document.addEventListener('DOMContentLoaded', function() {"
-    "  if (typeof bootstrap !== 'undefined') {"
-    "    document.getElementById('bootstrap-version').textContent = bootstrap.Tooltip.VERSION;"
-    "  } else {"
-    "    document.getElementById('bootstrap-version').textContent = 'Not available';"
-    "  }"
-    "});"
-    "</script>");
+  // JavaScript for uptime - split into very basic chunks
+  page += F("<script>");
+  page += F("function updateUptime() {");
+  page += F("    var time = ");
+  page += millis();
+  page += F(";");
+  page += F("    var seconds = Math.floor(time / 1000);");
+  page += F("    var minutes = Math.floor(seconds / 60);");
+  page += F("    var hours = Math.floor(minutes / 60);");
+  page += F("    var days = Math.floor(hours / 24);");
+  page += F("    seconds = seconds % 60;");
+  page += F("    minutes = minutes % 60;");
+  page += F("    hours = hours % 24;");
+  page += F("    var text = '';");
+  page += F("    if (days > 0) { text = text + days + 'd '; }");
+  page += F("    if (hours > 0) { text = text + hours + 'h '; }");
+  page += F("    if (minutes > 0) { text = text + minutes + 'm '; }");
+  page += F("    text = text + seconds + 's';");
+  page += F("    document.getElementById('uptime').textContent = text;");
+  page += F("}");
+  page += F("setTimeout(function() {");
+  page += F("    updateUptime();");
+  page += F("    setInterval(updateUptime, 1000);");
+  page += F("}, 0);");
+  page += F("</script>");
+
+  // Separate, simple script for Bootstrap version
+  page += F("<script>");
+  page += F("setTimeout(function() {");
+  page += F("    var element = document.getElementById('bootstrap-version');");
+  page += F("    if (typeof bootstrap !== 'undefined') {");
+  page += F("        element.textContent = bootstrap.Tooltip.VERSION;");
+  page += F("    } else {");
+  page += F("        element.textContent = 'Not available';");
+  page += F("    }");
+  page += F("}, 0);");
+  page += F("</script>");
 
   get_footer_page();
-
   if (trim_page(start, len, true)) return;
 }
 
