@@ -3,6 +3,10 @@
 ## ✨ New Features & Updates
 - 🌙 Dark Mode by default
 - 🎨 Added new Bootswatch themes
+- 🎨 New "Phoenix" theme as factory default:
+  - Dark background with light text
+  - Vibrant orange accents
+  - Local storage
 - 🏠 Redesigned homepage with card-based layout:
   - Product Information card: Version, model details and GitHub link
   - Hardware card: Board specs, CPU info and memory stats

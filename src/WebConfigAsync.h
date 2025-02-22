@@ -114,12 +114,14 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("<title>PedalinoMini&trade;</title>");
   page += F("<meta charset='utf-8'>");
   page += F(" <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>");
-  if ( theme == "bootstrap" ) {
-  #ifdef BOOTSTRAP_LOCAL
-    page += F("<link rel='stylesheet' href='/css/bootstrap.min.css' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>");
-  #else
+  if (theme == "phoenix") {
+    #ifdef BOOTSTRAP_LOCAL
+      page += F("<link rel='stylesheet' href='/css/bootstrap.min.css' crossorigin='anonymous'>");
+    #else
+      page += F("<link href='https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css' rel='stylesheet' crossorigin='anonymous'>");
+    #endif
+  } else if (theme == "bootstrap") {
     page += F("<link href='https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css' rel='stylesheet' crossorigin='anonymous'>");
-  #endif
   } else {
     page += F("<link href='https://cdn.jsdelivr.net/npm/bootswatch@latest/dist/");
     page += theme;
@@ -154,8 +156,8 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   if (p >= 0) {
     page += F("<div class='container-fluid mt-3 mb-3'>");
   
-    // page += F("<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-3'>");
-    page += F("<nav class='navbar navbar-expand-md navbar-dark mb-3' style='background-color: #212529;'>");
+    page += F("<nav class='navbar navbar-expand-md mb-3'>");
+    // page += F("<nav class='navbar navbar-expand-md navbar-dark mb-3' style='background-color: #212529;'>");
     page += F("<div class='container-fluid'>");
     page += F("<a class='navbar-brand' href='/'>");
     page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
@@ -302,7 +304,8 @@ void get_footer_page() {
 
   page += F("</div>");
 #ifdef BOOTSTRAP_LOCAL
-  page += F("<script defer src='/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>");
+  // page += F("<script defer src='/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>");
+  page += F("<script defer src='/js/bootstrap.bundle.min.js' integrity='' crossorigin='anonymous'></script>");
 #else
   page += F("<script src='https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.bundle.min.js' crossorigin='anonymous'></script>");
 #endif
@@ -310,7 +313,46 @@ void get_footer_page() {
   page += F("</html>");
 }
 
-#include "WebPages/LoginPage.h"
+void get_login_page() {
+
+  get_top_page(-1, 0, 65535);
+
+  page += F("<div class='col-4'>");
+  page += F("</div>");
+
+  page += F("<div class='col-4'>");
+  page += F("<form class='form-signin'>");
+  page += F("<div class='text-center mb-4'>");
+  page += F("<img class='mb-4' src='/logo.png' alt='' width='64' height='64'>");
+  page += F("<h1 class='h3 mb-3 font-weight-normal'>PedalinoMini&trade;</h1>");
+  page += F("<p>Wireless MIDI foot controller <a href='https://github.com/alf45tar/PedalinoMini'>More info</a></p>");
+  page += F("</div>");
+
+  page += F("<div class='form-label-group'>");
+  page += F("<input type='text' id='username' class='form-control' placeholder='Username' required='' autofocus=''>");
+  page += F("<label for='username'>Username</label>");
+  page += F("</div>");
+
+  page += F("<div class='form-label-group'>");
+  page += F("<input type='password' id='password' class='form-control' placeholder='Password' required=''>");
+  page += F("<label for='password'>Password</label>");
+  page += F("</div>");
+
+  page += F("<div class='checkbox mb-3'>");
+  page += F("<label>");
+  page += F("<input type='checkbox' value='remember-me'> Remember me");
+  page += F("</label>");
+  page += F("</div>");
+  page += F("<button class='btn btn-lg btn-primary btn-block' type='submit'>Sign in</button>");
+  page += F("<p class='mt-5 mb-3 text-muted text-center'>© 2018-2019</p>");
+  page += F("</form>");
+  page += F("</div>");
+
+  page += F("<div class='col-4'>");
+  page += F("</div>");
+
+  get_footer_page();
+}
 
 // Optimized status item helper
 void addStatusItem(const char* label, const String& value) {
@@ -3469,7 +3511,8 @@ void get_sequences_page(unsigned int start, unsigned int len) {
 
 void get_options_page(unsigned int start, unsigned int len) {
 
-  const String  bootswatch[] = {  "bootstrap",
+  const String  bootswatch[] = {  "phoenix",
+                                  "bootstrap",
                                   "cerulean",
                                   "cosmo",
                                   "cyborg",
@@ -3730,7 +3773,7 @@ void get_options_page(unsigned int start, unsigned int len) {
   page += F("<label for='theme'>Theme</label>");
   page += F("</div>");
   page += F("<small id='bootstrapthemeHelpBlock' class='form-text text-muted'>");
-  page += F("Changing default theme require internet connection because themes are served via a CDN network. Only 'bootstrap' theme has been stored into Pedalino flash memory.");
+  page += F("Bootstrap (Local)' uses the theme stored in flash memory. Other themes require internet connection as they are served via CDN network.");
   page += F("</small>");
   page += F("</div>");
   page += F("</div>");

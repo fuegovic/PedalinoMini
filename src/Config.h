@@ -846,7 +846,7 @@ void load_factory_default()
   passwordSoftAP     = getChipId();
   httpUsername       = "";
   httpPassword       = "";
-  theme              = "bootstrap";
+  theme              = "phoenix";
   currentBank        = 1;
   currentProfile     = 0;
   pressTime          = PED_PRESS_TIME;
