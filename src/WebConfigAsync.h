@@ -1,14 +1,3 @@
-/*
-__________           .___      .__  .__                 _____  .__       .__     ___ ________________    ___
-\______   \ ____   __| _/____  |  | |__| ____   ____   /     \ |__| ____ |__|   /  / \__    ___/     \   \  \
- |     ___// __ \ / __ |\__  \ |  | |  |/    \ /  _ \ /  \ /  \|  |/    \|  |  /  /    |    | /  \ /  \   \  \
- |    |   \  ___// /_/ | / __ \|  |_|  |   |  (  <_> )    Y    \  |   |  \  | (  (     |    |/    Y    \   )  )
- |____|    \___  >____ |(____  /____/__|___|  /\____/\____|__  /__|___|  /__|  \  \    |____|\____|__  /  /  /
-               \/     \/     \/             \/               \/        \/       \__\                 \/  /__/
-                                                                                   (c) 2018-2024 alf45star
-                                                                       https://github.com/alf45tar/PedalinoMini
- */
-
 String theme         = "bootstrap";
 String httpUsername  = "";
 String httpPassword  = "";
@@ -34,13 +23,6 @@ inline void http_run() {};
 AsyncWebServer          httpServer(80);
 
 #ifdef WEBCONFIG
-
-#ifdef WEBSOCKET
-AsyncWebSocket               webSocket("/ws");
-AsyncEventSource             events("/events");    // EventSource is single direction, text-only protocol.
-AsyncWebSocketMessageBuffer *buffer = NULL;
-AsyncWebSocketClient        *wsClient = NULL;
-#endif
 
 #define WEBPAGE_MEMORY_ALLOCATION 8192    // To avoid memory fragmentation keep web page chunk smaller than allocated space
 
@@ -152,15 +134,14 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   // page += F("</li>");
   // //
 
-  // Home nav item alt - logo.png
+  // Home nav item alt - logo.webp
   if (p >= 0) {
     page += F("<div class='container-fluid mt-3 mb-3'>");
   
     page += F("<nav class='navbar navbar-expand-md mb-3'>");
-    // page += F("<nav class='navbar navbar-expand-md navbar-dark mb-3' style='background-color: #212529;'>");
     page += F("<div class='container-fluid'>");
     page += F("<a class='navbar-brand' href='/'>");
-    page += F("<img src='/logo.png' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
+    page += F("<img src='/logo.webp' width='30' height='30' class='d-inline-block align-top' alt=''></a>");
     page += F("<button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation'>");
     page += F("<span class='navbar-toggler-icon'></span>");
     page += F("</button>");
@@ -254,7 +235,7 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
   page += F("</li>");
 
   page += F("<li class='nav-item");
-  page += (p == 9 ? F(" active'>") : F("'>"));    // Use p == 9 for the Update page
+  page += (p == 9 ? F(" active'>") : F("'>"));
   page += F("<a class='nav-link' href='/update'>");
   page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cloud-upload' viewBox='0 0 16 16'>");
   page += F("<path fill-rule='evenodd' d='M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z'/>");
@@ -323,7 +304,7 @@ void get_login_page() {
   page += F("<div class='col-4'>");
   page += F("<form class='form-signin'>");
   page += F("<div class='text-center mb-4'>");
-  page += F("<img class='mb-4' src='/logo.png' alt='' width='64' height='64'>");
+  page += F("<img class='mb-4' src='/logo.webp' alt='' width='64' height='64'>");
   page += F("<h1 class='h3 mb-3 font-weight-normal'>PedalinoMini&trade;</h1>");
   page += F("<p>Wireless MIDI foot controller <a href='https://github.com/alf45tar/PedalinoMini'>More info</a></p>");
   page += F("</div>");
@@ -414,24 +395,27 @@ void get_root_page(unsigned int start, unsigned int len) {
   addCard(HARDWARE_ICON, "Hardware");
 
   // Board Information
-  page += F("<h6 class='border-bottom pb-2'>Board Information</h6>");
+  page += F("<h6 class='border-bottom pb-2 fw-bold'>Board Information</h6>");
   addStatusItem("Board", ARDUINO_BOARD);
   addStatusItem("Chip", ESP.getChipModel());
   addStatusItem("Chip ID", getChipId());
 
   // CPU Information Section  
-  page += F("<h6 class='border-bottom pb-2 mt-3'>CPU Information</h6>");
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>CPU Information</h6>");
   addStatusItem("CPU Core", String(xPortGetCoreID()));
   addStatusItem("CPU Frequency", String(ESP.getCpuFreqMHz()) + " MHz");
 
   // Memory Information Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>Memory Information</h6>");
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Memory Information</h6>");
   addStatusItem("Flash Size", String(ESP.getFlashChipSize() / (1024 * 1024)) + " MB");
   addStatusItem("Flash Frequency", String(ESP.getFlashChipSpeed() / 1000000) + " MHz");
   addStatusItem("Memory Used", String((ESP.getHeapSize() - ESP.getFreeHeap()) / 1024) + "/" + String(ESP.getHeapSize() / 1024) + " kB");
   addStatusItem("Max Memory Allocation", String(maxAllocation / 1024) + " kB");
 
   // Storage Information
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Storage Information</h6>");
+  addStatusItem("SPIFFS Used", String(SPIFFS.usedBytes() / 1024) + "/" + String(SPIFFS.totalBytes() / 1024) + " kB");
+  addStatusItem("SPIFFS Type", F("LittleFS"));
   nvs_stats_t nvs_stats;
   if (nvs_get_stats("nvs", &nvs_stats) == ESP_OK) {
     addStatusItem("NVS Used", String(nvs_stats.used_entries) + "/" + String(nvs_stats.total_entries));
@@ -442,398 +426,149 @@ void get_root_page(unsigned int start, unsigned int len) {
 
   // Network Status Card
   addCard(NETWORK_ICON, "Network");
+  // First show Station info if connected
   if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
+    page += F("<h6 class='border-bottom pb-2 fw-bold'>WiFi Client</h6>");
     addStatusItem("SSID", wifiSSID);
     addStatusItem("IP", WiFi.localIP().toString());
     addStatusItem("Signal", String(WiFi.RSSI()) + " dBm");
+    addStatusItem("BSSID", WiFi.BSSIDstr());
+    addStatusItem("Channel", String(WiFi.channel()));
+    addStatusItem("MAC Address", WiFi.macAddress());
+    addStatusItem("Subnet Mask", WiFi.subnetMask().toString());
+    addStatusItem("Gateway", WiFi.gatewayIP().toString());
+    addStatusItem("DNS", WiFi.dnsIP().toString());
+    addStatusItem("Hostname", WiFi.getHostname());
   }
 
+  // Then show AP info if enabled, regardless of Station status
   if (WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA) {
-    page += F("<h6 class='border-bottom pb-2 mt-3'>Hotspot</h6>");
+    // Add section header if we showed Station info
+    if (WiFi.getMode() == WIFI_AP_STA) {
+      page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Access Point</h6>");
+    }
     addStatusItem("AP SSID", ssidSoftAP);
     addStatusItem("AP IP", WiFi.softAPIP().toString());
+    addStatusItem("AP MAC", WiFi.softAPmacAddress());
+    addStatusItem("Connected Clients", String(WiFi.softAPgetStationNum()));
   }
 
   // MIDI Status
-  page += F("<h6 class='border-bottom pb-2 mt-3'>MIDI</h6>");
-  addStatusItem("Network MIDI", appleMidiConnected ? "Connected" : "Disconnected");
-  #ifdef BLE
-  addStatusItem("BLE MIDI", bleMidiConnected ? "Connected" : "Disconnected");
-  #endif
-  page += F("</div></div></div>");
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>MIDI</h6>");
 
+  // Network MIDI status with colored text
+  page += F("<div class='row g-1 mb-2'><div class='col-6'>");
+  page += F("Network MIDI");
+  page += F("</div><div class='col-6 text-end'>");
+  if (appleMidiConnected) {
+    page += F("<span class='text-success'>Connected</span>");
+  } else {
+    page += F("<span class='text-danger'>Disconnected</span>");
+  }
+  page += F("</div></div>");
+
+  #ifdef BLE
+  // BLE MIDI status with colored text
+  page += F("<div class='row g-1 mb-2'><div class='col-6'>");
+  page += F("BLE MIDI");
+  page += F("</div><div class='col-6 text-end'>");
+  if (bleMidiConnected) {
+    page += F("<span class='text-success'>Connected</span>");
+  } else {
+    page += F("<span class='text-danger'>Disconnected</span>");
+  }
+  page += F("</div></div>");
+  #endif
+
+  page += F("</div></div></div>");
   if (trim_page(start, len)) return;
 
   // System Status Card
   addCard(SYSTEM_ICON, "System");
-  
+
   // System Information Section
-  page += F("<h6 class='border-bottom pb-2'>System Information</h6>");
+  page += F("<h6 class='border-bottom pb-2 fw-bold'>System Information</h6>");
   addStatusItem("SDK Version", ESP.getSdkVersion());
-  addStatusItem("Free Memory", String(freeMemory / 1024) + " kB");
+  addStatusItem("Free Memory", "<span id='free-memory'></span>");
   addStatusItem("Uptime", "<span id='uptime'></span>");
 
-  // Firmware Section
-  page += F("<h6 class='border-bottom pb-2 mt-3'>Firmware</h6>");
-  
-  char version[16];
-  snprintf(version, sizeof(version), "%d.%d.%d", 
-           PEDALINO_VERSION_MAJOR, 
-           PEDALINO_VERSION_MINOR, 
-           PEDALINO_VERSION_PATCH);
-  addStatusItem("Version", version);
-  
-  addStatusItem("Size", String(sketchSize) + " bytes");
-  addStatusItem("Hash", sketchMD5);
-  addStatusItem("Bootstrap", "<span id='bsver'></span>");
+  // ESP32 Platform Section
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>ESP32 Platform</h6>");
   addStatusItem("ESP32 Platform", ESP32_PLATFORM_VERSION);
-  
   char idfVer[16];
   snprintf(idfVer, sizeof(idfVer), "%d.%d.%d", 
-           ESP_IDF_VERSION_MAJOR, 
-           ESP_IDF_VERSION_MINOR, 
-           ESP_IDF_VERSION_PATCH);
+          ESP_IDF_VERSION_MAJOR, 
+          ESP_IDF_VERSION_MINOR, 
+          ESP_IDF_VERSION_PATCH);
   addStatusItem("IDF Version", idfVer);
-  
   addStatusItem("Build Env", xstr(PLATFORMIO_ENV));
-  page += F("</div></div></div>");
+
+  // Firmware Section
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Firmware</h6>");
+  char version[16];
+  snprintf(version, sizeof(version), "%d.%d.%d", 
+          PEDALINO_VERSION_MAJOR, 
+          PEDALINO_VERSION_MINOR, 
+          PEDALINO_VERSION_PATCH);
+  addStatusItem("Version", version);
+  addStatusItem("Size", String(sketchSize) + " bytes");
+  addStatusItem("Hash", sketchMD5);
+
+  // Frontend Section  
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Frontend</h6>");
+  addStatusItem("Bootstrap Version", "<span id='bootstrap-version'></span>");
 
   // Close the row of cards
   page += F("</div>");
   
-  // JavaScript for uptime - split into very basic chunks
-  page += F("<script>");
-  page += F("function updateUptime() {");
-  page += F("    var time = ");
-  page += millis();
-  page += F(";");
-  page += F("    var seconds = Math.floor(time / 1000);");
-  page += F("    var minutes = Math.floor(seconds / 60);");
-  page += F("    var hours = Math.floor(minutes / 60);");
-  page += F("    var days = Math.floor(hours / 24);");
-  page += F("    seconds = seconds % 60;");
-  page += F("    minutes = minutes % 60;");
-  page += F("    hours = hours % 24;");
-  page += F("    var text = '';");
-  page += F("    if (days > 0) { text = text + days + 'd '; }");
-  page += F("    if (hours > 0) { text = text + hours + 'h '; }");
-  page += F("    if (minutes > 0) { text = text + minutes + 'm '; }");
-  page += F("    text = text + seconds + 's';");
-  page += F("    document.getElementById('uptime').textContent = text;");
-  page += F("}");
-  page += F("setTimeout(function() {");
-  page += F("    updateUptime();");
-  page += F("    setInterval(updateUptime, 1000);");
-  page += F("}, 0);");
-  page += F("</script>");
-
-  // Separate, simple script for Bootstrap version
-  page += F("<script>");
-  page += F("setTimeout(function() {");
-  page += F("    var element = document.getElementById('bootstrap-version');");
-  page += F("    if (typeof bootstrap !== 'undefined') {");
-  page += F("        element.textContent = bootstrap.Tooltip.VERSION;");
-  page += F("    } else {");
-  page += F("        element.textContent = 'Not available';");
-  page += F("    }");
-  page += F("}, 0);");
-  page += F("</script>");
-
-  get_footer_page();
-  if (trim_page(start, len, true)) return;
-}
-
-void get_live_page(unsigned int start, unsigned int len) {
-
-  if (get_top_page(1, start, len)) return;
-
-  page += F("<div aria-live='polite' aria-atomic='true' style='position: relative;'>"
-            "<div id='remotedisplay' class='toast' style='position: absolute; top: 0; right: 0; max-width: 600px;' data-autohide='false'>"
-            "<div class='toast-header'>"
-            "<strong class='me-auto'>Remote Display</strong>"
-            "<small class='text-muted'>128x64</small>"
-            "<button type='button' class='btn-close' data-bs-dismiss='toast' aria-label='Close'></button>"
-            "</div>"
-            "<div class='toast-body'>"
-            "<canvas id='screen' height='64' width='128'>"
-            "Sorry, your browser does not support canvas."
-            "</canvas><br><small>"
-            "<a id='zoom1' href='#' role='button'>1x</a> "
-            "<a id='zoom2' href='#' role='button'>2x</a> "
-            "<a id='zoom4' href='#' role='button'>4x</a> "
-            "<a id='invert' href='#' role='button'>Invert</a></small>"
-            "</div>"
-            "</div>"
-            "</div>"
-
-            "<div id='live'>"
-            "<a id='showremotedisplay' href='#' role='button'>Remote Display</a>"
-            "<p></p>"
-            "<small>Bank</small><br>"
-            "<div class='btn-group btn-group-toggle' data-toggle='buttons'>");
-
-  if (trim_page(start, len)) return;
-
-  for (unsigned int i = 1; i < BANKS; i++) {
-    page += F("<div class='col text-center g-0'>");
-    page += F("<div class='grid-square'>");
-    page += F("<button type='button' class='btn btn-outline-primary btn-sm' id='bank");
-    page += i;
-    page += F("'>");
-    if (String(banknames[i]).isEmpty())
-      page += i;
-    else
-      page += banknames[i];
-    page += F("</button>");
-    page += F("</div>");
-    page += F("</div>");
-
-    if (trim_page(start, len)) return;
-  }
-  page += F("</div>"
-            "<p></p>"
-
-            "<div class='btn-group'>"
-            "<button type='button' class='btn btn-primary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
-            "MIDI Clock</button>"
-            "<ul class='dropdown-menu'>"
-            "<li><a id='clock-master' class='dropdown-item' href='#'>Master</a></li>"
-            "<li><a id='clock-slave'  class='dropdown-item' href='#'>Slave</a></li>"
-            "</ul>"
-            "</div>"
-
-            "<div class='btn-group'>"
-            "<button type='button' class='btn btn-outline-primary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
-            "Time Signature</button>"
-            "<ul class='dropdown-menu'>"
-            "<li><a id='4_4' class='dropdown-item' href='#'>4/4 Common Time</a></li>"
-            "<li><a id='3_4' class='dropdown-item' href='#'>3/4 Waltz Time</a></li>"
-            "<li><a id='2_4' class='dropdown-item' href='#'>2/4 March Time</a></li>"
-            "<li><a id='3_8' class='dropdown-item' href='#'>3/8</a></li>"
-            "<li><a id='6_8' class='dropdown-item' href='#'>6/8</a></li>"
-            "<li><a id='9_8' class='dropdown-item' href='#'>9/8</a></li>"
-            "<li><a id='12_8' class='dropdown-item' href='#'>12/8</a></li>"
-            "</ul>"
-            "</div>");
-
-  if (trim_page(start, len)) return;
-
-  page += F("<div class='btn-group'>"
-            "<button type='button' class='btn btn-primary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
-            "MTC</button>"
-            "<ul class='dropdown-menu'>"
-            "<li><a id='mtc-master' class='dropdown-item' href='#'>Master</a></li>"
-            "<li><a id='mtc-slave' class='dropdown-item' href='#'>Slave</a></li>"
-            "</ul>"
-            "</div>"
-            "<p></p>"
-
-            "<div>"
-            "<h1 id='bpm'></h1> bpm"
-            "<h1 id='timesignature'></h1>"
-            "<h1 id='beat'></h1>"
-            "<h1 id='mtc'></h1>"
-            "</div>"
-            "<p></p>"
-
-            "<button id='start' type='button' class='btn btn-outline-primary'>Start</button>"
-            "<button id='stop' type='button' class='btn btn-outline-primary'>Stop</button>"
-            "<button id='continue' type='button' class='btn btn-outline-primary'>Continue</button>"
-            "<button id='tap' type='button' class='btn btn-outline-primary'>Tap</button>"
-            "</div>");
-
-  if (trim_page(start, len)) return;
-
+  // JavaScript for uptime counter 
   page += F("<script>"
-            "var isplaying = 0;"
-            "var invert = 0;"
-            "var zoom = 1;"
-            "var con;"
-            "var source;"
+      "function u(){"
+      "const e=document.getElementById('uptime');"
+      "let t=");
+  page += millis();
+  page += F(";"
+      "try{"
+      "const n=()=>{"
+      "t+=1e3;"
+      "let n=Math.floor(t/1e3),o=Math.floor(n/60),r=Math.floor(o/60),a=Math.floor(r/24);"
+      "n%=60,o%=60,r%=24;"
+      "let l='';"
+      "a>0&&(l+=a+'d '),r>0&&(l+=r+'h '),o>0&&(l+=o+'m '),l+=n+'s';"
+      "e.innerHTML=l"
+      "};"
+      "n(),setInterval(n,1e3)"
+      "}catch(t){e.innerHTML='<span class=\"text-danger\">Error</span>'}"
+      "}"
+      "setTimeout(u,0);"
+      "</script>");
 
-            "function webSocketConnect() {"
-            "con = new WebSocket('ws://' + location.hostname + ':80/ws');"
-            "con.binaryType = 'arraybuffer';"
-            "con.onopen = function () {"
-            "console.log('WebSocket to Pedalino open');"
-            //"$('#live').find('input, button, submit, textarea, select').removeAttr('disabled');"
-            //"$('#live').find('a').removeClass('disablehyper').unbind('click');"
-            "var preview = document.querySelectorAll('input, button, submit, textarea, select');"
-            "for (var i = 0; i < preview.length;  i++) {preview[i].removeAttribute('disabled');};"
-            //"document.querySelectorAll('a').forEach(function(number, index, array){array[index].classList.remove('disablehyper').removeEventListener('click', click);});"
-            "};"
-            "con.onerror = function (error) {"
-            "console.log('WebSocket to Pedalino error ', error);"
-            "};"
-            "con.onmessage = function (e) {"
-            "var data = e.data;"
-            "var dv = new DataView(data);"
-  //          "if (dv.buffer.byteLength != 1024) return;"
-            "var canvas=document.getElementById('screen');"
-            "var context=canvas.getContext('2d');"
-            "var x=0; y=0;"
-            "for (y=0; y<64; y++)"
-            "  for (x=0; x<128; x++)"
-            "    if ((dv.getUint8(x+Math.floor(y/8)*128) & (1<<(y&7))) == 0){"
-            "      (invert == 0) ? context.clearRect(x*zoom,y*zoom,zoom,zoom) : context.fillRect(x*zoom,y*zoom,zoom,zoom);"
-            "    } else {(invert == 0) ? context.fillRect(x*zoom,y*zoom,zoom,zoom) : context.clearRect(x*zoom,y*zoom,zoom,zoom);}"
-            "};"
-            "con.onclose = function () {"
-            "console.log('WebSocket to Pedalino closed');"
-            //"$('#live').find('input, button, submit, textarea, select').attr('disabled', 'disabled');"
-            //"$('#live').find('a').addClass('disablehyper').click(function (e) { e.preventDefault(); });"
-            "var preview = document.querySelectorAll('input, button, submit, textarea, select');"
-            "for (var i = 0; i < preview.length;  i++) {preview[i].setAttribute('disabled', 'disabled');};"
-            "document.querySelectorAll('a').forEach(function(number, index, array){array[index].classList.add('disablehyper').addEventListener(click, click);});"
-            "};"
-            "setInterval(keepAliveConnection, 1000);"
-            "};");
+  // Memory update script
+  page += F("<script>"
+      "function m(){"
+      "const e=document.getElementById('free-memory');"
+      "try{"
+      "const n=()=>{"
+      "fetch('/memory').then(e=>e.json()).then(n=>{e.textContent=(n.memory/1024).toFixed(2)+' kB'})"
+      ".catch(()=>{e.innerHTML='<span class=\"text-danger\">Error</span>'})};"
+      "n(),setInterval(n,5e3)"
+      "}catch(n){e.innerHTML='<span class=\"text-danger\">Error</span>'}"
+      "}"
+      "setTimeout(m,500);"
+      "</script>");
 
-  if (trim_page(start, len)) return;
-
-  page += F("function click(e) { e.preventDefault(); };"
-
-            "function keepAliveConnection() {"
-            "if (con.readyState == WebSocket.CLOSED) webSocketConnect();"
-            "if (source.readyState == EventSource.CLOSED) eventSourceConnect();"
-            "};"
-
-            "webSocketConnect();"
-
-            "function eventSourceConnect() {"
-            "if (!!window.EventSource) {"
-            "source = new EventSource('/events');"
-            "source.addEventListener('open', function(e) {"
-            "console.log('Events Connected');"
-            "}, false);"
-            "source.addEventListener('error', function(e) {"
-            "if (e.target.readyState != EventSource.OPEN) {"
-            "console.log('Events Disconnected');"
-            "}"
-            "}, false);"
-            "source.addEventListener('message', function(e) {"
-            "console.log('Event: ', e.data);"
-            "}, false);"
-            "source.addEventListener('play', function(e) { isplaying = e.data; }, false);"
-            "source.addEventListener('timesignature', function(e) {"
-            "document.getElementById('timesignature').innerHTML = e.data;"
-            "}, false);"
-            "source.addEventListener('bpm', function(e) {"
-            "document.getElementById('bpm').innerHTML = e.data;"
-            "}, false);"
-            "source.addEventListener('beat', function(e) {"
-            "document.getElementById('beat').innerHTML = e.data;"
-            "}, false);"
-            "source.addEventListener('mtc', function(e) {"
-            "document.getElementById('mtc').innerHTML = e.data;"
-	          "}, false);"
-            "source.addEventListener('screen', function(e) {"
-            "}, false);"
-            "}"
-            "}"
-
-            "eventSourceConnect();");
-
-  if (trim_page(start, len)) return;
-
-  page += F("function sendBinary(str) {"
-            "if (con.readyState != WebSocket.OPEN || con.bufferedAmount > 0) return;"
-            "var buffer = new ArrayBuffer(str.length+1);"
-            "var view = new DataView(buffer);"
-            "for (i=0; i<str.length; i++)"
-            "  view.setUint8(i, str.charCodeAt(i));"
-            "view.setUint8(str.length, 0);"
-            "con.send(view);"
-            "}"
-
-            "document.getElementById('showremotedisplay').onclick = function() {"
-            "const toast = new bootstrap.Toast(document.getElementById('remotedisplay'));"
-            "toast.show();"
-            "setInterval(requestRemoteDisplay, 1000);"
-            "return false; };"
-
-            "function requestRemoteDisplay() {sendBinary('.');}"
-
-            "function resizeScreen(z) {"
-            "zoom = z;"
-            "var canvas=document.getElementById('screen');"
-            "var context=canvas.getContext('2d');"
-            "context.canvas.width = 128*zoom;"
-            "context.canvas.height = 64*zoom;"
-            "};");
-
-  if (trim_page(start, len)) return;
-
-  for (unsigned int i = 1; i < BANKS; i++) {
-    page += F("document.getElementById('bank");
-    page += i;
-    page += F("').onclick = function() {"
-              "sendBinary('bank");
-    page += i;
-    page += F("');"
-              "return false; };");
-
-    if (trim_page(start, len)) return;
-  }
-
-  page += F("document.getElementById('invert').onclick = function() {"
-            "if (invert == 0 ) invert = 1; else invert = 0; return false; };"
-            "document.getElementById('zoom1').onclick = function() { resizeScreen(1); return false; };"
-            "document.getElementById('zoom2').onclick = function() { resizeScreen(2); return false; };"
-            "document.getElementById('zoom4').onclick = function() { resizeScreen(4); return false; };"
-
-            "document.getElementById('clock-master').onclick = function() {"
-            "sendBinary('clock-master');"
-            "return false; };"
-            "document.getElementById('clock-slave').onclick = function() {"
-            "sendBinary('clock-slave');"
-            "return false; };"
-            "document.getElementById('mtc-master').onclick = function() {"
-            "sendBinary('mtc-master');"
-            "return false; };"
-            "document.getElementById('mtc-slave').onclick = function() {"
-            "sendBinary('mtc-slave');"
-            "return false; };"
-
-            "document.getElementById('4_4').onclick = function() {"
-            "sendBinary('4/4');"
-            "return false; };"
-            "document.getElementById('3_4').onclick = function() {"
-            "sendBinary('3/4');"
-            "return false; };"
-            "document.getElementById('2_4').onclick = function() {"
-            "sendBinary('2/4');"
-            "return false; };"
-            "document.getElementById('3_8').onclick = function() {"
-            "sendBinary('3/8');"
-            "return false; };"
-            "document.getElementById('6_8').onclick = function() {"
-            "sendBinary('6/8');"
-            "return false; };"
-            "document.getElementById('9_8').onclick = function() {"
-            "sendBinary('9/8');"
-            "return false; };"
-            "document.getElementById('12_8').onclick = function() {"
-            "sendBinary('12/8');"
-            "return false; };"
-
-            "document.getElementById('start').onclick = function() {"
-            "sendBinary('start');"
-            "return false; };"
-            "document.getElementById('stop').onclick = function() {"
-            "sendBinary('stop');"
-            "return false; };"
-            "document.getElementById('continue').onclick = function() {"
-            "sendBinary('continue');"
-            "return false; };"
-            "document.getElementById('tap').onclick = function() {"
-            "sendBinary('tap');"
-            "return false; };"
-
-            "</script>");
+  // Simple script for Bootstrap version
+  page += F("<script>"
+    "document.addEventListener('DOMContentLoaded', function() {"
+    "  if (typeof bootstrap !== 'undefined') {"
+    "    document.getElementById('bootstrap-version').textContent = bootstrap.Tooltip.VERSION;"
+    "  } else {"
+    "    document.getElementById('bootstrap-version').textContent = 'Not available';"
+    "  }"
+    "});"
+    "</script>");
 
   get_footer_page();
-
   if (trim_page(start, len, true)) return;
 }
 
@@ -1753,7 +1488,7 @@ void get_actions_page(unsigned int start, unsigned int len) {
 
     page += F("<div class='w-25'>");
     page += F("<div class='form-floating'>");
-    page += F("<input type='color' class='form-control' id='color0Input");
+    page += F("<input type='color' class='form-control form-control-color w-100' id='color0Input");
     page += i;
     page += F("' name='color0-");
     page += i;
@@ -1761,30 +1496,30 @@ void get_actions_page(unsigned int start, unsigned int len) {
     char color[8];
     sprintf(color, "#%06X", act->color0 & 0xFFFFFF);
     page += color;
-    page += F("'>");
+    page += F("' title='Choose off color'>");
     page += F("<label for='color0Input");
     page += i;
     page += F("' id='color0Label");
     page += i;
-    page += F("'>Off</label>");
+    page += F("' class='small'>Off</label>");
     page += F("</div>");
     page += F("</div>");
-
+    
     page += F("<div class='w-25'>");
     page += F("<div class='form-floating'>");
-    page += F("<input type='color' class='form-control' id='color1Input");
+    page += F("<input type='color' class='form-control form-control-color w-100' id='color1Input");
     page += i;
     page += F("' name='color1-");
     page += i;
     page += F("' value='");
     sprintf(color, "#%06X", act->color1 & 0xFFFFFF);
     page += color;
-    page += F("'>");
+    page += F("' title='Choose on color'>");
     page += F("<label for='color1Input");
     page += i;
     page += F("' id='color1Label");
     page += i;
-    page += F("'>On</label>");
+    page += F("' class='small'>On</label>");
     page += F("</div>");
     page += F("</div>");
 
@@ -3395,7 +3130,7 @@ void get_sequences_page(unsigned int start, unsigned int len) {
 
     page += F("<div class='col'>");
     page += F("<div class='form-floating'>");
-    page += F("<input type='color' class='form-control' id='colorInput");
+    page += F("<input type='color' class='form-control form-control-color w-100' id='colorInput");
     page += i;
     page += F("' name='color");
     page += i;
@@ -3403,10 +3138,10 @@ void get_sequences_page(unsigned int start, unsigned int len) {
     char color[8] = "#000000";
     sprintf(color, "#%06X", sequences[s-1][i-1].color & 0xFFFFFF);
     page += color;
-    page += F("'>");
+    page += F("' title='Choose color'>");
     page += F("<label for='colorInput");
     page += i;
-    page += F("'>Color</label>");
+    page += F("' class='small'>Color</label>");
     page += F("</div>");
     page += F("</div>");
 
@@ -4961,22 +4696,6 @@ size_t get_root_page_chunked(uint8_t *buffer, size_t maxLen, size_t index) {
   return byteWritten;
 }
 
-size_t get_live_page_chunked(uint8_t *buffer, size_t maxLen, size_t index) {
-
-  page = "";
-  get_live_page(index, maxLen - 1);
-  page.getBytes(buffer, maxLen, 0);
-  buffer[maxLen-1] = 0; // CWE-126
-  size_t byteWritten = strlen((const char *)buffer);
-  if (byteWritten == 0) {
-    page = "";
-    alert = "";
-    alertError = "";
-    fullPageCompleted = true;
-  }
-  return byteWritten;
-}
-
 size_t get_actions_page_chunked(uint8_t *buffer, size_t maxLen, size_t index) {
 
   page = "";
@@ -5153,14 +4872,6 @@ void http_handle_root(AsyncWebServerRequest *request) {
   request->send(response);
 }
 
-void http_handle_live(AsyncWebServerRequest *request) {
-  if (!httpUsername.isEmpty() && !request->authenticate(httpUsername.c_str(), httpPassword.c_str())) return request->requestAuthentication();
-  http_handle_globals(request);
-  AsyncWebServerResponse *response = request->beginChunkedResponse("text/html", get_live_page_chunked);
-  response->addHeader("Connection", "close");
-  request->send(response);
-}
-
 void http_handle_actions(AsyncWebServerRequest *request) {
 
   String list;
@@ -5266,20 +4977,6 @@ void http_handle_progress(AsyncWebServerRequest *request) {
     request->send(200, "text/plain", String(HttpsOTA.status() == HTTPS_OTA_UPDATING ? 100 * otaProgress / FIRMWARE_MAX_SIZE : 0));
   else
     request->send(200, "text/plain", String(Update.isRunning() && Update.size() ? 100 * Update.progress() / Update.size() : 0));
-}
-
-void http_handle_post_live(AsyncWebServerRequest *request) {
-
-  String a;
-
-  a = request->arg("profile");
-  currentProfile = a.toInt();
-
-  alert = "Saved";
-
-  AsyncWebServerResponse *response = request->beginChunkedResponse("text/html", get_live_page_chunked);
-  response->addHeader("Connection", "close");
-  request->send(response);
 }
 
 void http_handle_post_actions(AsyncWebServerRequest *request) {
@@ -6088,10 +5785,6 @@ void http_handle_update_file_upload(AsyncWebServerRequest *request, String filen
   //Upload handler chunks in data
   if (!index) {
     // Disconnect, not to interfere with OTA process
-#ifdef WEBSOCKET
-    webSocket.enable(false);
-    webSocket.closeAll();
-#endif
     firmwareUpdate = PED_UPDATE_HTTP;
     delay(100);
     DPRINT("Update Start: %s\n", filename.c_str());
@@ -6185,239 +5878,12 @@ void http_handle_not_found(AsyncWebServerRequest *request) {
   }
 }
 
-
-#ifdef WEBSOCKET
-void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
-  static uint32_t lastPing = 0;
-  const uint32_t PING_INTERVAL = 2000;  // Send ping every 2 seconds
-  const uint32_t PING_TIMEOUT = 5000;   // Consider connection lost after 5 seconds without pong
-
-  if (type == WS_EVT_CONNECT) {
-    // Client connected
-    DPRINT("ws[%s][%u] connect\n", server->url(), client->id());
-    wsClient = client;
-    client->ping();
-    lastPing = millis();
-    isConnected = true;
-    
-    // Set keep-alive period and timeout
-    client->keepAlivePeriod(2);
-    client->keepAliveTimeout(5);
-    
-    // Send initial state as JSON
-    DynamicJsonDocument doc(2048);
-    doc["mode"] = MTC.getMode() == MidiTimeCode::SynchroClockMaster ? "clock-master" : 
-                  MTC.getMode() == MidiTimeCode::SynchroClockSlave ? "clock-slave" : "none";
-    doc["bpm"] = bpm;
-    doc["timeSignature"] = timeSignature == PED_TIMESIGNATURE_2_4 ? "2/4" :
-                          timeSignature == PED_TIMESIGNATURE_3_4 ? "3/4" :
-                          timeSignature == PED_TIMESIGNATURE_4_4 ? "4/4" :
-                          timeSignature == PED_TIMESIGNATURE_3_8 ? "3/8" :
-                          timeSignature == PED_TIMESIGNATURE_6_8 ? "6/8" :
-                          timeSignature == PED_TIMESIGNATURE_9_8 ? "9/8" :
-                          timeSignature == PED_TIMESIGNATURE_12_8 ? "12/8" : "4/4";
-    doc["currentBank"] = currentBank;
-    doc["isPlaying"] = MTC.isPlaying();
-    doc["mtcMode"] = currentMidiTimeCode;
-    doc["displayEnabled"] = true;
-    doc["displayBuffer"] = ""; // Will be updated via binary messages
-
-    String output;
-    serializeJson(doc, output);
-    client->text(output);
-
-    // Initialize display buffer
-    if (wsClient && display.buffer) {
-      wsClient->binary(display.buffer, 128*64);
-    }
-
-    // Schedule next ping
-    client->ping();
-
-    // Send initial display update
-    if (wsClient && display.buffer) {
-      wsClient->binary(display.buffer, 128*64);
-    }
-    
-  } else if (type == WS_EVT_DISCONNECT) {
-    // Client disconnected
-    DPRINT("ws[%s][%u] disconnect\n", server->url(), client->id());
-    isConnected = false;
-    if (wsClient == client) {
-      wsClient = NULL;
-    }
-    
-  } else if (type == WS_EVT_ERROR) {
-    // Error received
-    DPRINT("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
-    if (wsClient == client) {
-      wsClient = NULL;
-      isConnected = false;
-    }
-    
-  } else if (type == WS_EVT_PONG) {
-    // Pong received (response to ping)
-    DPRINT("ws[%s][%u] pong received\n", server->url(), client->id());
-    lastPing = millis();
-    
-    // Check if connection timed out
-    if (millis() - lastPing > PING_TIMEOUT) {
-      DPRINT("ws[%s][%u] connection timeout\n", server->url(), client->id());
-      client->close();
-      if (wsClient == client) {
-        wsClient = NULL;
-        isConnected = false;
-      }
-    }
-  } else if(type == WS_EVT_DATA){
-    //data packet
-    AwsFrameInfo * info = (AwsFrameInfo*)arg;
-    if(info->final && info->index == 0 && info->len == len){
-      //the whole message is in a single frame and we got all of it's data
-      DPRINT("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
-      if(info->opcode == WS_TEXT){
-        data[len] = 0;
-        DPRINT("%s\n", (char*)data);
-      } else {
-        for (size_t i = 0; i < info->len; i++) {
-          DPRINT("%02x ", data[i]);
-        }
-        data[info->len-1] = 0;
-        DPRINT(" %s\n", (char*)data);
-        //DPRINT("%d\n", ESP.getFreeHeap());
-        if (strcmp((const char *)data, ".") == 0) {
-          //AsyncWebSocketMessageBuffer *buffer = webSocket.makeBuffer(128*64);
-          //memcpy(buffer->get(), display.buffer, 128*64);
-          //if (connected && buffer) {client->binary(buffer); delete buffer; buffer = NULL;}
-          //client->binary(display.buffer, 128*64);
-        }
-        else if (strcmp((const char *)data, "start") == 0)
-          mtc_start();
-        else if (strcmp((const char *)data, "stop") == 0)
-          mtc_stop();
-        else if (strcmp((const char *)data, "continue") == 0)
-          mtc_continue();
-        else if (strcmp((const char *)data, "tap") == 0)
-          mtc_tap();
-        else if (strcmp((const char *)data, "clock-master") == 0) {
-          MTC.setMode(MidiTimeCode::SynchroClockMaster);
-          bpm = (bpm == 0) ? 120 : bpm;
-          MTC.setBpm(bpm);
-          currentMidiTimeCode = PED_MIDI_CLOCK_MASTER;
-        }
-        else if (strcmp((const char *)data, "clock-slave") == 0) {
-          MTC.setMode(MidiTimeCode::SynchroClockSlave);
-          currentMidiTimeCode = PED_MIDI_CLOCK_SLAVE;
-          bpm = 0;
-        }
-        else if (strcmp((const char *)data, "mtc-master") == 0) {
-          MTC.setMode(MidiTimeCode::SynchroMTCMaster);
-          MTC.sendPosition(0, 0, 0, 0);
-          currentMidiTimeCode = PED_MTC_MASTER_24;
-        }
-        else if (strcmp((const char *)data, "mtc-slave") == 0) {
-          MTC.setMode(MidiTimeCode::SynchroMTCSlave);
-          currentMidiTimeCode = PED_MTC_SLAVE;
-        }
-        else if (strcmp((const char *)data, "4/4") == 0) {
-          timeSignature = PED_TIMESIGNATURE_4_4;
-          MTC.setBeat(4);
-        }
-        else if (strcmp((const char *)data, "3/4") == 0) {
-          timeSignature = PED_TIMESIGNATURE_3_4;
-          MTC.setBeat(3);
-        }
-        else if (strcmp((const char *)data, "2/4") == 0) {
-          timeSignature = PED_TIMESIGNATURE_2_4;
-          MTC.setBeat(2);
-        }
-        else if (strcmp((const char *)data, "3/8") == 0) {
-          timeSignature = PED_TIMESIGNATURE_3_8;
-          MTC.setBeat(3);
-        }
-        else if (strcmp((const char *)data, "6/8") == 0) {
-          timeSignature = PED_TIMESIGNATURE_6_8;
-          MTC.setBeat(3);
-        }
-        else if (strcmp((const char *)data, "9/8") == 0) {
-          timeSignature = PED_TIMESIGNATURE_9_8;
-          MTC.setBeat(3);
-        }
-        else if (strcmp((const char *)data, "12/8") == 0) {
-          timeSignature = PED_TIMESIGNATURE_12_8;
-          MTC.setBeat(3);
-        }
-        else {
-          int b;
-          if (sscanf((const char *)data, "bank%d", &b) == 1)
-            currentBank = constrain(b, 0, BANKS - 1);
-            update_current_step();
-            leds_refresh();
-        }
-      }
-      /*
-      if(info->opcode == WS_TEXT)
-        client->text("I got your text message");
-      else
-        client->binary("I got your binary message");
-      */
-    } else {
-      //message is comprised of multiple frames or the frame is split into multiple packets
-      if(info->index == 0){
-        if(info->num == 0)
-          DPRINT("ws[%s][%u] %s-message start\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
-        DPRINT("ws[%s][%u] frame[%u] start[%llu]\n", server->url(), client->id(), info->num, info->len);
-      }
-
-      DPRINT("ws[%s][%u] frame[%u] %s[%llu - %llu]: ", server->url(), client->id(), info->num, (info->message_opcode == WS_TEXT)?"text":"binary", info->index, info->index + len);
-      if(info->message_opcode == WS_TEXT){
-        data[len] = 0;
-        DPRINT("%s\n", (char*)data);
-      } else {
-        for(size_t i=0; i < len; i++){
-          DPRINT("%02x ", data[i]);
-        }
-        DPRINT("\n");
-      }
-
-      if((info->index + len) == info->len){
-        DPRINT("ws[%s][%u] frame[%u] end[%llu]\n", server->url(), client->id(), info->num, info->len);
-        if(info->final){
-          DPRINT("ws[%s][%u] %s-message end\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
-          /*
-          if(info->message_opcode == WS_TEXT)
-            client->text("I got your text message");
-          else
-            client->binary("I got your binary message");
-          */
-        }
-      }
-    }
-  }
-}
-#endif  // NO_WEBSOCKET
-
-
 void http_setup() {
 
 #ifdef WEBCONFIG
-#ifdef WEBSOCKET
-  webSocket.onEvent(onWsEvent);
-  httpServer.addHandler(&webSocket);
-  //events.setAuthentication("user", "pass");
-  httpServer.addHandler(&events);
-#endif
-/*
-  httpServer.serveStatic("/favicon.ico",                SPIFFS, "/favicon.ico").setDefaultFile("/favicon.ico").setCacheControl("max-age=600");
-  httpServer.serveStatic("/logo.png",                   SPIFFS, "/logo.png").setDefaultFile("/logo.png").setCacheControl("max-age=600");
-  httpServer.serveStatic("/css/bootstrap.min.css",      SPIFFS, "/css/bootstrap.min.css").setDefaultFile("/css/bootstrap.min.css").setCacheControl("max-age=600");
-  httpServer.serveStatic("/js/bootstrap.bundle.min.js", SPIFFS, "/js/bootstrap.bundle.min.js").setDefaultFile("/js/bootstrap.bundle.min.js").setCacheControl("max-age=600");
-  httpServer.serveStatic("/js/Sortable.min.js",         SPIFFS, "/js/Sortable.min.js").setDefaultFile("/js/Sortable.min.js").setCacheControl("max-age=600");
-  httpServer.serveStatic("/schema.json",                SPIFFS, "/schema.json").setDefaultFile("/schema.json").setCacheControl("max-age=600");
-  httpServer.serveStatic("/files",                      SPIFFS, "/").setDefaultFile("").setAuthentication(httpUsername.c_str(), httpPassword.c_str());
-*/
+
   httpServer.serveStatic("/favicon.ico",                SPIFFS, "/favicon.ico").setCacheControl("max-age=600");
-  httpServer.serveStatic("/logo.png",                   SPIFFS, "/logo.png").setCacheControl("max-age=600");
+  httpServer.serveStatic("/logo.webp",                   SPIFFS, "/logo.webp").setCacheControl("max-age=600");
   httpServer.serveStatic("/css/bootstrap.min.css",      SPIFFS, "/css/bootstrap.min.css").setCacheControl("max-age=600");
   httpServer.serveStatic("/js/bootstrap.bundle.min.js", SPIFFS, "/js/bootstrap.bundle.min.js").setCacheControl("max-age=600");
   httpServer.serveStatic("/js/Sortable.min.js",         SPIFFS, "/js/Sortable.min.js").setCacheControl("max-age=600");
@@ -6427,8 +5893,6 @@ void http_setup() {
   httpServer.on("/",                            http_handle_root);
   httpServer.on("/login",           HTTP_GET,   http_handle_login);
   httpServer.on("/login",           HTTP_POST,  http_handle_post_login);
-  httpServer.on("/live",            HTTP_GET,   http_handle_live);
-  httpServer.on("/live",            HTTP_POST,  http_handle_post_live);
   httpServer.on("/actions",         HTTP_GET,   http_handle_actions);
   httpServer.on("/actions",         HTTP_POST,  http_handle_post_actions);
   httpServer.on("/pedals",          HTTP_GET,   http_handle_pedals);
@@ -6443,7 +5907,11 @@ void http_setup() {
   httpServer.on("/options",         HTTP_POST,  http_handle_post_options);
   httpServer.on("/configurations",  HTTP_GET,   http_handle_configurations);
   httpServer.on("/configurations",  HTTP_POST,  http_handle_post_configurations, http_handle_configuration_file_upload);
-
+  httpServer.on("/memory",          HTTP_GET, [](AsyncWebServerRequest *request) {
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    response->printf("{\"memory\": %d}", ESP.getFreeHeap());
+    request->send(response);
+  });
   httpServer.on("/update",          HTTP_GET,   http_handle_update);
   httpServer.on("/update",          HTTP_POST,  http_handle_post_update, http_handle_update_file_upload);
   httpServer.on("/progress",        HTTP_GET,   http_handle_progress);
@@ -6476,24 +5944,6 @@ inline void http_run() {
   if (interruptCounter2 > 0) {
 
     interruptCounter2 = 0;
-
-#ifdef WEBSOCKET
-    //webSocket.binaryAll(display.buffer, 128*64);
-#if defined(ARDUINO_LILYGO_T_DISPLAY) || defined(ARDUINO_LILYGO_T_DISPLAY_S3)
-#else
-    if (wsClient) wsClient->binary(display.buffer, 128*64);
-#endif
-     // Limits the number of clients by closing the oldest client
-     // when the maximum number of clients has been exceeded
-    webSocket.cleanupClients();
-#endif
-
-/*
-    if (!buffer) {
-      buffer = webSocket.makeBuffer(128*64);
-      memcpy(buffer->get(), display.buffer, 128*64);
-    }
-    */
   }
 }
 
