@@ -22,6 +22,10 @@
 - 🔄 Added update menu item to navbar
 - 🔧 Updated JSON schema to support 15 pedals
 - 💾 Updated factory default
+- 🔐 Simplified default credentials:
+  - Hostname/mDNS: "pedalino.local"
+  - Access Point SSID: "Pedalino"
+  - Access Point Password: "pedalino"
 - 💡 Added new Fire Ocean LED effect
 - 💡 Profile LED Indicator (LED 20):
   - Profile A: Orange

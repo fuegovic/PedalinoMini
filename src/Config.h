@@ -837,13 +837,16 @@ void spiffs_load_profile(byte profile) {
 //
 void load_factory_default()
 {
-  host               = getChipId();
+  // host               = getChipId();
+  host               = "Pedalino";
   bootMode           = PED_BOOT_NORMAL;
   bleServer          = "";
   wifiSSID           = "";
   wifiPassword       = "";
-  ssidSoftAP         = String("Pedalino-") + getChipId();
-  passwordSoftAP     = getChipId();
+  // ssidSoftAP         = String("Pedalino-") + getChipId();
+  ssidSoftAP         = String("Pedalino");
+  // passwordSoftAP     = getChipId();
+  passwordSoftAP     = "pedalino";
   httpUsername       = "";
   httpPassword       = "";
   theme              = "phoenix";
