@@ -36,7 +36,12 @@
   - Profile A: Fire Ocean (lava waves)
   - Profile B: Pacifica (ocean waves)
   - Profile C: Pride (rainbow waves)
-- 
+- Updated supported input modes: 
+  - Momentary
+  - Latch
+  - Analog
+  - Analog Pads
+  - **Note:** Other modes requiring 2 GPIOs have been disabled
 
 ## 🔄 Profile System
 - Cycles through profiles A → B → C
@@ -44,10 +49,10 @@
 - Profile- : Backward cycling (A→C→B→A)
 - Auto-saves settings when switching
 - Shows current profile on screen
-- LED 19 indicates active profile:
-  - Red: Profile A
-  - Green: Profile B
-  - Blue: Profile C
+- LED 20 indicates active profile:
+  - Orange: Profile A
+  - Cyan: Profile B
+  - Magenta: Profile C
 
 ## 📌 Pin Configuration Guide
 
@@ -75,6 +80,13 @@
 - MIDI OUT: GPIO 4
 - USB MIDI: GPIO 18,19
 - LED Strip: GPIO 5
+
+### Supported Input Modes: 
+  - Momentary
+  - Latch
+  - Analog
+  - Analog Pads
+> **Note:** Other modes requiring 2 GPIOs have been disabled
 
 ### ⚡ Hardware Wiring
 
