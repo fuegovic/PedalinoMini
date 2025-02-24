@@ -282,10 +282,8 @@ bool get_top_page(int p, unsigned int start, unsigned int len) {
 }
 
 void get_footer_page() {
-
-  page += F("</div>");
+  page += F("</div>"); // Close container-fluid from get_top_page
 #ifdef BOOTSTRAP_LOCAL
-  // page += F("<script defer src='/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>");
   page += F("<script defer src='/js/bootstrap.bundle.min.js' integrity='' crossorigin='anonymous'></script>");
 #else
   page += F("<script src='https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.bundle.min.js' crossorigin='anonymous'></script>");
@@ -365,6 +363,12 @@ void addCard(const char* icon, const char* title) {
   page += F("</h5><div class='card-body'>");
 }
 
+void closeCard() {
+  page += F("</div>"); // Close card-body
+  page += F("</div>"); // Close card
+  page += F("</div>"); // Close col
+}
+
 void get_root_page(unsigned int start, unsigned int len) {
   if (get_top_page(0, start, len)) return;
 
@@ -387,7 +391,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   addStatusItem("Controls", String(CONTROLS));
   addStatusItem("Sequences", String(SEQUENCES));
   addStatusItem("LEDs", String(LEDS));
-  page += F("</div></div></div>");
+  closeCard();
 
   if (trim_page(start, len)) return;
 
@@ -420,7 +424,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   if (nvs_get_stats("nvs", &nvs_stats) == ESP_OK) {
     addStatusItem("NVS Used", String(nvs_stats.used_entries) + "/" + String(nvs_stats.total_entries));
   }
-  page += F("</div></div></div>");
+  closeCard();
 
   if (trim_page(start, len)) return;
 
@@ -498,7 +502,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("</div></div>");
   #endif
 
-  page += F("</div></div></div>");
+  closeCard();
   if (trim_page(start, len)) return;
 
   // System Status Card
@@ -586,7 +590,9 @@ void get_root_page(unsigned int start, unsigned int len) {
     "});"
     "</script>");
 
-  get_footer_page();
+  closeCard();
+  
+    get_footer_page();
   if (trim_page(start, len, true)) return;
 }
 
@@ -1975,19 +1981,24 @@ void get_pedals_page(unsigned int start, unsigned int len) {
     page += F("'");
     if (pedals[i-1].mode == PED_MOMENTARY1) page += F(" selected");
     page += F(">Momentary</option>");
-    
-      page += F("<option value='");
-      page += PED_LATCH1;
-      page += F("'");
-      if (pedals[i-1].mode == PED_LATCH1) page += F(" selected");
-      page += F(">Latch</option>");
-      page += F("<option value='");
-      page += PED_ANALOG;
-      page += F("'");
-      if (pedals[i-1].mode == PED_ANALOG) page += F(" selected");
-      page += F(">Analog</option>");
+    //if (PIN_D(i-1) != PIN_A(i-1)) {
+    page += F("<option value='");
+    page += PED_LATCH1;
+    page += F("'");
+    if (pedals[i-1].mode == PED_LATCH1) page += F(" selected");
+    page += F(">Latch</option>");
+    page += F("<option value='");
+    page += PED_ANALOG;
+    page += F("'");
+    if (pedals[i-1].mode == PED_ANALOG) page += F(" selected");
+    page += F(">Analog</option>");
+    page += F("<option value='");
+    page += PED_ANALOG_PAD;
+    page += F("'");
+    if (pedals[i-1].mode == PED_ANALOG_PAD) page += F(" selected");
+    page += F(">Analog Pad</option>");
 
-    page += F("</select>");
+      page += F("</select>");
     page += F("<label for='modeSelect");
     page += i;
     page += F("'>Mode</label>");
