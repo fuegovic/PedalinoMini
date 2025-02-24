@@ -304,37 +304,37 @@ void setup()
     newBootMode = PED_BOOT_NORMAL;
     display_progress_bar_title2("Release button for", "Normal Boot");
   }
-  while ((digitalRead(FACTORY_DEFAULT_PIN) == LOW) && (duration < 16000)) {
-    if (duration > 1000 && duration < 3000 && newBootMode != PED_BOOT_BLE) {
+  while ((digitalRead(FACTORY_DEFAULT_PIN) == LOW) && (duration < 21000)) {
+    if (duration > 3000 && duration < 6000 && newBootMode != PED_BOOT_BLE) {
       newBootMode = PED_BOOT_BLE;
       display_progress_bar_title2("Release button for", "Bluetooth Only");
     }
-    else if (duration > 3000 && duration < 5000 && newBootMode != PED_BOOT_WIFI) {
+    else if (duration > 6000 && duration < 9000 && newBootMode != PED_BOOT_WIFI) {
       newBootMode = PED_BOOT_WIFI;
       display_progress_bar_title2("Release button for", "WiFi Only");
     }
-    else if (duration > 5000 && duration < 7000 && newBootMode != PED_BOOT_AP) {
+    else if (duration > 9000 && duration < 12000 && newBootMode != PED_BOOT_AP) {
       newBootMode = PED_BOOT_AP;
       display_progress_bar_title2("Release button for", "Access Point");
     }
-    else if (duration > 7000 && duration < 9000 && newBootMode != PED_BOOT_AP_NO_BLE) {
+    else if (duration > 12000 && duration < 15000 && newBootMode != PED_BOOT_AP_NO_BLE) {
       newBootMode = PED_BOOT_AP_NO_BLE;
       display_progress_bar_title2("Release button for", "AP without BLE");
     }
-    else if (duration > 9000 && duration < 11000 && newBootMode != PED_BOOT_RESET_WIFI) {
+    else if (duration > 15000 && duration < 18000 && newBootMode != PED_BOOT_RESET_WIFI) {
       newBootMode = PED_BOOT_RESET_WIFI;
       display_progress_bar_title2("Release button for", "WiFi Reset");
     }
-    else if (duration > 11000 && duration < 13000 && newBootMode != PED_BOOT_LADDER_CONFIG) {
-      newBootMode = PED_BOOT_LADDER_CONFIG;
-      display_progress_bar_title2("Release button for", "Ladder Config");
-    }
-    else if (duration > 13000 && duration < 16000 && newBootMode != PED_FACTORY_DEFAULT) {
+    // else if (duration > 11000 && duration < 13000 && newBootMode != PED_BOOT_LADDER_CONFIG) {
+    //   newBootMode = PED_BOOT_LADDER_CONFIG;
+    //   display_progress_bar_title2("Release button for", "Ladder Config");
+    // }
+    else if (duration > 18000 && duration < 21000 && newBootMode != PED_FACTORY_DEFAULT) {
       newBootMode = PED_FACTORY_DEFAULT;
       display_progress_bar_title2("Hold button for", "Factory Default");
     }
     DPRINT("#");
-    display_progress_bar_update(duration, 16000);
+    display_progress_bar_update(duration, 21000);
     duration = millis() - milliStart;
   }
 
