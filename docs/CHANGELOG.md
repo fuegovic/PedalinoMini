@@ -113,4 +113,4 @@ GPIO --- [SWITCH] --- GND
 2. 🔒 Input-only pins: GPIO 34,35,36,39
 3. ⬆️ Use internal pull-up for switches
 4. ⚡ Expression pedals: 0-3.3V range
-5. 🔧 No external resistors needed
+5. 🔧 External pull-up resistors required for analog pins (Pedals 1-6, 10kΩ recommended)
