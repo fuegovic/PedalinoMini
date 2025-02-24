@@ -1,7 +1,7 @@
-[![](./images/PedalinoMini486.png)](https://github.com/alf45tar/PedalinoMini-6)
+[![](./data/logo.webp)](https://github.com/fuegovic/PedalinoMini)
 
 
-# PedalinoMini™
+# PedalinoMini™ 🐦‍🔥
 
 Wireless MIDI foot controller for guitarists and more.
 
@@ -28,12 +28,12 @@ You can change the presets of your guitar rig, turn old MIDI equipment into some
 
 ## Features
 
-- Support for digital foot switches (momentary or latch), analog expression pedals, jog wheels (rotary encoders) and triggers.
-- 6 controllers ports for ESP32 and 8 controllers ports for ESP32S3. One controller port can support up to 6 indipendent switches for a total of 36 (ESP32) or 48 (ESP32S3) switches.
+- Support for digital foot switches (momentary or latch), analog expression pedals, ~~jog wheels (rotary encoders)~~ and triggers.
+- ~~6 controllers ports for ESP32 and 8 controllers ports for ESP32S3. One controller port can support up to 6 indipendent switches for a total of 36 (ESP32) or 48 (ESP32S3) switches.~~
 - 20 banks + 1 global bank
 - 3 user profiles
 - 20 sequences of 10 steps each
-- Each port can connect 1 expression pedal or 1 jog wheel or up to 6 foot switches via a resitors ladder (TC HELICON Switch-6).
+- ~~Each port can connect 1 expression pedal or 1 jog wheel or up to 6 foot switches via a resitors ladder (TC HELICON Switch-6).~~
 - MIDI output via AppleMIDI (also known as RTP-MIDI) or ipMIDI via Wi-Fi
 - Send almost every MIDI messages: Program Change, Control Code, Note On/Off, Channel Pressure, Pitch Bend, Bank Select, Start, Stop, Continue or a sequence of the previous messages
 - MIDI channel, MIDI note, MIDI control code, MIDI program change can be configured by each pedal and by each bank
@@ -41,51 +41,12 @@ You can change the presets of your guitar rig, turn old MIDI equipment into some
 - Invert polarity via software
 - Individual automatic calibration of expression pedals. Manual fine tuning is not usually requested.
 - Transform a linear expression pedal into log expression pedal and vice versa
-- Calibrating resistors ladder is easy as pressing footswitches in sequence
+- ~~Calibrating resistors ladder is easy as pressing footswitches in sequence~~
 - RGB NeoPixel/WS2812B status leds
 - Responsive and mobile-first configuration web interface (<http://pedalino.local>)
 - Installing firmware and WiFi provisioning directly from your browser
 - Smart Config technology to help users connect to a Wi-Fi network through simple app on a smartphone.
 - OTA (Over the Air) firmware update or via HTTP (<http://pedalino.local/update>)
-
-## PedalinoMini™ 4
-
-An easy way to create one is by building the [PedalinoMini™ 4](https://github.com/alf45tar/PedalinoMini-4). I aimed to keep it as simple as possible.
-
-[PedalinoMini™ 4](https://github.com/alf45tar/PedalinoMini-4) operates seamlessly with its 4 footswitches, featuring a big 1.9" color display equipped with WiFi, Bluetooth, and USB MIDI capabilities. It is powered through a USB-C port, using either a power adapter or, for enhanced convenience, a compact power bank, ensuring up to 6 hours of uninterrupted functionality.
-
-[![](https://github.com/alf45tar/PedalinoMini-4/blob/main/images/PedalinoMini%204.jpg)](https://github.com/alf45tar/PedalinoMini-4)
-
-## PedalinoMini™ 6/8
-
-Do you need more footswitches? [PedalinoMini™ 6](https://github.com/alf45tar/PedalinoMini-6) or [PedalinoMini™ 8](https://github.com/alf45tar/PedalinoMini-8) is for you.
-
-[![](https://github.com/alf45tar/PedalinoMini-8/blob/fde349a01218d866c310c22895a28c323da8b707/images/PedalinoMini%208%20Naked.jpg)](https://github.com/alf45tar/PedalinoMini-8)
-
-## Sponsors
-
-New features, bug corrections, priority reply will be offered at zero-day to **sponsors only**. Sponsors will have access to a private repository.
-
-New features and bug corrections will be released to this public repository when one of the following goals is met (whichever come first):
-
-- **One thousand stars**
-
-  _Add a star to the project if you don't want be a sponsor._
-
-  >Goal is 1000 stars.
-
-- **12 months from October 25th, 2024**
-
-  _Be patience if you are not ready to add a star._
-
-  >Goal is reached on Ocotber 25th, 2025.
-
-When one of the previous goals will be reached sponsors will continue to receive in advance new versions and new goals will set.
-
-Sponsors version additions/fixes since October 25th, 2024:
-- None
-
-[PedalinoMini™ Case 1](https://github.com/alf45tar/PedalinoMini-Case-1) is available to sponsors only.
 
 ## Public versions history
 
