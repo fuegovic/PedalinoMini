@@ -36,12 +36,18 @@
   - Profile A: Fire Ocean (lava waves)
   - Profile B: Pacifica (ocean waves)
   - Profile C: Pride (rainbow waves)
-- Updated supported input modes: 
+- 📐 Updated supported input modes: 
   - Momentary
   - Latch
   - Analog
   - Analog Pads
   - **Note:** Other modes requiring 2 GPIOs have been disabled
+- 🔄 Looping boot menu: does not factory reset anymore when holding past the last option
+- ⚡ Improved boot menu:
+  - 2 seconds for Normal Boot selection
+  - 3 seconds per option
+  - Safe looping past last option
+  - Factory Default triggers only on release during its time window
 
 ## 🔄 Profile System
 - Cycles through profiles A → B → C
@@ -56,7 +62,7 @@
 
 ## 📌 Pin Configuration Guide
 
-### Pedal Assignments
+### 🎛️ Pedal Assignments
 | Pedal | GPIO | Digital | Analog | Type |
 |-------|------|---------|---------|------|
 | 1     | 36   | ✅      | ✅      | Expression (ADC1_CH0) |
@@ -81,7 +87,7 @@
 - USB MIDI: GPIO 18,19
 - LED Strip: GPIO 5
 
-### Supported Input Modes: 
+### 📐 Supported Input Modes: 
   - Momentary
   - Latch
   - Analog
@@ -103,8 +109,8 @@ GPIO --- [SWITCH] --- GND
 ```
 
 ### ⚠️ Important Notes
-1. ADC1 pins (Pedals 1-6) work with WiFi
-2. Input-only pins: GPIO 34,35,36,39
-3. Use internal pull-up for switches
-4. Expression pedals: 0-3.3V range
-5. No external resistors needed
+1. 📡 ADC1 pins (Pedals 1-6) work with WiFi
+2. 🔒 Input-only pins: GPIO 34,35,36,39
+3. ⬆️ Use internal pull-up for switches
+4. ⚡ Expression pedals: 0-3.3V range
+5. 🔧 No external resistors needed
