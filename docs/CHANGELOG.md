@@ -96,7 +96,16 @@
 
 ### ⚡ Hardware Wiring
 
-#### 🎚️ Expression Pedals (1-6)
+#### 🎛️ Modular Design
+- Total of 15 inputs that can be configured as needed:
+  - Any combination of footswitches and expression pedals (max 6)
+  - Common setups:
+    - 15 footswitches
+    - 9 footswitches + 6 expression pedals
+    - 12 footswitches + 3 expression pedals
+    - etc.
+
+#### 🎚️ Expression Pedal Wiring
 ```
 3.3V --- [POT HIGH]
          [POT WIPER] --- GPIO

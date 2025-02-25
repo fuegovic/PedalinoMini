@@ -1,11 +1,31 @@
 [![](./data/logo.webp)](https://github.com/fuegovic/PedalinoMini)
 
-
 # PedalinoMini™ 🐦‍🔥
 
 Wireless MIDI foot controller for guitarists and more.
 
-You can change the presets of your guitar rig, turn old MIDI equipment into something that’s USB-compatible, give you hands-free or foot-occupied ways to control your rig during a live performance, and it can be done with WiFi or Bluetooth. This is a full-featured MIDI controller, with three user profiles, and it can control a maximum of 36 foot switches. That’s an impressive amount of kit for such a small device; usually you’d have to spend hundreds or even thousands of dollars for a simple MIDI controller, and the PedalinoMini does everything with very cheap hardware.
+## Table of Contents
+
+- [Features](#features)
+- [Bill of Materials](#bill-of-materials)
+- [Schematic](#schematic)
+- [How to Upload Firmware](#how-to-upload-firmware-wifi-provisioning-and-access-to-web-user-interface)
+- [USB MIDI using Arduino Pro Micro](#usb-midi-using-arduino-pro-micro)
+- [Boot Modes](#boot-modes)
+- [How to Build and Upload](#how-to-build-and-upload)
+- [How to Connect to WiFi](#how-to-connect-pedalinomini-to-a-wifi-network)
+- [How to Connect to Web Interface](#how-to-connect-to-the-web-user-intertace)
+- [Pedals](#pedals)
+- [Controls](#controls)
+- [Actions](#actions)
+- [Interfaces](#interfaces)
+- [Sequences](#sequences)
+- [Options](#options)
+- [Configurations](#configurations)
+- [Display Mode](#display-mode)
+- [How to Switch Profiles](#how-to-switch-profiles)
+
+You can change the presets of your guitar rig, turn old MIDI equipment into something that's USB-compatible, give you hands-free or foot-occupied ways to control your rig during a live performance, and it can be done with WiFi or Bluetooth. This is a full-featured MIDI controller, with three user profiles, capable of managing up to 15 analog and digital pedals with 3 profiles with 20 banks each. That's an impressive amount of kit for such a small device; usually you'd have to spend hundreds or even thousands of dollars for a simple MIDI controller, and the PedalinoMini does everything with very cheap hardware.
 
 - Plug-and-play with any MIDI-compatible app on iOS 8 and above as well as OS X Yosemite and above.
 - High customizable using web interface
@@ -28,12 +48,13 @@ You can change the presets of your guitar rig, turn old MIDI equipment into some
 
 ## Features
 
-- Support for digital foot switches (momentary or latch), analog expression pedals, ~~jog wheels (rotary encoders)~~ and triggers.
-- ~~6 controllers ports for ESP32 and 8 controllers ports for ESP32S3. One controller port can support up to 6 indipendent switches for a total of 36 (ESP32) or 48 (ESP32S3) switches.~~
-- 20 banks + 1 global bank
-- 3 user profiles
+- Support for digital foot switches (momentary or latch), analog expression pedals and triggers.
+- 15 controller ports for ESP32. One controller port can support one switch or an analog input (for ADC GPIOs).
+- 20 banks + 1 global bank 
+- 3 user profiles with automatic profile LED indicator
 - 20 sequences of 10 steps each
-- ~~Each port can connect 1 expression pedal or 1 jog wheel or up to 6 foot switches via a resitors ladder (TC HELICON Switch-6).~~
+- Each port can connect 1 expression pedal or 1 digital switch
+- LED effects (Fire Ocean, Pacifica, Pride) with profile-specific patterns
 - MIDI output via AppleMIDI (also known as RTP-MIDI) or ipMIDI via Wi-Fi
 - Send almost every MIDI messages: Program Change, Control Code, Note On/Off, Channel Pressure, Pitch Bend, Bank Select, Start, Stop, Continue or a sequence of the previous messages
 - MIDI channel, MIDI note, MIDI control code, MIDI program change can be configured by each pedal and by each bank
@@ -41,193 +62,10 @@ You can change the presets of your guitar rig, turn old MIDI equipment into some
 - Invert polarity via software
 - Individual automatic calibration of expression pedals. Manual fine tuning is not usually requested.
 - Transform a linear expression pedal into log expression pedal and vice versa
-- ~~Calibrating resistors ladder is easy as pressing footswitches in sequence~~
 - RGB NeoPixel/WS2812B status leds
 - Responsive and mobile-first configuration web interface (<http://pedalino.local>)
 - Installing firmware and WiFi provisioning directly from your browser
-- Smart Config technology to help users connect to a Wi-Fi network through simple app on a smartphone.
 - OTA (Over the Air) firmware update or via HTTP (<http://pedalino.local/update>)
-
-## Public versions history
-
-<details>
-<summary>3.5.0 - October 25th, 2024 - Bonus release for 500 stars</summary>
-
-- Fixed simultaneous button press
-- Fixed reboot on configuration load
-- Fixed reboot on change profile via WebUI
-- Fixed bank 0 Program Change leds
-- Fixed LILYGO® T-Display-S3 display off on battery
-- Fixed LILYGO® T-Display-S3 leds strip and midi out pin overlap
-- Increased sequences to 20
-- Add support for ADS1115 16-bit analog-to-digital converter for 4 additional Analog pedals
-- Modified the voltage detection
-- Removed default credentials to connect to WebUI
-- Enabled PSRAM for LILYGO® T-Display-S3
-- Updated onboard Bootstrap to 5.3.3
-- Updated SorttableJS to 1.15.3
-- Updated to ArduinoJson v7
-- Updated to Adafruit TinyUSB Library version 3 (configuration description override)
-</details>
-
-<details>
-<summary>3.2.2 - February 3st, 2024</summary>
-
-- BPI Leaf S3 new pins assignment
-- ESPAsyncWebServer from esphome
-
-</details>
-
-<details>
-<summary>3.2.1 - February 1st, 2024</summary>
-
-- BPI Leaf S3 and LILYGO® T-Display-S3 USB MIDI device mode
-- LILYGO® T-Display-S3 display support
-- Fixed sequence led in configuration file
-- Added MIDI Channel "None" (do not send any message but recorded as last message sent to be used with Repeat Overwrite) and "All"
-- Fixed sequences loop when last slot is not empty
-- Fixed an error preventing AP mode with ESP32 S3
-- Added "MIDI Clock Master", "MIDI CLock Slave", "MIDI Clock Off", "Repeat", "Repeat Overwrite" to configuration file
-- Updated onboard Bootstrap to 5.3.2
-- Better battery voltage detection for BPI Leaf S3
-- Updated SortableJS to 1.15.2
-- Moved low priority tasks to Core 0
-- Added `lilygo-t-display` target board with Espressif 6.5.0
-</details>
-
-<details>
-<summary>3.1.6 - May 1st, 2023</summary>
-- Fixed power off action
-</details>
-
-<details>
-<summary>3.1.5 - April 30th, 2023</summary>
-
-The following features:
-
-- Bootstrap 5.2.2 onboard and latest via internet
-- SortableJS 1.15.0
-- Latest JSON Editor
-- Better buttons placement in WebUI
-- Fixed RGB order in cross led refresh
-- Fixed BLE boot mode disabled when disabled in Options
-- BLE client mode (define BLECLIENT in platformio.ini)
-- Redesign of Pedals logic with Controls
-- Simultaneous buttons press
-- Control Change Snap (thanks to potul)
-- OLED display bottom line fix (thanks to potul)
-- Tag name truncated fix
-- Led color on boot fix
-- Add Debounce Interval and Simultaneous Gap Time in Options
-- Press & Release event for streamline actions
-- Inactivity timeout switch off display and leds
-- Added Default as led option in Sequences
-- Added "Set Bank" action in Sequences
-- Added "Step by Step+" and "Step by Step-" to run sequence step by step forward and backward
-- Added latch emulation for momentary switches
-- Initial suppport for BPI Leaf S3 (no USB MIDI device/host)
-- Increased Controls to 100
-- Configuration file up to 256Kb when PSRAM is available
-- Configuration file can be appended to current profile (only Actions)
-- Switch profile (CC 00 [01-03] on channel 16) and bank (CC 32 [00-20] on channel 1&) via MIDI
-- MIDI Clock and MIDI Time Code (MTC) fixes and improvements
-
-has been released to public on April 30th, 2023. Thanks to the new sponsors: SrMorris, FelixMuellCode, MiqViq, serhatsoyyigit, potul, AndreySom, C*********, jimhiggs, A***********, Ratterbass, TarFilarek, S*********, bobvc133, itsptadeu, mosswind,,b*******, m*****, m*******, m********, TheNothingMan.
-</details>
-
-<details>
-<summary>2.5.2 - September 23rd, 2022</summary>
-
-Bonus version for doubling the stars on September 2nd, 2022.
-
-- RGB Order saved in NVS
-- Minor bug fixes
-</details>
-
-<details>
-<summary>2.5.1 - August 2nd, 2022</summary>
-
-The following features:
-
-- Fixed reboot on Options page with a long list of visible WiFi network
-- Fixed Note velocity always zero
-- Added display flip vertically on TTGO T-Display
-- Updated to latest JSON Editor 9.7.4
-- Added flip display and leds RGB order in Options
-- Fixed memory fragmentation during webpage creation
-- A new pedal type to connect an expression pedal and a switch (momentary or ladder) to one port only
-- Disabled WiFi power saving to reduce latency
-- Added OSC local port, remote host and remote port in Options
-- New "OSC Message" action sending integer and float values
-- Experimental: replace NVS with JSON files
-
-has been released to public on August 2nd, 2022 thanks to the following sponsors: b*******, basst22778, dbosnyak, d***********, slapukas, Samantha-uk, Poznik, FelixMuellCode, yusufrahadika and s*****.
-</details>
-
-<details>
-<summary>2.4.0 - February 26th, 2022</summary>
-
-The following features:
-
-- Installing firmware and WiFi provisioning directly from browser
-- Support for ultrasonic ranging module HC-SR04
-- Adjusting easing and threshold for analog and ultrasonic sensor
-- Fixed a bug that avoid to reach max value when analog calibration is on
-- Improved Pedals web UI
-- Fixed Program Change leds brightness
-- Link each button to a led in Pedals setup in order to streamline Actions definition
-
-has been released to public on February 26th, 2022. Thanks to the new sponsors: ClintR1984, pstechsolutions, mknerr, radioactivetoy, y0m1g, joesuspense, andeee, jsleroy, Viser, anssir, mattzzw.
-</details>
-
-<details>
-<summary>2.3.2 - November 12th, 2021</summary>
-
-  The following features:
-
-- Bootstrap 5.1.3
-- JSON Editor 9.5.6
-- Reduced debounce interval from 20ms to 5ms
-- Added "Set Led Color" action
-- Redesigned Sequences (new web UI, new configuration file) - EEPROM breaking change
-- Improved Actions web UI
-- Bank duplication
-
-has been released to public on November 12th, 2021. Thanks to the new sponsors: RomanKlein777, michaelhauser, bobvc133, bmarshall91, p*************.
-</details>
-
-<details>
-<summary>August 9th, 2021</summary>
-
-The following features/fixes:
-
-- Bootstrap 5.0.2
-- Fixed BOOT button actions in default configuration
-- Fixed compilation error when BATTERY flag defined for board without battery support
-- Fixed battery indicator for generic ESP32 board without battery support
-- Fixed TTGO T-Display glitches
-- Enable/disable incoming and outcoming MIDI messages display
-- Universal expression pedal
-- Fixed normal banks actions are not triggered when there are no actions in global bank
-- Fixed actions disappering on WebUI after profile switch
-- Drag & drop banks reorder
-- Current bank saved before profile switch (only via pedal)
-- Fixed Network MIDI/AppleMIDI/RTP-MIDI not working in AP mode
-- Leds effects
-
-has been released to public on August 9th, 2021 thanks to the following sponsors: richardjs, P********, j*****, TarFilarek. wespac001 x 2, DR-Mello, DWSQUIRES, e36910, itsptadeu.
-</details>
-
-<details>
-<summary>May 12th, 2021</summary>
-
-The following features:
-
-- Detection and actions triggered on REPEAT PRESSED and LONG RELEASE event
-- Latest Bootstrap 5 release and WebUI themes
-
-has been released to public on May 12th, 2021 thanks to the following sponsors: @MaxZak2020, @Alt Shift Creative, @serhatsoyyigit, @Kubbik1, @rigr, @jwyse, @teopost, @davidin73, @juani13973, @ba********, @MiqViq, @jisv48.
-</details>
 
 ## Bill of materials
 
@@ -236,19 +74,6 @@ The shortest bill of materials ever: an ESP32 board and a OLED display. That's i
 - Any ESP32 board supported by [Arduino core for ESP32](https://github.com/espressif/arduino-esp32)
   - Tested on [DOIT ESP32 DevKit V1](https://github.com/SmartArduino/SZDOITWiKi/wiki/ESP8266---ESP32) 4M dual-mode Wi-Fi and Bluetooth module
 - OLED I2C 0.96"/1.3" display 128x64 pixels SSD1306/SH1106 based
-
-Not enough short?
-
-- An all-in-one [LILYGO® TTGO T-Display](http://www.lilygo.cn/prod_view.aspx?TypeId=50033&Id=1126&FId=t3:50033:3) with an 1.14" IPS display and onboard lithium battery interface
-
-- An all-in-one [Heltec WiFi Kit 32](https://heltec.org/project/wifi-kit-32/) with an integrated OLED display (0.96") and onboard lithium battery interface
-
-- An all-in-one [TTGO T-Eight ESP32](https://github.com/LilyGO/TTGO-T-Eight-ESP32) with a bigger OLED display (1.3"), 4MB PSRAM and onboard lithium battery interface
-
-Not enough powerful?
-
-- [BPI-Leaf-S3](https://wiki.banana-pi.org/BPI-Leaf-S3)
-- [LILYGO® T-Display-S3](https://www.lilygo.cc/products/t-display-s3?variant=42351558590645)
 
 USB MIDI (ESP32 only) and DIN MIDI connection requires additional hardware.
 
@@ -261,21 +86,6 @@ USB MIDI (ESP32 only) and DIN MIDI connection requires additional hardware.
 ### Warnings
 
 - Do not forget the add the pullup resistors on PIN_A1 to PIN_A6 otherwise pins will be floating. A floating pin can trigger unexpected MIDI events. As alternative you can disable the not used pedals via web interface.
-- GPIO12 must be LOW during boot. MTDI (GPIO12) is used as a bootstrapping pin to select output voltage of an internal regulator which powers the flash chip (VDD_SDIO). This pin has an internal pulldown so if left unconnected it will read low at reset (selecting default 3.3V operation). Connect to the corresponding controller port only pedals that can guarantee a LOW value on boot. For more details check the official documentation [here](https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/sd_pullup_requirements.html#mtdi-strapping-pin).
-
-To create your own ladder you can start simulating the below ones:
-
-Simulate voltage ladder 2k 3k 5.1k 10k 30K
-- [Thinkercad](https://www.tinkercad.com/things/7m1vdQfmXFo)
-- [Circuit Simulation Applet](https://tinyurl.com/2mrlxab7)
-
-Simulate voltage ladder 10k (TC-Helicon Switch 6)
-- [Thinkercad](https://www.tinkercad.com/things/jnovvmmsONp)
-- [Circuit Simulation Applet](https://tinyurl.com/2ptxv97t)
-
-Simulate "D1 Robot LCD Keypad Shield" voltage ladder
-- [Thinkercad](https://www.tinkercad.com/things/jQAR4Hrh3GH)
-- [Circuit Simulation Applet](https://tinyurl.com/2zbrnsh6)
 
 ## How to upload firmware, WiFi provisioning and access to web user interface
 
@@ -301,35 +111,6 @@ The only requirement for now is to use a Google Chrome or Microsoft Edge browser
 11. Press "Visit device" to access web user interface
 </details>
 
-## USB MIDI using Raspberry Pi Pico (RP2040)
-
-Raspberry Pi Pico is a generally available cost-effective board that can be used to add an USB MIDI connection.
-
-### Method 1
-Thanks to [Sthopeless](https://github.com/Sthopeless)
-
-- Flash Pico with the .UF2 binary file provided here https://github.com/rsta2/pico/releases/tag/v1.0
-- Connect ESP32 RX1 to Pico GP0 and ESP32 TX1 to Pico GP1 and GND to GND.
-
-### Method 2
-
-- Flash Pico with CircuitPhyton .UF2 binary file provided here https://circuitpython.org/board/raspberry_pi_pico. Tutorial available [here](https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython).
-- Copy the CIRCUITPY folder files under the CIRCUITPY Pico drive. The CIRCUITPY folder contains the boot.py file and the [Adafruit CircuitPhyton MIDI](https://github.com/adafruit/Adafruit_CircuitPython_MIDI) library.
-- Connect ESP32 RX1 to Pico GP0 and ESP32 TX1 to Pico GP1 and GND to GND.
-
-For both methods:
-
-ESP32 Pin|Pico Pin
----------|--------
-RX1|GP0
-TX1|GP1
-GND|GND
-
-- If the Pico is powered via USB, the VSYS must NOT be connected to other power source.
-- [Optional] Power ESP32 board just feeding the power from the VBUS port on the Pico to VIN (if available) of the ESP32.
-
-IMPORTANT: ESP32 board and Pico must share GND.
-
 ## USB MIDI using Arduino Pro Micro
 
 The cheapest and compact way to implement an USB MIDI connection is using an Arduino Pro Micro and the [BlokasLabs/USBMIDI](https://github.com/BlokasLabs/USBMIDI) library. Upload the [UsbMidiConverter](https://github.com/BlokasLabs/USBMIDI/blob/master/examples/UsbMidiConverter/UsbMidiConverter.ino) example into the Arduino Pro Micro.
@@ -340,20 +121,19 @@ Arduino Pro Micro is powered by the USB MIDI connection.
 
 IMPORTANT: ESP32 board and Arduino Pro Micro must share GND.
 
-## Booting modes
+## Boot modes
 
-PedalinoMini™ has 8 booting modes:
+PedalinoMini™ has 7 boot modes:
 
 Mode|Name|Description
 ----|----|-----------
 1|Normal|BLE and WiFi are enabled. PedalinoMini™ starts the WiFi procedure on boot (connect to last AP -> WiFi Provisioning -> SmartConfig -> WPS -> Access Point).<br>After boot PedalinoMini™ will wait for BLE-MIDI connection.
-2|Bluetooth Only|WiFi and Web UI are disabled.<br> PedalinoMini™ will wait for BLE-MIDI connection only.
+2|Bluetooth Only|WiFi and Web UI are disabled.<br>PedalinoMini™ will wait for BLE-MIDI connection only.
 3|WiFi Only|PedalinoMini™ starts the WiFi procedure on boot (connect to last AP -> WiFi Provisioning -> SmartConfig -> WPS -> Access Point).<br>BLE is disabled.
 4|Access Point with Bluetooth|PedalinoMini™ skip the WiFi procedure on boot and create a WiFi Access Point.<br>PedalinoMini™ will wait for BLE-MIDI connection too.
 5|Access Point without Bluetooth|PedalinoMini™ skips the WiFi procedure on boot and create a WiFi Access Point.<br>BLE is disabled.
 6|Reset WiFi credentials|Forget the last connected access point.<br>On next boot PedalinoMini™ can be connected to a new AP.
-7|Ladder Config|Learn mode for your ladder pedal. Any resistors ladder (up to 6 buttons) can be calibrated just pressing footswitches in any sequence. During calibration press and hold the footswitch until the timeout expires (the upper bar reaches zero) and the measure is acquired with a value in the botton bar. After calibration footswitches are numbered depending of the corresponding analog value: lower value lower number. TC HELICON Switch-6 footswitch 1 correspond to button 6, footswitch 2 to button 5, and so on until footswitch 6 to button 1.<br>Configure at least one pedal as Ladder before to proceed with configuration.
-8|Reset to factory default|
+7|Factory Default|Reset EEPROM to factory default.
 
 The last booting mode (1-5) is selected if you don't press any button on boot.
 
@@ -362,7 +142,7 @@ The default boot mode is (1) Normal.
 To select a different mode:
 
 - Press and release EN button (POWER button on TTGO T-Eight) and immediately after press and hold BOOT button (CENTER button on TTGO T-Eight)
-- Follow the istructions on display. Keep it pressed until the progress bar reach the end to reset to factory default. If you release the button before the progress bar reach the end PedalinoMini™ will start in one of the supported boot mode.
+- Follow the instructions on display. Keep it pressed until the progress bar reach the end to reset to factory default. If you release the button before the progress bar reach the end PedalinoMini™ will start in one of the supported boot mode.
 
 Mode|Name|USB-MIDI|Legacy MIDI|RTP-MIDI|ipMIDI|BLE MIDI|OSC|Web UI|OTA Firmware Update|HTTP Firmware Update
 :--:|----|:------:|:---------:|:------:|:----:|:------:|:-:|:----:|:-----------------:|:------------------:
@@ -601,14 +381,6 @@ A complete configuration file editor is provided for advanced operations.
 
 Some example configurations are provides. The default configuration for [PedalinoMini™ Case 1](https://github.com/alf45tar/PedalinoMini-Case-1) is available as 'case1'.
 
-### iRig BlueBoard
-
-PedalinoMini™ can emulate an [IK Multimedia iRig Blueboard](https://www.ikmultimedia.com/products/irigblueboard/) using 'blueboard' configuration. Midi Mode 1 is on bank 1 and Midi Mode 2 is on bank 2. PedalinoMini™ emulation works on any MIDI interface and not only "MIDI over Bluetooth" as the original iRig Blueboard.
-
-### Fender Mustang Amplifier
-
-PedalinoMini™ can control a Fender Mustang I/II/III/IV Amplifier via MIDI. Additional [software](https://github.com/alf45tar/mustang-midi-bridge-win) is required to translate MIDI messages to the proprietary USB protocol used by Fender Mustang amplifiers. The bonus configuration is called 'mustang' and works with 3 momentary switches and 3 jog wheels.
-
 ## Display mode
 
 Where|What|Display|Description
@@ -629,101 +401,3 @@ During normal operation
 - Single press of BOOT button to move to the next profile
 - Double press of BOOT button to move to the previous profile
 - Long press of BOOT buttom to switch between live performance display and scrolling pages where configuration parameters (the device name, the IP address etc.) are displayed.
-
-On TTGO T-Eight replace BOOT button with CENTER button.
-
-## End User Built (oldest first)
-
-https://github.com/marosell
-![marosell](https://user-images.githubusercontent.com/1125586/65741408-f1188b80-e0b9-11e9-868f-e65c7d6db10b.JPG)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/22)
-
-https://github.com/mknerr
-![mknerr](https://user-images.githubusercontent.com/25649210/83949366-60ba4b00-a7f1-11ea-8af6-402a4fcb3f37.jpeg)
-
-https://github.com/alf45tar
-![alf45tar](https://user-images.githubusercontent.com/35426671/74613398-71459900-510e-11ea-8cb0-226436100cea.jpg)
-
-https://github.com/jimhiggs
-![jimhiggs](https://user-images.githubusercontent.com/33665935/75095781-0c0b0100-556f-11ea-99ee-fa6dd0c59d29.jpg)
-
-https://github.com/raidolo
-![raidolo](https://user-images.githubusercontent.com/25846804/91668083-dfc9d180-eb09-11ea-818e-1f8f97915324.jpeg)
-
-https://github.com/bsos
-![bsos](https://user-images.githubusercontent.com/6843511/94213274-63c26f80-fea4-11ea-9e11-c6955389c7e1.jpeg)
-
-https://github.com/rigr
-![rigr](https://user-images.githubusercontent.com/6568315/95367206-c2d8a900-08d4-11eb-9cc1-21adec9d219b.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/138)
-
-https://github.com/Hans68
-![Hans68](https://user-images.githubusercontent.com/48477907/73469296-6fe24580-4386-11ea-9e55-7be09ae2b0d0.JPG)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/63)
-
-https://github.com/teopost
-![teopost](https://user-images.githubusercontent.com/2573389/109355786-0cc02c80-7880-11eb-9d7c-7eb23dfa2dee.png)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/186)
-
-https://github.com/gallochri
-![gallochri](https://user-images.githubusercontent.com/404229/116277564-e3d7ed00-a785-11eb-99e5-e77df0bbd130.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/214)
-
-https://github.com/juani13973/pedalinio-18-footswitches-prototype
-![juani13973](https://user-images.githubusercontent.com/77895272/120079259-599be500-c0b3-11eb-9603-fcdf18e27eb4.JPG)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/229)
-
-https://github.com/MaxZak2020
-![MaxZak2020](https://user-images.githubusercontent.com/74506186/120315265-d366e500-c2e4-11eb-92f9-1ba9e9d01312.jpg)
-
-https://github.com/aFunkyBass
-![aFunkyBass](https://user-images.githubusercontent.com/66510206/121218730-493df400-c883-11eb-9394-602709fa271e.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/234)
-
-https://github.com/akosbeke
-![akosbeke](https://user-images.githubusercontent.com/7037649/124348379-e4f42300-dbe9-11eb-90aa-9a2cc2da19a1.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/240)
-
-https://github.com/borsei222
-![borsei222](https://user-images.githubusercontent.com/86922846/124502833-81721d00-ddc4-11eb-82b1-7ade0704b464.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/241)
-
-https://github.com/TarFilarek
-![TarFilarek](https://user-images.githubusercontent.com/64553282/139289650-594a5aac-00a3-489f-adf7-b22673826392.mp4)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/221)
-
-https://github.com/bobvc133
-![bobvc133](https://user-images.githubusercontent.com/91867813/165307799-8213016f-47a2-4d13-857f-fd7b80032586.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/330)
-
-https://github.com/Samantha-uk
-![Samantha-uk](https://user-images.githubusercontent.com/45871296/171361904-7694ab34-969d-43b8-b81d-fbdeb5835a03.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/issues/342)
-
-https://github.com/potul
-![potul](https://user-images.githubusercontent.com/40333657/201747449-be337a9b-9728-42e7-b6b0-1b2df7edcc7c.png)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/398)
-
-https://github.com/Celticpure
-![Celticpure](https://user-images.githubusercontent.com/96823448/205149565-6311a23a-2be7-4579-8790-e0c4de3f14b9.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/404)
-
-https://github.com/jimhiggs
-![jimhiggs](https://user-images.githubusercontent.com/33665935/206598010-81ac7ab8-e267-41f5-8c59-5f51bd0de007.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/407)
-
-https://github.com/Keeze
-![Keeze](https://user-images.githubusercontent.com/6306958/218185050-52533cb4-c31e-48e1-9e49-27c15cf6d23b.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/430)
-
-https://github.com/mattzzw
-![mattzzw](https://user-images.githubusercontent.com/1312120/224659984-124092b5-49f4-4abf-a4c2-acec75f85838.jpg)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/438)
-
-https://github.com/Jelle7and9
-![Jelle7and9](https://private-user-images.githubusercontent.com/137293236/296360172-27cde9c3-16ed-4ce2-b53d-1cc7fd52cd59.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzMjY3NjIsIm5iZiI6MTcxNjMyNjQ2MiwicGF0aCI6Ii8xMzcyOTMyMzYvMjk2MzYwMTcyLTI3Y2RlOWMzLTE2ZWQtNGNlMi1iNTNkLTFjYzdmZDUyY2Q1OS5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMVQyMTIxMDJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0xZmQ5YzRkNmIxYmI2NjQzNDZiZWU2NzQwMDFiOTI0NzE1NzUxZjEyN2Y0ZTQ5NjhlOGViYjU0ZGFlNjA4MTgyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.AoothpAOgxuCo_4Nj_q1etgwkRxJb3MfdXlBnBpLO2U)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/454)
-
-https://github.com/regisampa
-![regisampa](https://private-user-images.githubusercontent.com/168490796/331563312-2737da52-6488-47e2-81e9-4d5d59a08fad.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTYzMjY3MTAsIm5iZiI6MTcxNjMyNjQxMCwicGF0aCI6Ii8xNjg0OTA3OTYvMzMxNTYzMzEyLTI3MzdkYTUyLTY0ODgtNDdlMi04MWU5LTRkNWQ1OWEwOGZhZC5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTIxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUyMVQyMTIwMTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1kYzM5YjBmMDljM2Q3MThhNTA5OWUwMDA1ZWU4ZTQ4MmNiYzQwNTBhMDZiMThiZjVhNTY1ZGQzODg2YTdjNTUwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.jRnF43m8lOmR32t2utMe53YDYSDCDrov1OBk-HCfhq4)
-[More details](https://github.com/alf45tar/PedalinoMini/discussions/515)

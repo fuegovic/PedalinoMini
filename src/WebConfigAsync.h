@@ -1987,6 +1987,11 @@ void get_pedals_page(unsigned int start, unsigned int len) {
     page += F("'");
     if (pedals[i-1].mode == PED_LATCH1) page += F(" selected");
     page += F(">Latch</option>");
+    page += F("<option value='"); 
+    page += PED_LADDER;
+    page += F("'");
+    if (pedals[i-1].mode == PED_LADDER) page += F(" selected");
+    page += F(">Ladder</option>");
     page += F("<option value='");
     page += PED_ANALOG;
     page += F("'");
@@ -3273,711 +3278,678 @@ void get_sequences_page(unsigned int start, unsigned int len) {
   if (trim_page(start, len, true)) return;
 }
 
+#include <WiFi.h>
+
+//// +++ OPTIONS PAGE +++ ////
 void get_options_page(unsigned int start, unsigned int len) {
 
-    // Define available Bootstrap themes (Bootswatch variants)
-    const String  bootswatch[] = {  "phoenix",
-                                    "bootstrap",
-                                    "cerulean",
-                                    "cosmo",
-                                    "cyborg",
-                                    "darkly",
-                                    "flatly",
-                                    "journal",
-                                    "litera",
-                                    "lumen",
-                                    "lux",
-                                    "materia",
-                                    "minty",
-                                    "morph",
-                                    "pulse",
-                                    "quartz",
-                                    "sandstone",
-                                    "simplex",
-                                    "sketchy",
-                                    "slate",
-                                    "solar",
-                                    "spacelab",
-                                    "superhero",
-                                    "united",
-                                    "vapor",
-                                    "yeti",
-                                    "zephyr" };
-  
-    // Generate the page header
-    if (get_top_page(7, start, len)) return;
-  
-    page += F("<form method='post'>");
-  
-    // Device Configuration Card and Boot Mode Card row
-    page += F("<div class='row'>");
-    // Device Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 20 20'>");
-    page += F("<path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z'/>");
-    page += F("</svg>");
-    page += F(" Device</h5>");
-    page += F("<div class='card-body'>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='devicename' name='mdnsdevicename' value='");
-    page += host;
-    page += F("'>");
-    page += F("<label for='devicename'>Name</label>");
-    page += F("</div>");
-    page += F("<small id='devicenameHelpBlock' class='form-text text-muted'>");
-    page += F("Each device must have a different name. Enter the device name without .local. Web UI will be available at http://<i>device_name</i>.local<br>");
-    page += F("Pedalino will be restarted if you change it.");
-    page += F("</small>");
-    page += F("<div class='row'>");
-    page += F("<div class='col-auto me-auto'>");
-    page += F("</div>");
-    page += F("<div class='col-auto'>");
-    page += F("<a href='/update' class='btn btn-primary btn-sm' role='button' aria-pressed='true'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cloud-arrow-down' viewBox='0 0 16 16'>");
-    page += F("<path fill-rule='evenodd' d='M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708l2 2z'/>");
-    page += F("<path d='M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z'/>");
-    page += F("</svg>");
-    page += F(" Check for Updates</a>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // Boot Mode Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-power' viewBox='0 0 20 20'>");
-    page += F("<path d='M7.5 1v7h1V1h-1z'/>");
-    page += F("<path d='M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z'/>");
-    page += F("</svg>");
-    page += F(" Boot Mode</h5>");
-    page += F("<div class='card-body'>");
+  // Available Bootstrap Themes (Bootswatch Variants)
+  const String bootswatch[] = {
+    "phoenix",    "bootstrap",  "cerulean",    "cosmo",
+    "cyborg",     "darkly",     "flatly",      "journal",
+    "litera",     "lumen",      "lux",         "materia",
+    "minty",      "morph",      "pulse",       "quartz",
+    "sandstone",  "simplex",    "sketchy",     "slate",
+    "solar",      "spacelab",   "superhero",   "united",
+    "vapor",      "yeti",       "zephyr"
+  };
+
+  // Page Header
+  if (get_top_page(7, start, len)) return;
+
+  page += F("<form method='post'>");
+
+  // --- Row: Device Configuration & Boot Mode ---
+  page += F("<div class='row'>");
+
+  // --- Column: Device Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 20 20'><path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z'/></svg> Device</h5>");
+  page += F("<div class='card-body'>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='devicename' name='mdnsdevicename' value='");
+  page += host;
+  page += F("'>");
+  page += F("<label for='devicename'>Name</label>");
+  page += F("</div>");
+
+  page += F("<small id='devicenameHelpBlock' class='form-text text-muted'>");
+  page += F("Each device must have a different name. Enter the device name without .local. Web UI will be available at http://<i>device_name</i>.local<br>");
+  page += F("Pedalino will be restarted if you change it.");
+  page += F("</small>");
+
+  page += F("<div class='row'>");
+  page += F("<div class='col-auto me-auto'></div>");
+  page += F("<div class='col-auto'>");
+  page += F("<a href='/update' class='btn btn-primary btn-sm' role='button' aria-pressed='true'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cloud-arrow-down' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M7.646 10.854a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 9.293V5.5a.5.5 0 0 0-1 0v3.793L6.354 8.146a.5.5 0 1 0-.708.708l2 2z'/><path d='M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z'/></svg> Check for Updates</a>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Column: Boot Mode Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-power' viewBox='0 0 20 20'><path d='M7.5 1v7h1V1h-1z'/><path d='M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z'/></svg> Boot Mode</h5>");
+  page += F("<div class='card-body'>");
+
   #ifdef WIFI
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='bootModeWifi' name='bootmodewifi'");
-    if (bootMode == PED_BOOT_NORMAL ||
-        bootMode == PED_BOOT_WIFI   ||
-        bootMode == PED_BOOT_AP     ||
-        bootMode == PED_BOOT_AP_NO_BLE) page += F(" checked");
-    page += F(">");
-    page += F("<label class='form-check-label' for='bootModeWifi'>WiFi</label>");
-    page += F("</div>");
-    page += F("<small id='bootModeWifiHelpBlock' class='form-text text-muted'>");
-    page += F("RTP-MIDI, ipMIDI, OSC and web UI require WiFi.");
-    page += F("</small>");
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='bootModeAP' name='bootmodeap'");
-    if (bootMode == PED_BOOT_AP ||
-        bootMode == PED_BOOT_AP_NO_BLE) page += F(" checked");
-    page += F(">");
-    page += F("<label class='form-check-label' for='bootModeAP'>Access Point</label>");
-    page += F("</div>");
-    page += F("<small id='bootModeAPHelpBlock' class='form-text text-muted'>");
-    page += F("To enable AP Mode enable WiFi too.");
-    page += F("</small>");
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='bootModeWifi' name='bootmodewifi'");
+  if (bootMode == PED_BOOT_NORMAL || bootMode == PED_BOOT_WIFI || bootMode == PED_BOOT_AP || bootMode == PED_BOOT_AP_NO_BLE)
+    page += F(" checked");
+  page += F(">");
+  page += F("<label class='form-check-label' for='bootModeWifi'>WiFi</label>");
+  page += F("</div>");
+  page += F("<small id='bootModeWifiHelpBlock' class='form-text text-muted'>RTP-MIDI, ipMIDI, OSC and web UI require WiFi.</small>");
+
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='bootModeAP' name='bootmodeap'");
+  if (bootMode == PED_BOOT_AP || bootMode == PED_BOOT_AP_NO_BLE)
+    page += F(" checked");
+  page += F(">");
+  page += F("<label class='form-check-label' for='bootModeAP'>Access Point</label>");
+  page += F("</div>");
+  page += F("<small id='bootModeAPHelpBlock' class='form-text text-muted'>To enable AP Mode enable WiFi too.</small>");
   #endif
+
   #ifdef BLE
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='bootModeBLE' name='bootmodeble'");
-    if (bootMode == PED_BOOT_NORMAL ||
-        bootMode == PED_BOOT_BLE    ||
-        bootMode == PED_BOOT_AP) page += F(" checked");
-    page += F(">");
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='bootModeBLE' name='bootmodeble'");
+  if (bootMode == PED_BOOT_NORMAL || bootMode == PED_BOOT_BLE || bootMode == PED_BOOT_AP)
+    page += F(" checked");
+  page += F(">");
+
   #ifdef BLECLIENT
-    page += F("<label class='form-check-label' for='bootModeBLE'>BLE Client</label>");
+  page += F("<label class='form-check-label' for='bootModeBLE'>BLE Client</label>");
   #else
-    page += F("<label class='form-check-label' for='bootModeBLE'>BLE Server</label>");
+  page += F("<label class='form-check-label' for='bootModeBLE'>BLE Server</label>");
   #endif
-    page += F("</div>");
-    page += F("<small id='bootModeBLEHelpBlock' class='form-text text-muted'>");
-    page += F("BLE MIDI requires BLE.");
-    page += F("</small>");
+
+  page += F("</div>");
+  page += F("<small id='bootModeBLEHelpBlock' class='form-text text-muted'>BLE MIDI requires BLE.</small>");
   #endif
-  
-    if (trim_page(start, len)) return;
-  
+
+  if (trim_page(start, len)) return;
+
   #ifdef BLECLIENT
-    page += F("<br><br>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='20' id='bleserver' name='bleServer' value='");
-    page += bleServer;
-    page += F("'>");
-    page += F("<label for='bleserver'>BLE Server Name/Address</label>");
-    page += F("</div>");
-    page += F("<small id='bootModeBLEServerHelpBlock' class='form-text text-muted'>");
-    page += F("Enter the device name of another Pedalino to connect via BLE.<br>");
-    page += F("Leave blank to connect to first available BLE MIDI server with MIDI characteristic. ");
-    page += F("A BLE address (i.e. f2:c1:d9:36:e7:6b) is accepted too.");
-    page += F("</small>");
+  page += F("<br><br>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='20' id='bleserver' name='bleServer' value='");
+  page += bleServer;
+  page += F("'>");
+  page += F("<label for='bleserver'>BLE Server Name/Address</label>");
+  page += F("</div>");
+
+  page += F("<small id='bootModeBLEServerHelpBlock' class='form-text text-muted'>");
+  page += F("Enter the device name of another Pedalino to connect via BLE.<br>");
+  page += F("Leave blank to connect to first available BLE MIDI server with MIDI characteristic. ");
+  page += F("A BLE address (i.e. f2:c1:d9:36:e7:6b) is accepted too.");
+  page += F("</small>");
   #endif
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // WiFi Network and AP Mode row
-    page += F("<div class='row'>");
-    // WiFi Network Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 20 20'>");
-    page += F("<path d='M15.385 6.115a.485.485 0 0 0-.048-.736A12.443 12.443 0 0 0 8 3 12.44 12.44 0 0 0 .663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.802 6.717 2.164.204.148.489.13.668-.049z'/>");
-    page += F("<path d='M13.229 8.271c.216-.216.194-.578-.063-.745A9.456 9.456 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.577 1.336c.205.132.48.108.652-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.472 6.472 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.408.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.611-.091l.015-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .708 0l.707-.707z'/>");
-    page += F("</svg>");
-    page += F(" WiFi Network</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<select class='form-select' id='wifissid' name='wifiSSID'>");
-    networks = WiFi.scanComplete();
-    if (networks > 0) {
-      for (int i = 0; i < networks; i++) {
-        if (!WiFi.SSID(i).isEmpty()) {
-          page += F("<option value='");
-          page += WiFi.SSID(i);
-          page += F("'");
-          if (wifiSSID == WiFi.SSID(i)) page += F(" selected");
-          page += F(">");
-          page += WiFi.SSID(i);
-          page += F("</option>");
-        }
-  
-        if (trim_page(start, len)) return;
+
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Row: WiFi Network & AP Mode ---
+  page += F("<div class='row'>");
+
+  // --- Column: WiFi Network Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 20 20'><path d='M15.385 6.115a.485.485 0 0 0-.048-.736A12.443 12.443 0 0 0 8 3 12.44 12.44 0 0 0 .663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.507 0 4.827.802 6.717 2.164.204.148.489.13.668-.049z'/><path d='M13.229 8.271c.216-.216.194-.578-.063-.745A9.456 9.456 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.577 1.336c.205.132.48.108.652-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.472 6.472 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.408.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.611-.091l.015-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .708 0l.707-.707z'/></svg> WiFi Network</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<select class='form-select' id='wifissid' name='wifiSSID'>");
+
+  int networks = WiFi.scanComplete();
+  if (networks > 0) {
+    for (int i = 0; i < networks; i++) {
+      if (!WiFi.SSID(i).isEmpty()) {
+        page += F("<option value='");
+        page += WiFi.SSID(i);
+        page += F("'");
+        if (wifiSSID == WiFi.SSID(i))
+          page += F(" selected");
+        page += F(">");
+        page += WiFi.SSID(i);
+        page += F("</option>");
       }
-    }
-    page += F("</select>");
-    page += F("<label for='wifissid'>SSID</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='password' maxlength='32' id='wifipassword' name='wifiPassword' value='");
-    page += wifiPassword;
-    page += F("'>");
-    page += F("<label for='wifipassword'>Password</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted'>");
-    page += F("Connect to a wifi network using SSID and password. WiFi networks list is updated only on boot.<br>");
-    page += F("Pedalino will be restarted if it is connected to a WiFi network and you change them.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // AP Mode Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-broadcast-pin' viewBox='0 0 20 20'>");
-    page += F("<path d='M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707zm2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 0 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708zm5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708zm2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM6 8a2 2 0 1 1 2.5 1.937V15.5a.5.5 0 0 1-1 0V9.937A2 2 0 0 1 6 8z'/>");
-    page += F("</svg>");
-    page += F(" AP Mode</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='ssidsoftap' name='ssidSoftAP' value='");
-    page += ssidSoftAP;
-    page += F("'>");
-    page += F("<label for='wifissidap'>SSID</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='password' maxlength='32' id='passwordsoftap' name='passwordSoftAP' value='");
-    page += passwordSoftAP;
-    page += F("'>");
-    page += F("<label for='passwordsoftap'>Password</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted'>");
-    page += F("Access Point SSID and password.<br>");
-    page += F("Pedalino will be restarted if it is in AP mode and you change them.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // Web UI Theme and Web UI Login row
-    page += F("<div class='row'>");
-    // Web UI Theme Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-display' viewBox='0 0 20 20'>");
-    page += F("<path d='M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75c.167-.333.25-.833.25-1.5H2s-2 0-2-2V4zm1.398-.855a.758.758 0 0 0-.254.302A1.46 1.46 0 0 0 1 4.01V10c0 .325.078.502.145.602.07.105.17.188.302.254a1.464 1.464 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.302 1.464 1.464 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.757.757 0 0 0-.302-.254A1.46 1.46 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145z'/>");
-    page += F("</svg>");
-    page += F(" Web UI Theme</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='form-floating'>");
-    page += F("<select class='form-select' id='bootstraptheme' name='theme'>");
-    for (unsigned int i = 0; i < sizeof(bootswatch) / sizeof(bootswatch[0]); i++) {
-      page += F("<option value='");
-      page += bootswatch[i];
-      page += F("'");
-      if (theme == bootswatch[i]) page += F(" selected");
-      page += F(">");
-      page += bootswatch[i];
-      page += F("</option>");
-  
       if (trim_page(start, len)) return;
     }
-    page += F("</select>");
-    page += F("<label for='theme'>Theme</label>");
-    page += F("</div>");
-    page += F("<small id='bootstrapthemeHelpBlock' class='form-text text-muted'>");
-    page += F("Bootstrap (Local)' uses the theme stored in flash memory. Other themes require internet connection as they are served via CDN network.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // Web UI Login Card
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-key' viewBox='0 0 20 20'>");
-    page += F("<path d='M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z'/>");
-    page += F("<path d='M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/>");
-    page += F("</svg>");
-    page += F(" Web UI Login</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control form-control-sm' type='text' maxlength='32' id='httpusername' name='httpUsername' value='");
-    page += httpUsername;
-    page += F("'>");
-    page += F("<label for='httpusername'>Username</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control form-control-sm' type='password' maxlength='32' id='httppassword' name='httpPassword' value='");
-    page += httpPassword;
-    page += F("'>");
-    page += F("<label for='httppassword'>Password</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted'>");
-    page += F("Web UI administrator username and password. Leave username blank for no login request.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-    
-    // Momentary Switches and right column (Leds, Screen Saver, Additional Features) row
-    page += F("<div class='row'>");
-    // Momentary Switches Card - Made taller with h-100 and spans multiple rows
-    page += F("<div class='col-md-6 col-12 mb-3'>");
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-toggle-on' viewBox='0 0 20 20'>");
-    page += F("<path d='M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z'/>");
-    page += F("</svg>");
-    page += F(" Momentary Switches</h5>");
-    page += F("<div class='card-body'>");
+  }
+
+  page += F("</select>");
+  page += F("<label for='wifissid'>SSID</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='password' maxlength='32' id='wifipassword' name='wifiPassword' value='");
+  page += wifiPassword;
+  page += F("'>");
+  page += F("<label for='wifipassword'>Password</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<small class='form-text text-muted'>");
+  page += F("Connect to a wifi network using SSID and password. WiFi networks list is updated only on boot.<br>");
+  page += F("Pedalino will be restarted if it is connected to a WiFi network and you change them.");
+  page += F("</small>");
+
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Column: AP Mode Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-broadcast-pin' viewBox='0 0 20 20'><path d='M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707zm2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 0 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708zm5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708zm2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM6 8a2 2 0 1 1 2.5 1.937V15.5a.5.5 0 0 1-1 0V9.937A2 2 0 0 1 6 8z'/></svg> AP Mode</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='ssidsoftap' name='ssidSoftAP' value='");
+  page += ssidSoftAP;
+  page += F("'>");
+  page += F("<label for='wifissidap'>SSID</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='password' maxlength='32' id='passwordsoftap' name='passwordSoftAP' value='");
+  page += passwordSoftAP;
+  page += F("'>");
+  page += F("<label for='passwordsoftap'>Password</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<small class='form-text text-muted'>");
+  page += F("Access Point SSID and password.<br>");
+  page += F("Pedalino will be restarted if it is in AP mode and you change them.");
+  page += F("</small>");
+
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Row: Web UI Theme & Web UI Login ---
+  page += F("<div class='row'>");
+
+  // --- Column: Web UI Theme Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-display' viewBox='0 0 20 20'><path d='M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75c.167-.333.25-.833.25-1.5H2s-2 0-2-2V4zm1.398-.855a.758.758 0 0 0-.254.302A1.46 1.46 0 0 0 1 4.01V10c0 .325.078.502.145.602.07.105.17.188.302.254a1.464 1.464 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.302 1.464 1.464 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.757.757 0 0 0-.302-.254A1.46 1.46 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145z'/></svg> Web UI Theme</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='form-floating'>");
+  page += F("<select class='form-select' id='bootstraptheme' name='theme'>");
+
+  for (unsigned int i = 0; i < sizeof(bootswatch) / sizeof(bootswatch[0]); i++) {
+    page += F("<option value='");
+    page += bootswatch[i];
+    page += F("'");
+    if (theme == bootswatch[i])
+      page += F(" selected");
+    page += F(">");
+    page += bootswatch[i];
+    page += F("</option>");
 
     if (trim_page(start, len)) return;
+  }
 
-    page += F("<div class='row g-3'>"); // Increased gap between elements
-    page += F("<div class='col-6 px-3'>"); // Added padding to separate columns
-    // First Column
-    page += F("<div class='mb-4'>"); // Added margin bottom for spacing
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='debounceInterval' name='debounceinterval' value='");
-    page += debounceInterval;
-    page += F("'>");
-    page += F("<label for='debounceInterval'>Debounce Interval</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>"); // Added top margin
-    page += F("Range: 1-100ms (Default: 5ms)<br>Eliminates false triggers from switch bounce.<br>");
-//    page += F("Increase this value if you experience unwanted duplicate triggers from a single press.");
-    page += F("</small>");
-    page += F("</div>");
+  page += F("</select>");
+  page += F("<label for='theme'>Theme</label>");
+  page += F("</div>");
 
-    page += F("<div class='mb-4'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='pressTime' name='presstime' value='");
-    page += pressTime;
-    page += F("'>");
-    page += F("<label for='pressTime'>Press Time</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>");
-    page += F("Range: 1-1000ms (Default: 200ms)<br>Duration required for a single press to register.");
-    page += F("</small>");
-    page += F("</div>");
+  page += F("<small id='bootstrapthemeHelpBlock' class='form-text text-muted'>");
+  page += F("Bootstrap (Local)' uses the theme stored in flash memory. Other themes require internet connection as they are served via CDN network.");
+  page += F("</small>");
 
-    page += F("<div class='mb-4'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='longPressTime' name='longpresstime' value='");
-    page += longPressTime;
-    page += F("'>");
-    page += F("<label for='longPressTime'>Long Press Time</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Column: Web UI Login Card ---
+  page += F("<div class='col-md-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-key' viewBox='0 0 20 20'><path d='M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z'/><path d='M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg> Web UI Login</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control form-control-sm' type='text' maxlength='32' id='httpusername' name='httpUsername' value='");
+  page += httpUsername;
+  page += F("'>");
+  page += F("<label for='httpusername'>Username</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control form-control-sm' type='password' maxlength='32' id='httppassword' name='httpPassword' value='");
+  page += httpPassword;
+  page += F("'>");
+  page += F("<label for='httppassword'>Password</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("<small class='form-text text-muted'>");
+  page += F("Web UI administrator username and password. Leave username blank for no login request.");
+  page += F("</small>");
+
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Start main content row that will contain both columns
+  page += F("<div class='row'>");
+
+  // --- Left Column
+  page += F("<div class='col-md-6 col-12 d-flex flex-column'>");
+
+  // --- Momentary Switches Card
+  page += F("<div class='card mb-3' style='flex-grow: 1;'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-toggle-on' viewBox='0 0 20 20'><path d='M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z'/></svg> Momentary Switches</h5>");
+  page += F("<div class='card-body'>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("<div class='row g-3'>");
+  page += F("<div class='col-6 px-3'>");
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='debounceInterval' name='debounceinterval' value='");
+  page += debounceInterval;
+  page += F("'>");
+  page += F("<label for='debounceInterval'>Debounce Interval</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
+  page += F("Range: 1-100ms (Default: 5ms)<br>Eliminates false triggers from switch bounce.<br>");
+  page += F("</small>");
+  page += F("</div>");
+
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='pressTime' name='presstime' value='");
+  page += pressTime;
+  page += F("'>");
+  page += F("<label for='pressTime'>Press Time</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
+  page += F("Range: 1-1000ms (Default: 200ms)<br>Duration required for a single press to register.");
+  page += F("</small>");
+  page += F("</div>");
+
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='longPressTime' name='longpresstime' value='");
+  page += longPressTime;
+  page += F("'>");
+  page += F("<label for='longPressTime'>Long Press Time</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
     page += F("Range: 1-2000ms (Default: 500ms)<br>Duration required to trigger a long press.<br>");
-//   page += F("Measured from initial press until release.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
 
-    page += F("<div class='col-6 px-3'>"); // Second column with padding
-    page += F("<div class='mb-4'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='simultaneousGapTime' name='simultaneousgaptime' value='");
-    page += simultaneousGapTime;
-    page += F("'>");
-    page += F("<label for='simultaneousGapTime'>Simultaneous Gap Time</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>");
-    page += F("Range: 1-100ms (Default: 50ms)<br>Maximum time gap between two button presses to be considered simultaneous.");
-    page += F("</small>");
-    page += F("</div>");
+  page += F("<div class='col-6 px-3'>"); // Second column with padding
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='simultaneousGapTime' name='simultaneousgaptime' value='");
+  page += simultaneousGapTime;
+  page += F("'>");
+  page += F("<label for='simultaneousGapTime'>Simultaneous Gap Time</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
+  page += F("Range: 1-100ms (Default: 50ms)<br>Maximum time gap between two button presses to be considered simultaneous.");
+  page += F("</small>");
+  page += F("</div>");
 
-    page += F("<div class='mb-4'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='doublePressTime' name='doublepresstime' value='");
-    page += doublePressTime;
-    page += F("'>");
-    page += F("<label for='doublePressTime'>Double Press Time</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>");
-    page += F("Range: 1-1000ms (Default: 400ms)<br>Maximum time between two presses to register as a double-press.");
-//    page += F("Measured from the start of the first press to the start of the second press.");
-    page += F("</small>");
-    page += F("</div>");
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='doublePressTime' name='doublepresstime' value='");
+  page += doublePressTime;
+  page += F("'>");
+  page += F("<label for='doublePressTime'>Double Press Time</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
+  page += F("Range: 1-1000ms (Default: 400ms)<br>Maximum time between two presses to register as a double-press.");
+  page += F("</small>");
+  page += F("</div>");
 
-    page += F("<div class='mb-4'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='repeatPressTime' name='repeatpresstime' value='");
-    page += repeatPressTime;
-    page += F("'>");
-    page += F("<label for='repeatPressTime'>Repeat Press Time</label>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted mt-2'>");
-    page += F("Range: 1-5000ms (Default: 1000ms)<br>Duration of continuous press before auto-repeat begins.");
-//    page += F("Once triggered, generates repeated press events until released.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
+  page += F("<div class='mb-4'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='repeatPressTime' name='repeatpresstime' value='");
+  page += repeatPressTime;
+  page += F("'>");
+  page += F("<label for='repeatPressTime'>Repeat Press Time</label>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted mt-2'>");
+  page += F("Range: 1-5000ms (Default: 1000ms)<br>Duration of continuous press before auto-repeat begins.");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
 
-    if (trim_page(start, len)) return;
-  
-    // Right column container
-    page += F("<div class='col-md-6 col-12'>");
-    // Leds Card
-    page += F("<div class='card mb-3'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-brightness-high' viewBox='0 0 20 20'>");
-    page += F("<path d='M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z'/>");
-    page += F("</svg>");
-    page += F(" Leds</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control form-control-sm' type='number' id='leds' name='leds' min='0' max='254' value='");
-    page += LEDS;
-    page += F("'>");
-    page += F("<label for='leds'>Leds</label>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F("<div class='w-50'>");
-    page += F("<div class='form-floating'>");
-    page += F("<select class='form-select' name='rgborder'>");
-    page += F("<option value='");
-    page += RGB;
-    page += F("'");
-    if (rgbOrder == RGB) page += F(" selected");
-    page += F(">RGB</option>");
-    page += F("<option value='");
-    page += RBG;
-    page += F("'");
-    if (rgbOrder == RBG) page += F(" selected");
-    page += F(">RBG</option>");
-    page += F("<option value='");
-    page += GRB;
-    page += F("'");
-    if (rgbOrder == GRB) page += F(" selected");
-    page += F(">GRB</option>");
-    page += F("<option value='");
-    page += GBR;
-    page += F("'");
-    if (rgbOrder == GBR) page += F(" selected");
-    page += F(">GBR</option>");
-    page += F("<option value='");
-    page += BRG;
-    page += F("'");
-    if (rgbOrder == BRG) page += F(" selected");
-    page += F(">BRG</option>");
-    page += F("<option value='");
-    page += BGR;
-    page += F("'");
-    if (rgbOrder == BGR) page += F(" selected");
-    page += F(">BGR</option>");
-    page += F("</select>");
-    page += F("<label for='rgborder'>RGB Order</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F("<label for='brightnessOn'>Leds On Brightness: ");
-    page += ledsOnBrightness;
-    page += F("</label>");
-    page += F("<input type='range' class='form-range' min='0' max='255' id='brightnessOn' name='ledsonbrightness'");
-    page += F(" value='");
-    page += ledsOnBrightness;
-    page += F("' oninput='this.previousElementSibling.textContent = `Leds On Brightness: ` + this.value'>");
-    page += F("<label for='brightnessOff'>Leds Off Brightness: ");
-    page += ledsOffBrightness;
-    page += F("</label>");
-    page += F("<input type='range' class='form-range' min='0' max='255' id='brightnessOff' name='ledsoffbrightness'");
-    page += F(" value='");
-    page += ledsOffBrightness;
-    page += F("' oninput='this.previousElementSibling.textContent = `Leds Off Brightness: ` + this.value'>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    // Screen Saver Card
-    page += F("<div class='card mb-3'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-display' viewBox='0 0 20 20'>");
-    page += F("<path d='M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75c.167-.333.25-.833.25-1.5H2s-2 0-2-2V4zm1.398-.855a.758.758 0 0 0-.254.302A1.46 1.46 0 0 0 1 4.01V10c0 .325.078.502.145.602.07.105.17.188.302.254a1.464 1.464 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.302 1.464 1.464 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.757.757 0 0 0-.302-.254A1.46 1.46 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145z'/>");
-    page += F("</svg>");
-    page += F(" Screen Saver</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control form-control-sm' type='number' id='screenSaverTimeout' name='screensavertimeout' min='0' max='1440' value='");
-    page += screenSaverTimeout / 60000;
-    page += F("'>");
-    page += F("<label for='timeout'>Timeout</label>");
-    page += F("<small id='screenSaverTimeoutHelpBlock' class='form-text text-muted'>");
-    page += F("Power off display and leds when inactive for a certain amount of time in minutes.<br>Min 0 (never) - Default 60 (1 hour) - Max 1440 (24 hours).");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    // Additional Features Card
-    page += F("<div class='card mb-3'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-sliders' viewBox='0 0 20 20'>");
-    page += F("<path fill-rule='evenodd' d='M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z'/>");
-    page += F("</svg>");
-    page += F(" Additional Features</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='flipScreen' name='flipscreen'");
-    if (flipScreen) page += F(" checked");
-    page += F(">");
-    page += F("<label class='form-check-label' for='flipScreen'>Flip Screen</label>");
-    page += F("</div>");
-    page += F("<small id='flidScreenHelpBlock' class='form-text text-muted'>");
-    page += F("Vertical flip of screen.");
-    page += F("</small>");
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='tapDanceMode' name='tapdancemode'");
-    if (tapDanceMode) page += F(" checked");
-    page += F(">");
-    page += F("<label class='form-check-label' for='tapDanceMode'>Tap Dance Mode</label>");
-    page += F("</div>");
-    page += F("<small id='tapDanceModeHelpBlock' class='form-text text-muted'>");
-    page += F("The first press of pedal X switch to bank X, the second press of any pedal send the MIDI event.");
-    page += F("</small>");
-    page += F("<div class='form-check form-switch'>");
-    page += F("<input class='form-check-input' type='checkbox' id='repeatOnBankSwitch' name='repeatonbankswitch'");
-    if (repeatOnBankSwitch) page += F(" checked");
-    page += F(">");
-    page += F("<label class='form-check-label' for='repeatOnBankSwitch'>Bank Switch Repeat</label>");
-    page += F("</div>");
-    page += F("<small id='repeatOnBankSwitchModeHelpBlock' class='form-text text-muted'>");
-    page += F("On bank switch repeat the last MIDI message that was sent for that bank");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F("</div>"); // Close the Right column container
-    // page += F("</div>"); // Close the row that the right column is in 
-
-    // OSC Local and Remote row
-    page += F("<div class='row'>");
-    // OSC Local Card
-    page += F("<div class='col-lg-6 col-12 mb-3'>");    // Changed from col-md-6 to col-lg-6
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-ear' viewBox='0 0 20 20'>");
-    page += F("<path d='M8.5 1A4.5 4.5 0 0 0 4 5.5v7.047a2.453 2.453 0 0 0 4.75.861l.512-1.363a5.553 5.553 0 0 1 .816-1.46l2.008-2.581A4.34 4.34 0 0 0 8.66 1H8.5ZM3 5.5A5.5 5.5 0 0 1 8.5 0h.16a5.34 5.34 0 0 1 4.215 8.618l-2.008 2.581a4.555 4.555 0 0 0-.67 1.197l-.51 1.363A3.453 3.453 0 0 1 3 12.547V5.5ZM8.5 4A1.5 1.5 0 0 0 7 5.5v2.695c.112-.06.223-.123.332-.192.327-.208.577-.44.72-.727a.5.5 0 1 1 .895.448c-.256.513-.673.865-1.079 1.123A8.538 8.538 0 0 1 7 9.313V11.5a.5.5 0 0 1-1 0v-6a2.5 2.5 0 0 1 5 0V6a.5.5 0 0 1-1 0v-.5A1.5 1.5 0 0 0 8.5 4Z'/>");
-    page += F("</svg>");
-    page += F(" OSC Local</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-75'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' readonly id='localip' name='localip' value='");
-    page += host;
-    page += F(".local - ");
-    page += WiFi.localIP().toString();
-    page += F("'>");
-    page += F("<label for='wifissid'>Local Host - IP Address</label>");
-    page += F("</div>");
-    page += F("</div>");
+  // --- Resistor Ladder Network Card
+  page += F("<div class='card mb-3' style='flex-grow: 1;'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-ladder' viewBox='0 0 20 20'><path d='M4.5 1a.5.5 0 0 1 .5.5V2h6v-.5a.5.5 0 0 1 1 0v14a.5.5 0 0 1-1 0V15H5v.5a.5.5 0 0 1-1 0v-14a.5.5 0 0 1 .5-.5zM5 14h6v-2H5v2zm0-3h6V9H5v2zm0-3h6V6H5v2zm0-3h6V3H5v2z'/></svg> Resistor Ladder Network</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='d-grid gap-1'>");
+  for (byte i = 1; i <= LADDER_STEPS + 1; i++) {
+    if ((i - 1) % 4 == 0)
+      page += F("<div class='row g-1'>");
     page += F("<div class='w-25'>");
     page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='number' min='0' max='65535' id='oscLocalPort' name='osclocalport' value='");
-    page += oscLocalPort;
+    page += F("<input class='form-control form-control-sm' type='number' id='threshold");
+    page += i;
+    page += F("' name='threshold");
+    page += i;
+    page += F("' min='0' max='");
+    page += (ADC_RESOLUTION - 1);
+    page += F("' value='");
+    page += ladderLevels[i - 1];
     page += F("'>");
-    page += F("<label for='osclocalport'>Port</label>");
+    page += F("<label for='threshold");
+    page += i;
+    page += F("'>Level ");
+    page += i;
+    page += F("</label>");
     page += F("</div>");
     page += F("</div>");
-    page += F("<small class='form-text text-muted'>");
-    page += F("OSC local address and port to receive OSC messages.<br>");
-    page += F("Broadcast OSC messages on configured port are received too.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
+    if (i % 4 == 0 || i == LADDER_STEPS + 1)
+      page += F("</div>");
+
     if (trim_page(start, len)) return;
-  
-    // OSC Remote Card
-    page += F("<div class='col-lg-6 col-12 mb-3'>");    // Changed from col-md-6 to col-lg-6 
-    page += F("<div class='card h-100'>");
-    page += F("<h5 class='card-header'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-megaphone' viewBox='0 0 20 20'>");
-    page += F("<path d='M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49a68.14 68.14 0 0 0-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 74.663 74.663 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199V2.5zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0zm-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233c.18.01.359.022.537.036 2.568.189 5.093.744 7.463 1.993V3.85zm-9 6.215v-4.13a95.09 95.09 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A60.49 60.49 0 0 1 4 10.065zm-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68.019 68.019 0 0 0-1.722-.082z'/>");
-    page += F("</svg>");
-    page += F(" OSC Remote</h5>");
-    page += F("<div class='card-body'>");
-    page += F("<div class='row g-1'>");
-    page += F("<div class='w-75'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='text' maxlength='32' id='oscRemoteHost' name='oscremotehost' value='");
+  }
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("</div>"); // Close left column
+
+  // --- Right Column
+  page += F("<div class='col-md-6 col-12 d-flex flex-column'>");
+
+  // --- Leds Card
+  page += F("<div class='card mb-3' style='flex-grow: 1;'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-brightness-high' viewBox='0 0 20 20'><path d='M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z'/></svg> Leds</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control form-control-sm' type='number' id='leds' name='leds' min='0' max='254' value='");
+  page += LEDS;
+  page += F("'>");
+  page += F("<label for='leds'>Leds</label>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("<div class='w-50'>");
+  page += F("<div class='form-floating'>");
+  page += F("<select class='form-select' name='rgborder'>");
+  page += F("<option value='");
+  page += RGB;
+  page += F("'");
+  if (rgbOrder == RGB)
+    page += F(" selected");
+  page += F(">RGB</option>");
+  page += F("<option value='");
+  page += RBG;
+  page += F("'");
+  if (rgbOrder == RBG)
+    page += F(" selected");
+  page += F(">RBG</option>");
+  page += F("<option value='");
+  page += GRB;
+  page += F("'");
+  if (rgbOrder == GRB)
+    page += F(" selected");
+  page += F(">GRB</option>");
+  page += F("<option value='");
+  page += GBR;
+  page += F("'");
+  if (rgbOrder == GBR)
+    page += F(" selected");
+  page += F(">GBR</option>");
+  page += F("<option value='");
+  page += BRG;
+  page += F("'");
+  if (rgbOrder == BRG)
+    page += F(" selected");
+  page += F(">BRG</option>");
+  page += F("<option value='");
+  page += BGR;
+  page += F("'");
+  if (rgbOrder == BGR)
+    page += F(" selected");
+  page += F(">BGR</option>");
+  page += F("</select>");
+  page += F("<label for='rgborder'>RGB Order</label>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("<label for='brightnessOn'>Leds On Brightness: ");
+  page += ledsOnBrightness;
+  page += F("</label>");
+  page += F("<input type='range' class='form-range' min='0' max='255' id='brightnessOn' name='ledsonbrightness'");
+  page += F(" value='");
+  page += ledsOnBrightness;
+  page += F("' oninput='this.previousElementSibling.textContent = `Leds On Brightness: ` + this.value'>");
+  page += F("<label for='brightnessOff'>Leds Off Brightness: ");
+  page += ledsOffBrightness;
+  page += F("</label>");
+  page += F("<input type='range' class='form-range' min='0' max='255' id='brightnessOff' name='ledsoffbrightness'");
+  page += F(" value='");
+  page += ledsOffBrightness;
+  page += F("' oninput='this.previousElementSibling.textContent = `Leds Off Brightness: ` + this.value'>");
+  page += F("</div>");
+  page += F("</div>");
+
+  // --- Screen Saver Card
+  page += F("<div class='card mb-3' style='flex-grow: 1;'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-display' viewBox='0 0 20 20'><path d='M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75c.167-.333.25-.833.25-1.5H2s-2 0-2-2V4zm1.398-.855a.758.758 0 0 0-.254.302A1.46 1.46 0 0 0 1 4.01V10c0 .325.078.502.145.602.07.105.17.188.302.254a1.464 1.464 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.302 1.464 1.464 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.757.757 0 0 0-.302-.254A1.46 1.46 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145z'/></svg> Screen Saver</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control form-control-sm' type='number' id='screenSaverTimeout' name='screensavertimeout' min='0' max='1440' value='");
+  page += screenSaverTimeout / 60000;
+  page += F("'>");
+  page += F("<label for='timeout'>Timeout</label>");
+  page += F("<small id='screenSaverTimeoutHelpBlock' class='form-text text-muted'>");
+  page += F("Power off display and leds when inactive for a certain amount of time in minutes.<br>Min 0 (never) - Default 60 (1 hour) - Max 1440 (24 hours).");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- Additional Features Card
+  page += F("<div class='card mb-3' style='flex-grow: 1;'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-sliders' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z'/></svg> Additional Features</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='flipScreen' name='flipscreen'");
+  if (flipScreen)
+    page += F(" checked");
+  page += F(">");
+  page += F("<label class='form-check-label' for='flipScreen'>Flip Screen</label>");
+  page += F("</div>");
+  page += F("<small id='flidScreenHelpBlock' class='form-text text-muted'>");
+  page += F("Vertical flip of screen.");
+  page += F("</small>");
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='tapDanceMode' name='tapdancemode'");
+  if (tapDanceMode)
+    page += F(" checked");
+  page += F(">");
+  page += F("<label class='form-check-label' for='tapDanceMode'>Tap Dance Mode</label>");
+  page += F("</div>");
+  page += F("<small id='tapDanceModeHelpBlock' class='form-text text-muted'>");
+  page += F("The first press of pedal X switch to bank X, the second press of any pedal send the MIDI event.");
+  page += F("</small>");
+  page += F("<div class='form-check form-switch'>");
+  page += F("<input class='form-check-input' type='checkbox' id='repeatOnBankSwitch' name='repeatonbankswitch'");
+  if (repeatOnBankSwitch)
+    page += F(" checked");
+  page += F(">");
+  page += F("<label class='form-check-label' for='repeatOnBankSwitch'>Bank Switch Repeat</label>");
+  page += F("</div>");
+  page += F("<small id='repeatOnBankSwitchModeHelpBlock' class='form-text text-muted'>");
+  page += F("On bank switch repeat the last MIDI message that was sent for that bank");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("</div>");
+
+
+  // --- OSC Local and Remote row
+  page += F("<div class='row'>");
+
+  // --- OSC Local Card
+  page += F("<div class='col-lg-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-ear' viewBox='0 0 20 20'><path d='M8.5 1A4.5 4.5 0 0 0 4 5.5v7.047a2.453 2.453 0 0 0 4.75.861l.512-1.363a5.553 5.553 0 0 1 .816-1.46l2.008-2.581A4.34 4.34 0 0 0 8.66 1H8.5ZM3 5.5A5.5 5.5 0 0 1 8.5 0h.16a5.34 5.34 0 0 1 4.215 8.618l-2.008 2.581a4.555 4.555 0 0 0-.67 1.197l-.51 1.363A3.453 3.453 0 0 1 3 12.547V5.5ZM8.5 4A1.5 1.5 0 0 0 7 5.5v2.695c.112-.06.223-.123.332-.192.327-.208.577-.44.72-.727a.5.5 0 1 1 .895.448c-.256.513-.673.865-1.079 1.123A8.538 8.538 0 0 1 7 9.313V11.5a.5.5 0 0 1-1 0v-6a2.5 2.5 0 0 1 5 0V6a.5.5 0 0 1-1 0v-.5A1.5 1.5 0 0 0 8.5 4Z'/></svg> OSC Local</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+  page += F("<div class='w-75'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' readonly id='localip' name='localip' value='");
+  page += host;
+  page += F(".local - ");
+  page += WiFi.localIP().toString();
+  page += F("'>");
+  page += F("<label for='wifissid'>Local Host - IP Address</label>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("<div class='w-25'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='number' min='0' max='65535' id='oscLocalPort' name='osclocalport' value='");
+  page += oscLocalPort;
+  page += F("'>");
+  page += F("<label for='osclocalport'>Port</label>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted'>");
+  page += F("OSC local address and port to receive OSC messages.<br>");
+  page += F("Broadcast OSC messages on configured port are received too.");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  // --- OSC Remote Card
+  page += F("<div class='col-lg-6 col-12 mb-3'>");
+  page += F("<div class='card h-100'>");
+  page += F("<h5 class='card-header'><svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-megaphone' viewBox='0 0 20 20'><path d='M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49a68.14 68.14 0 0 0-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 74.663 74.663 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199V2.5zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0zm-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233c.18.01.359.022.537.036 2.568.189 5.093.744 7.463 1.993V3.85zm-9 6.215v-4.13a95.09 95.09 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A60.49 60.49 0 0 1 4 10.065zm-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68.019 68.019 0 0 0-1.722-.082z'/></svg> OSC Remote</h5>");
+  page += F("<div class='card-body'>");
+  page += F("<div class='row g-1'>");
+  page += F("<div class='w-75'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='text' maxlength='32' id='oscRemoteHost' name='oscremotehost' value='");
+  page += oscRemoteHost;
+  page += F("'>");
+  page += F("<label for='oscremotehost'>Remote Host/IP</label>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("<div class='w-25'>");
+  page += F("<div class='form-floating'>");
+  page += F("<input class='form-control' type='number' min='0' max='65535' id='oscRemotePort' name='oscremoteport' value='");
+  page += oscRemotePort;
+  page += F("'>");
+  page += F("<label for='oscremoteport'>Port</label>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("<small class='form-text text-muted'>");
+  page += F("OSC remote host name without .local, or IP address, and port to send OSC messages.<br>");
+  page += F("If you don't know them use the subnet broadcast address 255.255.255.255.<br>");
+  if (oscRemoteHost != oscRemoteIp.toString()) {
     page += oscRemoteHost;
-    page += F("'>");
-    page += F("<label for='oscremotehost'>Remote Host/IP</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<div class='w-25'>");
-    page += F("<div class='form-floating'>");
-    page += F("<input class='form-control' type='number' min='0' max='65535' id='oscRemotePort' name='oscremoteport' value='");
-    page += oscRemotePort;
-    page += F("'>");
-    page += F("<label for='oscremoteport'>Port</label>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("<small class='form-text text-muted'>");
-    page += F("OSC remote host name without .local, or IP address, and port to send OSC messages.<br>");
-    page += F("If you don't know them use the subnet broadcast address 255.255.255.255.<br>");
-    if (oscRemoteHost != oscRemoteIp.toString()) {
-      page += oscRemoteHost;
-      page += F(" resolved to ");
-      page += oscRemoteIp.toString();
-      page += F(".<br>");
-    }
-    page += F("If host name not found 255.255.255.255 is used.");
-    page += F("</small>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F("<div class='row'>");
-    // Form Submit Buttons
-    // -----------------
-    // Contains Apply, Save, Factory Reset, Reboot, Power Off buttons
-    page += F("<div class='col-auto me-auto'>");
-    page += F("<button type='submit' name='action' value='apply' class='btn btn-primary btn-sm'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'>");
-    page += F("<path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'/>");
-    page += F("<path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'/>");
-    page += F("</svg>");
-    page += F(" Apply</button> ");
-    page += F("<button type='submit' name='action' value='save' class='btn btn-primary btn-sm'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-save' viewBox='0 0 16 16'>");
-    page += F("<path d='M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z'>");
-    page += F("</svg>");
-    page += F(" Save</button>");
-    page += F("</div>");
-    page += F("<div class='col-auto'>");
-    page += F("<button type='submit' name='action' value='factorydefault' class='btn btn-danger btn-sm'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-wrench' viewBox='0 0 16 16'>");
-    page += F("<path d='M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019l.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z'/>");
-    page += F("</svg>");
-  
-    if (trim_page(start, len)) return;
-  
-    page += F(" Reset to Factory Default</button> ");
-    page += F("<button type='submit' name='action' value='reboot' class='btn btn-primary btn-sm'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-bootstrap-reboot' viewBox='0 0 16 16'>");
-    page += F("<path d='M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 0 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.812 6.812 0 0 0 1.16 8z'>");
-    page += F("<path d='M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352h1.141zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324h-1.6z'>");
-    page += F("</svg>");
-    page += F(" Reboot</button> ");
-    page += F("<button type='submit' name='action' value='poweroff' class='btn btn-primary btn-sm'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-power' viewBox='0 0 16 16'>");
-    page += F("<path d='M7.5 1v7h1V1h-1z'/>");
-    page += F("<path d='M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z'/>");
-    page += F("</svg>");
-    page += F(" Power Off</button>");
-    page += F("</div>");
-    page += F("</div>");
-  
-    page += F("</form>");
-  
-    // Generate page footer
-    get_footer_page();
-  
-    if (trim_page(start, len, true)) return;
+    page += F(" resolved to ");
+    page += oscRemoteIp.toString();
+    page += F(".<br>");
+  }
+  page += F("If host name not found 255.255.255.255 is used.");
+  page += F("</small>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+  page += F("</div>");
+
+  if (trim_page(start, len)) return;
+
+  page += F("<div class='row'>");
+  // --- Form Submit Buttons
+  // Contains Apply, Save, Factory Reset, Reboot, Power Off buttons
+  page += F("<div class='col-auto me-auto'>");
+  page += F("<button type='submit' name='action' value='apply' class='btn btn-primary btn-sm'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check2-circle' viewBox='0 0 16 16'><path d='M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z'/><path d='M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z'/></svg> Apply</button> ");
+  page += F("<button type='submit' name='action' value='save' class='btn btn-primary btn-sm'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-save' viewBox='0 0 16 16'><path d='M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z'/></svg> Save</button>");
+  page += F("</div>");
+  page += F("<div class='col-auto'>");
+  page += F("<button type='submit' name='action' value='factorydefault' class='btn btn-danger btn-sm'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-wrench' viewBox='0 0 16 16'><path d='M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019l.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z'/></svg> Reset to Factory Default</button> ");
+  page += F("<button type='submit' name='action' value='reboot' class='btn btn-primary btn-sm'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-bootstrap-reboot' viewBox='0 0 16 16'><path d='M1.161 8a6.84 6.84 0 1 0 6.842-6.84.58.58 0 0 1 0-1.16 8 8 0 1 1-6.556 3.412l-.663-.577a.58.58 0 0 1 .227-.997l2.52-.69a.58.58 0 0 1 .728.633l-.332 2.592a.58.58 0 0 1-.956.364l-.643-.56A6.812 6.812 0 0 0 1.16 8z'><path d='M6.641 11.671V8.843h1.57l1.498 2.828h1.314L9.377 8.665c.897-.3 1.427-1.106 1.427-2.1 0-1.37-.943-2.246-2.456-2.246H5.5v7.352h1.141zm0-3.75V5.277h1.57c.881 0 1.416.499 1.416 1.32 0 .84-.504 1.324-1.386 1.324h-1.6z'></svg> Reboot</button> ");
+  page += F("<button type='submit' name='action' value='poweroff' class='btn btn-primary btn-sm'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-power' viewBox='0 0 16 16'><path d='M7.5 1v7h1V1h-1z'/><path d='M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z'/></svg> Power Off</button>");
+  page += F("</div>");
+  page += F("</div>");
+
+  page += F("</form>");
+
+  // --- Page Footer
+  get_footer_page();
+
+  if (trim_page(start, len, true)) return;
 }
 
 
-//// CONFIGURATIONS PAGE ////
+//// +++ CONFIGURATIONS PAGE +++ ////
 void get_configurations_page(unsigned int start, unsigned int len) {
 
   if (get_top_page(8, start, len)) return;
