@@ -763,6 +763,11 @@ void ladder_config()
         if (analog.getValue() != ADC_RESOLUTION-1) {
           ladderLevels[i] = analog.getValue();
         }
+        display_progress_bar_title2("Release", "Switch " + String(i+1)); // Show "Release Switch" message
+        start = millis();
+        while (millis() - start < 1000) {
+          display_progress_bar_update(millis() - start, 1000); // Progress bar goes from full to empty
+        }
       }
       display_progress_bar_2_label(LADDER_STEPS, DISPLAY_WIDTH * ladderLevels[LADDER_STEPS-1] / ADC_RESOLUTION);
       delay(1000);

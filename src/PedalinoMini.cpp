@@ -415,6 +415,13 @@ void setup()
       eeprom_read_global();
       break;
 
+    case PED_BOOT_LADDER_CONFIG:
+      DPRINT("\nLadder Config\n");
+      eeprom_read_profile();
+      ladder_config();
+      ESP.restart();
+      break;
+
     case PED_FACTORY_DEFAULT:
       DPRINT("\nReset EEPROM to factory default\n");
       eeprom_initialize();

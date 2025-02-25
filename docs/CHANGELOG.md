@@ -48,6 +48,8 @@
   - 3 seconds per option
   - Safe looping past last option
   - Factory Default triggers only on release during its time window
+- 📚 Updated FastLED library to latest version for better ESP32 compatibility
+- ⚡ Re-enabled Switch Ladder feature for advanced switch configurations
 
 ## 🔄 Profile System
 - Cycles through profiles A → B → C
