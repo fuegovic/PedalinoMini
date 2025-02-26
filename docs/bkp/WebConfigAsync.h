@@ -1,3 +1,15 @@
+/*
+  (c) 2018-2025 alf45star
+  https://github.com/alf45tar/PedalinoMini
+
+  This file is part of PedalinoMini.
+
+  You should have received a copy of the GNU General Public License
+  along with PedalinoMini. If not, see <http://www.gnu.org/licenses/>.
+
+  Modifications by Fuegovic, 2025.
+*/
+
 String theme         = "phoenix";
 String httpUsername  = "";
 String httpPassword  = "";
@@ -19,13 +31,6 @@ inline void http_run() {};
 #include <nvs.h>
 
 #include "Version.h"
-#include "web/util/WebChunker.h"
-#include "web/components/ScriptStore.h"
-#include "web/components/SVGIcons.h"
-#include "web/components/Card.h"
-#include "web/components/StatusItem.h"
-#include "web/components/SectionHeader.h"
-#include "web/components/ConnectionStatus.h"
 
 AsyncWebServer          httpServer(80);
 
@@ -349,19 +354,22 @@ void addStatusItem(const char* label, const String& value) {
   page += F("</div></div>");
 }
 
+// Reusable SVG icons stored in PROGMEM to save RAM
+const char INFO_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-info-circle' viewBox='0 0 16 16'><path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'/><path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg>";
+const char HARDWARE_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-cpu' viewBox='0 0 16 16'><path d='M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z'/></svg>";
+const char NETWORK_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-wifi' viewBox='0 0 16 16'>"
+"<path d='M15.384 6.115a.485.485 0 0 0-.047-.736A12.444 12.444 0 0 0 8 3c-2.82 0-5.432.952-7.337 2.38a.485.485 0 0 0-.047.735.518.518 0 0 0 .668.05A11.448 11.448 0 0 1 8 4c2.597 0 4.99.883 6.766 2.166a.518.518 0 0 0 .668-.05'/>"
+"<path d='M13.229 8.271a.482.482 0 0 0-.063-.745A9.455 9.455 0 0 0 8 6c-2.086 0-4.02.666-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.576 1.336c.206.132.48.108.653-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.407.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.61-.091l.016-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .707 0l.707-.707z'/>"
+"</svg>";
+const char SYSTEM_ICON[] PROGMEM = "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='currentColor' class='bi bi-gear' viewBox='0 0 16 16'>"
+"<path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/>"
+"<path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z'/>"
+"</svg>";
+
 // Reusable card component
 void addCard(const char* icon, const char* title) {
   page += F("<div class='col'><div class='card h-100'><h5 class='card-header'>");
-  // Use icons from SVGIcons component
-  if (strcmp(icon, "INFO_ICON") == 0) {
-    page += Icons::InfoCircle().render();
-  } else if (strcmp(icon, "HARDWARE_ICON") == 0) {
-    page += Icons::Hardware().render(); 
-  } else if (strcmp(icon, "NETWORK_ICON") == 0) {
-    page += Icons::Network().render();
-  } else if (strcmp(icon, "SYSTEM_ICON") == 0) {
-    page += Icons::System().render();
-  }
+  page += FPSTR(icon);
   page += F(" ");
   page += title;
   page += F("</h5><div class='card-body'>");
@@ -381,28 +389,26 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("<small class='text-muted fs-5'>Wireless MIDI foot controller</small></h4>");
   page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 mx-3'>");
 
-  // Product Information Card with our new components
-  Card productInfoCard = Card(Icons::InfoCircle(), "Product Information");
-  String cardContent;
+  // Product Information Card
+  addCard(INFO_ICON, "Product Information");
+  addStatusItem("Model", String(MODEL));
+  page += F("<div class='row g-1 mb-2'><div class='col-6'>Source Code</div>");
+  page += F("<div class='col-6 text-end'><a href='");
+  page += PEDALINO_GITHUB_URL;
+  page += F("' target='_blank'>GitHub</a></div></div><hr class='my-2'>");
   
-  cardContent += StatusItem("Model", String(MODEL)).render();
-  cardContent += StatusItem("Source Code", 
-    "<a href='" + String(PEDALINO_GITHUB_URL) + "' target='_blank'>GitHub</a>").render();
-  cardContent += F("<hr class='my-2'>");
-  
-  cardContent += StatusItem("Profiles", String(PROFILES)).render();
-  cardContent += StatusItem("Banks", String(BANKS)).render();
-  cardContent += StatusItem("Pedals", String(PEDALS)).render();
-  cardContent += StatusItem("Controls", String(CONTROLS)).render();
-  cardContent += StatusItem("Sequences", String(SEQUENCES)).render();
-  cardContent += StatusItem("LEDs", String(LEDS)).render();
-  
-  page += productInfoCard.withContent(cardContent).render();
+  addStatusItem("Profiles", String(PROFILES));
+  addStatusItem("Banks", String(BANKS));
+  addStatusItem("Pedals", String(PEDALS));
+  addStatusItem("Controls", String(CONTROLS));
+  addStatusItem("Sequences", String(SEQUENCES));
+  addStatusItem("LEDs", String(LEDS));
+  closeCard();
 
   if (trim_page(start, len)) return;
 
   // Hardware Information Card
-  addCard("HARDWARE_ICON", "Hardware");
+  addCard(HARDWARE_ICON, "Hardware");
 
   // Board Information
   page += F("<h6 class='border-bottom pb-2 fw-bold'>Board Information</h6>");
@@ -435,7 +441,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   if (trim_page(start, len)) return;
 
   // Network Status Card
-  addCard("NETWORK_ICON", "Network");
+  addCard(NETWORK_ICON, "Network");
   // First show Station info if connected
   if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
     page += F("<h6 class='border-bottom pb-2 fw-bold'>WiFi Client</h6>");
@@ -512,7 +518,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   if (trim_page(start, len)) return;
 
   // System Status Card
-  addCard("SYSTEM_ICON", "System");
+  addCard(SYSTEM_ICON, "System");
 
   // System Information Section
   page += F("<h6 class='border-bottom pb-2 fw-bold'>System Information</h6>");
@@ -549,11 +555,53 @@ void get_root_page(unsigned int start, unsigned int len) {
   // Close the row of cards
   page += F("</div>");
   
-  // Add scripts using our new ScriptComponent system
-  page += ScriptStore::getUptimeScript(millis()).render();
-  page += ScriptStore::getMemoryUpdateScript().render();
-  page += ScriptStore::getBootstrapVersionScript().render();
-  
+  // JavaScript for uptime counter 
+  page += F("<script>"
+      "function u(){"
+      "const e=document.getElementById('uptime');"
+      "let t=");
+  page += millis();
+  page += F(";"
+      "try{"
+      "const n=()=>{"
+      "t+=1e3;"
+      "let n=Math.floor(t/1e3),o=Math.floor(n/60),r=Math.floor(o/60),a=Math.floor(r/24);"
+      "n%=60,o%=60,r%=24;"
+      "let l='';"
+      "a>0&&(l+=a+'d '),r>0&&(l+=r+'h '),o>0&&(l+=o+'m '),l+=n+'s';"
+      "e.innerHTML=l"
+      "};"
+      "n(),setInterval(n,1e3)"
+      "}catch(t){e.innerHTML='<span class=\"text-danger\">Error</span>'}"
+      "}"
+      "setTimeout(u,0);"
+      "</script>");
+
+  // Memory update script
+  page += F("<script>"
+      "function m(){"
+      "const e=document.getElementById('free-memory');"
+      "try{"
+      "const n=()=>{"
+      "fetch('/memory').then(e=>e.json()).then(n=>{e.textContent=(n.memory/1024).toFixed(2)+' kB'})"
+      ".catch(()=>{e.innerHTML='<span class=\"text-danger\">Error</span>'})};"
+      "n(),setInterval(n,5e3)"
+      "}catch(n){e.innerHTML='<span class=\"text-danger\">Error</span>'}"
+      "}"
+      "setTimeout(m,500);"
+      "</script>");
+
+  // Simple script for Bootstrap version
+  page += F("<script>"
+    "document.addEventListener('DOMContentLoaded', function() {"
+    "  if (typeof bootstrap !== 'undefined') {"
+    "    document.getElementById('bootstrap-version').textContent = bootstrap.Tooltip.VERSION;"
+    "  } else {"
+    "    document.getElementById('bootstrap-version').textContent = 'Not available';"
+    "  }"
+    "});"
+    "</script>");
+
   closeCard();
   
     get_footer_page();
