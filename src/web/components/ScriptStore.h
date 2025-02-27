@@ -59,20 +59,46 @@ public:
     return ScriptComponent(script);
   }
 
-  // Memory update script with KB display and 2 decimal places
+  // Memory update script with KB display and 2 decimal places that updates every 3 seconds
   static ScriptComponent getMemoryUpdateScript() {
-    // Calculate KB with 2 decimal places
+    // Calculate initial KB with 2 decimal places for first display
     float freeKB = ESP.getFreeHeap() / 1024.0;
     char formattedMem[12];
     sprintf(formattedMem, "%.2f", freeKB);
 
     String script = F("document.addEventListener('DOMContentLoaded', function() {\n"
-                     "  const memoryElem = document.getElementById('free-memory');\n"
-                     "  if (memoryElem && !memoryElem.textContent) {\n"
-                     "    memoryElem.textContent = '");
+                    "  // First try with 'memory' ID, then fall back to 'free-memory' ID\n"
+                    "  const memoryElem = document.getElementById('memory') || document.getElementById('free-memory');\n"
+                    "  if (!memoryElem) {\n"
+                    "    console.error('Memory element not found');\n"
+                    "    return;\n"
+                    "  }\n\n"
+                    "  // Set initial value\n"
+                    "  memoryElem.textContent = '");
     script += formattedMem;
-    script += F(" KB';\n"
+    script += F(" KB';\n\n"
+                "  function updateMemory() {\n"
+                "    fetch('/memory')\n"
+                "      .then(response => {\n"
+                "        if (!response.ok) throw new Error('Network response failed: ' + response.statusText);\n"
+                "        return response.json();\n"
+                "      })\n"
+                "      .then(data => {\n"
+                "        if (data && data.memory) {\n"
+                "          // The server already sends the value in KB with proper formatting\n"
+                "          memoryElem.textContent = data.memory + ' KB';\n"
+                "        } else {\n"
+                "          console.error('Invalid memory data format:', data);\n"
+                "        }\n"
+                "      })\n"
+                "      .catch(error => {\n"
+                "        console.error('Memory update error:', error);\n"
+                "      });\n"
                 "  }\n"
+                "  \n"
+                "  // Update memory immediately and then every 3 seconds\n"
+                "  updateMemory();\n"
+                "  setInterval(updateMemory, 3000);\n"
                 "});\n");
     return ScriptComponent(script);
   }

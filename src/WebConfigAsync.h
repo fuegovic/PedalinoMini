@@ -497,7 +497,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   // System Information Section
   page += F("<h6 class='border-bottom pb-2 fw-bold'>System Information</h6>");
   addStatusItem("SDK Version", ESP.getSdkVersion());
-  addStatusItem("Free Memory", "<span id='free-memory'></span>");
+  addStatusItem("Free Memory", "<span id='memory'></span>");
   addStatusItem("Uptime", "<span id='uptime'></span>");
 
   // ESP32 Platform Section
@@ -5801,10 +5801,14 @@ void http_setup() {
   httpServer.on("/options",         HTTP_POST,  http_handle_post_options);
   httpServer.on("/configurations",  HTTP_GET,   http_handle_configurations);
   httpServer.on("/configurations",  HTTP_POST,  http_handle_post_configurations, http_handle_configuration_file_upload);
-  httpServer.on("/memory",          HTTP_GET, [](AsyncWebServerRequest *request) {
-    AsyncResponseStream *response = request->beginResponseStream("application/json");
-    response->printf("{\"memory\": %d}", ESP.getFreeHeap());
-    request->send(response);
+  httpServer.on("/memory", HTTP_GET, [](AsyncWebServerRequest *request) {
+    char memoryJson[32];
+    float freeKB = ESP.getFreeHeap() / 1024.0;  // Convert bytes to KB
+    
+    // Format with 2 decimal places to create a proper string representation
+    sprintf(memoryJson, "{\"memory\":\"%.2f\"}", freeKB);
+    
+    request->send(200, "application/json", memoryJson);
   });
   httpServer.on("/update",          HTTP_GET,   http_handle_update);
   httpServer.on("/update",          HTTP_POST,  http_handle_post_update, http_handle_update_file_upload);
