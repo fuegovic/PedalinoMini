@@ -26,6 +26,7 @@ inline void http_run() {};
 #include "web/components/StatusItem.h"
 #include "web/components/SectionHeader.h"
 #include "web/components/ConnectionStatus.h"
+#include "web/util/FormatUtils.h"
 
 AsyncWebServer          httpServer(80);
 
@@ -372,7 +373,9 @@ void closeCard() {
   page += F("</div>"); // Close card
   page += F("</div>"); // Close col
 }
-
+// +++++++++++++++++++ //
+// ++++ ROOT PAGE ++++ //
+// +++++++++++++++++++ //
 void get_root_page(unsigned int start, unsigned int len) {
   if (get_top_page(0, start, len)) return;
 
@@ -381,27 +384,31 @@ void get_root_page(unsigned int start, unsigned int len) {
   page += F("<small class='text-muted fs-5'>Wireless MIDI foot controller</small></h4>");
   page += F("<div class='row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2 g-md-3 mx-3'>");
 
-  // Product Information Card with our new components
-  Card productInfoCard = Card(Icons::InfoCircle(), "Product Information");
-  String cardContent;
-  
-  cardContent += StatusItem("Model", String(MODEL)).render();
-  cardContent += StatusItem("Source Code", 
-    "<a href='" + String(PEDALINO_GITHUB_URL) + "' target='_blank'>GitHub</a>").render();
-  cardContent += F("<hr class='my-2'>");
-  
-  cardContent += StatusItem("Profiles", String(PROFILES)).render();
-  cardContent += StatusItem("Banks", String(BANKS)).render();
-  cardContent += StatusItem("Pedals", String(PEDALS)).render();
-  cardContent += StatusItem("Controls", String(CONTROLS)).render();
-  cardContent += StatusItem("Sequences", String(SEQUENCES)).render();
-  cardContent += StatusItem("LEDs", String(LEDS)).render();
-  
-  page += productInfoCard.withContent(cardContent).render();
+  // Product Information Card
+  // ------------------------
+  addCard("INFO_ICON", "Product Information");
+
+  // General Information
+  page += F("<h6 class='border-bottom pb-2 fw-bold'>General</h6>");
+  addStatusItem("Model", String(MODEL));
+  addStatusItem("🐦‍🔥 Source Code", "<a href='" + String(PEDALINO_GITHUB_URL) + "' target='_blank'>GitHub</a>");
+  addStatusItem("Original Source Code", "<a href='https://github.com/alf45tar/PedalinoMini' target='_blank'>GitHub</a>");
+
+  // Specifications and Features
+  page += F("<h6 class='border-bottom pb-2 fw-bold'>Specifications and Features</h6>");
+  addStatusItem("Profiles", String(PROFILES));
+  addStatusItem("Banks", String(BANKS));
+  addStatusItem("Pedals", String(PEDALS));
+  addStatusItem("Controls", String(CONTROLS));
+  addStatusItem("Sequences", String(SEQUENCES));
+  addStatusItem("LEDs", String(LEDS));
+
+  closeCard();
 
   if (trim_page(start, len)) return;
 
   // Hardware Information Card
+  // -------------------------
   addCard("HARDWARE_ICON", "Hardware");
 
   // Board Information
@@ -435,6 +442,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   if (trim_page(start, len)) return;
 
   // Network Status Card
+  // -------------------
   addCard("NETWORK_ICON", "Network");
   // First show Station info if connected
   if (WiFi.getMode() == WIFI_STA || WiFi.getMode() == WIFI_AP_STA) {
@@ -466,52 +474,24 @@ void get_root_page(unsigned int start, unsigned int len) {
   // MIDI Status section
   page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>MIDI Connections</h6>");
 
-  // Network MIDI status with icon and status badge
-  page += F("<div class='row g-1 mb-2'><div class='col-6 d-flex align-items-center'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-ethernet me-2' viewBox='0 0 16 16'>");
-  page += F("<path d='M14 13.5v-7a.5.5 0 0 0-.5-.5H12V4.5a.5.5 0 0 0-.5-.5h-1v-.5A.5.5 0 0 0 10 3H6a.5.5 0 0 0-.5.5V4h-1a.5.5 0 0 0-.5.5V6H2.5a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5ZM3.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25Zm2 0h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25Zm1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5ZM9.75 11h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5a.25.25 0 0 1 .25-.25Zm1.75.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-1.5Z'/>");
-  page += F("</svg>");
-  page += F("Network MIDI");
-  page += F("</div><div class='col-6 text-end'>");
-  if (appleMidiConnected) {
-    page += F("<span class='badge text-bg-success d-inline-flex align-items-center'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-play-circle-fill me-1' viewBox='0 0 16 16'>");
-    page += F("<path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z'/>");
-    page += F("</svg>Connected</span>");
-  } else {
-    page += F("<span class='badge text-bg-danger d-inline-flex align-items-center'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-stop-circle-fill me-1' viewBox='0 0 16 16'>");
-    page += F("<path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z'/>");
-    page += F("</svg>Disconnected</span>");
-  }
-  page += F("</div></div>");
+  // Use ConnectionStatus component for Network MIDI
+  page += ConnectionStatus("Network MIDI", appleMidiConnected, Icons::Ethernet().render()).render();
 
   #ifdef BLE
-  // BLE MIDI status with icon and status badge
-  page += F("<div class='row g-1 mb-2'><div class='col-6 d-flex align-items-center'>");
-  page += F("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-bluetooth me-2' viewBox='0 0 16 16'>");
-  page += F("<path fill-rule='evenodd' d='m8.543 3.948 1.316 1.316L8.543 6.58V3.948Zm0 8.104 1.316-1.316L8.543 9.42v2.632Zm-1.41-4.043L4.275 5.133l.827-.827L7.377 6.58V1.128l4.137 4.136L8.787 8.01l2.745 2.745-4.136 4.137V9.42l-2.294 2.274-.827-.827L7.133 8.01ZM7.903 16c3.498 0 5.904-1.655 5.904-8.01 0-6.335-2.406-7.99-5.903-7.99C4.407 0 2 1.655 2 8.01 2 14.344 4.407 16 7.904 16Z'/>");
-  page += F("</svg>");
-  page += F("BLE MIDI");
-  page += F("</div><div class='col-6 text-end'>");
-  if (bleMidiConnected) {
-    page += F("<span class='badge text-bg-success d-inline-flex align-items-center'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-play-circle-fill me-1' viewBox='0 0 16 16'>");
-    page += F("<path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z'/>");
-    page += F("</svg>Connected</span>");
-  } else {
-    page += F("<span class='badge text-bg-danger d-inline-flex align-items-center'>");
-    page += F("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-stop-circle-fill me-1' viewBox='0 0 16 16'>");
-    page += F("<path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z'/>");
-    page += F("</svg>Disconnected</span>");
-  }
-  page += F("</div></div>");
+  // Use ConnectionStatus component for BLE MIDI
+  page += ConnectionStatus("BLE MIDI", bleMidiConnected, Icons::Bluetooth().render()).render();
   #endif
+  // OSC
+  page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>OSC</h6>");
+  addStatusItem("OSC Local Port", String(oscLocalPort));
+  addStatusItem("OSC Remote Host", oscRemoteHost);
+  addStatusItem("OSC Remote Port", String(oscRemotePort));
 
   closeCard();
   if (trim_page(start, len)) return;
 
   // System Status Card
+  // ------------------
   addCard("SYSTEM_ICON", "System");
 
   // System Information Section
@@ -539,12 +519,13 @@ void get_root_page(unsigned int start, unsigned int len) {
           PEDALINO_VERSION_MINOR, 
           PEDALINO_VERSION_PATCH);
   addStatusItem("Version", version);
-  addStatusItem("Size", String(sketchSize) + " bytes");
+  addStatusItem("Size", formatFileSize(sketchSize));
   addStatusItem("Hash", sketchMD5);
 
   // Frontend Section  
   page += F("<h6 class='border-bottom pb-2 mt-3 fw-bold'>Frontend</h6>");
-  addStatusItem("Bootstrap Version", "<span id='bootstrap-version'></span>");
+  addStatusItem("Bootstrap Version", BOOTSTRAP_VERSION);
+  addStatusItem("Bootstrap Icons Version", BOOTSTRAP_ICONS_VERSION);
 
   // Close the row of cards
   page += F("</div>");
@@ -552,7 +533,7 @@ void get_root_page(unsigned int start, unsigned int len) {
   // Add scripts using our new ScriptComponent system
   page += ScriptStore::getUptimeScript(millis()).render();
   page += ScriptStore::getMemoryUpdateScript().render();
-  page += ScriptStore::getBootstrapVersionScript().render();
+  // page += ScriptStore::getBootstrapVersionScript().render();
   
   closeCard();
   

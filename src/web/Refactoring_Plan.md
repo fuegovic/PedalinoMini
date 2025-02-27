@@ -2,6 +2,8 @@
 
 ## Current Progress (February 26, 2025)
 
+**See: [Urgent Attention - Memory issue](./memory.md)**
+
 ### Completed:
 - ✅ Created base Component interface with virtual render() method
 - ✅ Implemented StatusItem component as first building block

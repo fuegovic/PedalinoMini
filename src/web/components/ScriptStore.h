@@ -3,86 +3,77 @@
 #include "ScriptComponent.h"
 
 /**
- * Store for common scripts used throughout the application
+ * ScriptStore - A factory for commonly used JavaScript components
+ * 
+ * This class provides static methods that return ScriptComponent instances
+ * for reusable JavaScript functionality.
  */
 class ScriptStore {
 public:
-  // Uptime counter script that updates the uptime display
-  static ScriptComponent getUptimeScript(unsigned long initialMillis) {
-    String script = F(
-      "function updateUptime() {"
-      "  const uptimeElement = document.getElementById('uptime');"
-      "  if (!uptimeElement) return;"
-      "  let totalMillis = ");
-    script += String(initialMillis);
-    script += F(";"
-      "  try {"
-      "    const updateDisplay = () => {"
-      "      totalMillis += 1000;"
-      "      let seconds = Math.floor(totalMillis / 1000);"
-      "      let minutes = Math.floor(seconds / 60);"
-      "      let hours = Math.floor(minutes / 60);"
-      "      let days = Math.floor(hours / 24);"
-      "      seconds %= 60;"
-      "      minutes %= 60;"
-      "      hours %= 24;"
-      "      let display = '';"
-      "      if (days > 0) display += days + 'd ';"
-      "      if (hours > 0) display += hours + 'h ';"
-      "      if (minutes > 0) display += minutes + 'm ';"
-      "      display += seconds + 's';"
-      "      uptimeElement.innerHTML = display;"
-      "    };"
-      "    updateDisplay();"
-      "    setInterval(updateDisplay, 1000);"
-      "  } catch (error) {"
-      "    uptimeElement.innerHTML = '<span class=\"text-danger\">Error</span>';"
-      "  }"
-      "}"
-      "setTimeout(updateUptime, 0);"
-    );
+  // Improved uptime display script with smarter formatting
+  static ScriptComponent getUptimeScript(unsigned long startTime) {
+    String script = F("document.addEventListener('DOMContentLoaded', function() {\n"
+                     "  // System boot time in milliseconds\n"
+                     "  const bootTimeMs = ");
+    script += startTime;
+    script += F(";\n"
+                "  let initialUptimeMs = bootTimeMs;\n"
+                "  \n"
+                "  function updateUptime() {\n"
+                "    const uptimeElem = document.getElementById('uptime');\n"
+                "    if (!uptimeElem) return;\n"
+                "    \n"
+                "    const uptimeSeconds = Math.floor(initialUptimeMs / 1000) + \n"
+                "                         Math.floor((Date.now() - performance.timing.navigationStart) / 1000);\n"
+                "    \n"
+                "    const days = Math.floor(uptimeSeconds / 86400);\n"
+                "    const hours = Math.floor((uptimeSeconds % 86400) / 3600);\n"
+                "    const minutes = Math.floor((uptimeSeconds % 3600) / 60);\n"
+                "    const seconds = uptimeSeconds % 60;\n"
+                "    \n"
+                "    // Smart formatting based on elapsed time\n"
+                "    let uptimeText = '';\n"
+                "    \n"
+                "    if (days > 0) {\n"
+                "      // Format: Nd HH:MM:SS\n"
+                "      uptimeText = days + 'd ' + hours.toString().padStart(2, '0') + ':' +\n"
+                "                  minutes.toString().padStart(2, '0') + ':' +\n"
+                "                  seconds.toString().padStart(2, '0');\n"
+                "    } else if (hours > 0) {\n"
+                "      // Format: HH:MM:SS\n"
+                "      uptimeText = hours + ':' +\n"
+                "                  minutes.toString().padStart(2, '0') + ':' +\n"
+                "                  seconds.toString().padStart(2, '0');\n"
+                "    } else {\n"
+                "      // Format: MM:SS\n"
+                "      uptimeText = minutes + ':' +\n"
+                "                  seconds.toString().padStart(2, '0');\n"
+                "    }\n"
+                "    \n"
+                "    uptimeElem.textContent = uptimeText;\n"
+                "  }\n"
+                "  \n"
+                "  updateUptime();\n"
+                "  setInterval(updateUptime, 1000);\n"
+                "});\n");
     return ScriptComponent(script);
   }
 
-  // Memory updater that fetches current memory usage
+  // Memory update script with KB display and 2 decimal places
   static ScriptComponent getMemoryUpdateScript() {
-    return ScriptComponent(F(
-      "function updateMemory() {"
-      "  const memoryElement = document.getElementById('free-memory');"
-      "  if (!memoryElement) return;"
-      "  try {"
-      "    const fetchMemory = () => {"
-      "      fetch('/memory')"
-      "        .then(response => response.json())"
-      "        .then(data => {"
-      "          memoryElement.textContent = (data.memory / 1024).toFixed(2) + ' kB';"
-      "        })"
-      "        .catch(() => {"
-      "          memoryElement.innerHTML = '<span class=\"text-danger\">Error</span>';"
-      "        });"
-      "    };"
-      "    fetchMemory();"
-      "    setInterval(fetchMemory, 5000);"
-      "  } catch (error) {"
-      "    memoryElement.innerHTML = '<span class=\"text-danger\">Error</span>';"
-      "  }"
-      "}"
-      "setTimeout(updateMemory, 500);"
-    ));
-  }
+    // Calculate KB with 2 decimal places
+    float freeKB = ESP.getFreeHeap() / 1024.0;
+    char formattedMem[12];
+    sprintf(formattedMem, "%.2f", freeKB);
 
-  // Bootstrap version detector
-  static ScriptComponent getBootstrapVersionScript() {
-    return ScriptComponent(F(
-      "document.addEventListener('DOMContentLoaded', function() {"
-      "  const versionElement = document.getElementById('bootstrap-version');"
-      "  if (!versionElement) return;"
-      "  if (typeof bootstrap !== 'undefined') {"
-      "    versionElement.textContent = bootstrap.Tooltip.VERSION;"
-      "  } else {"
-      "    versionElement.textContent = 'Not available';"
-      "  }"
-      "});"
-    ));
+    String script = F("document.addEventListener('DOMContentLoaded', function() {\n"
+                     "  const memoryElem = document.getElementById('free-memory');\n"
+                     "  if (memoryElem && !memoryElem.textContent) {\n"
+                     "    memoryElem.textContent = '");
+    script += formattedMem;
+    script += F(" KB';\n"
+                "  }\n"
+                "});\n");
+    return ScriptComponent(script);
   }
 };

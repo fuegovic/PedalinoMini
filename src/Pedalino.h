@@ -19,6 +19,9 @@
 #include <Arduino.h>
 
 #define MODEL           "PedalinoMini™ 🐦‍🔥"
+// For reference only, the actual version is defined in platformio.ini
+#define BOOTSTRAP_VERSION      "5.3.0"     // Bootstrap CSS framework version
+#define BOOTSTRAP_ICONS_VERSION "1.10.5"   // Bootstrap Icons version
 
 #define INTERFACES        6
 #define PROFILES          3
